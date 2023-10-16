@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
 * Студент: [Vladimir Maximov](https://up.htmlacademy.ru/react/14/user/2342349).
-* Наставник: `Неизвестно`.
+* Наставник: [Артём Новоселов](https://htmlacademy.ru/profile/id1195129).
 
 ---
 
