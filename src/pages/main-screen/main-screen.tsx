@@ -1,6 +1,11 @@
 import Card from '../../components/card/card.tsx';
 
-function MainScreen({countRentOffer}: {countRentOffer: number}) {
+
+interface MainScreenProps {
+  countRentOffer: number;
+}
+
+function MainScreen({countRentOffer}: MainScreenProps) {
   const arrayOfCities = Array.from({length: countRentOffer});
 
   return (

@@ -1,6 +1,10 @@
 import MainScreen from '../../pages/main-screen/main-screen.tsx';
 
-function App({countRentOffer}: {countRentOffer: number}) {
+interface AppProps {
+  countRentOffer: number;
+}
+
+function App({countRentOffer}: AppProps) {
   return (
     <MainScreen
       countRentOffer = {countRentOffer}
