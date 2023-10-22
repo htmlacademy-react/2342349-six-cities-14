@@ -1,0 +1,23 @@
+.not-found-page h1 {
+  font-size: 2em;
+  color: #be0c0c;
+}
+
+.not-found-page small {
+  font-size: 1em;
+  color: #603232;
+}
+
+.not-found-page a {
+  text-decoration: none;
+  color: blue;
+}
+
+.not-found-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 30vh;
+}
+
