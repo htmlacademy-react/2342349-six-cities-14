@@ -1,7 +1,7 @@
+import {Helmet} from 'react-helmet-async';
+import FooterContainer from '../../components/FooterContainer/FooterContainer.tsx';
 import HeaderLeft from '../../components/HeaderLeft/HeaderLeft.tsx';
 import HeaderNav from '../../components/HeaderNav/HeaderNav.tsx';
-import FooterContainer from '../../components/FooterContainer/FooterContainer.tsx';
-import { Helmet } from 'react-helmet-async';
 
 function FavoritePage() {
   return (
@@ -12,8 +12,8 @@ function FavoritePage() {
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
-            <HeaderLeft />
-            <HeaderNav />
+            <HeaderLeft/>
+            <HeaderNav/>
           </div>
         </div>
       </header>
@@ -165,7 +165,7 @@ function FavoritePage() {
           </section>
         </div>
       </main>
-      <FooterContainer />
+      <FooterContainer/>
     </div>
   );
 }

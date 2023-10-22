@@ -1,15 +1,15 @@
+import {HelmetProvider} from 'react-helmet-async';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {AppRoute, AuthorizationStatus} from '../../const.ts';
+import FavoritePage from '../../pages/favorite-page/favorite-page.tsx';
+import LoginPage from '../../pages/login-page/login-page.tsx';
 import MainPage from '../../pages/main-page/main-page.tsx';
 import NotFoundPage from '../../pages/not-found-page/not-found-page.tsx';
-import LoginPage from '../../pages/login-page/login-page.tsx';
-import FavoritePage from '../../pages/favorite-page/favorite-page.tsx';
 import OfferPage from '../../pages/offer-page/offer-page.tsx';
-import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import PrivateRoute from '../private-route/private-route.tsx';
-import { HelmetProvider } from 'react-helmet-async';
 
 interface AppProps {
-    countRentOffer: number;
+  countRentOffer: number;
 }
 
 function App({countRentOffer}: AppProps) {
@@ -19,7 +19,9 @@ function App({countRentOffer}: AppProps) {
         <Routes>
           <Route path={AppRoute.Main}
             element={
-              <MainPage countRentOffer={countRentOffer}/>
+              <MainPage
+                countRentOffer={countRentOffer}
+              />
             }
           />
           <Route path={AppRoute.Login} element={<LoginPage/>}/>

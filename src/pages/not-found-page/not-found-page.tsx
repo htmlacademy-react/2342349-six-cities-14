@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
-import './NotFoundPage.css';
+import {Helmet} from 'react-helmet-async';
+import {Link} from 'react-router-dom';
 import HeaderLeft from '../../components/HeaderLeft/HeaderLeft.tsx';
 import HeaderNav from '../../components/HeaderNav/HeaderNav.tsx';
-import {Helmet} from 'react-helmet-async';
+import './NotFoundPage.css';
 
 function NotFound() {
   return (

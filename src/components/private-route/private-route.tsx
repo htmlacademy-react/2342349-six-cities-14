@@ -1,8 +1,8 @@
+import {ReactElement} from 'react';
 import {Navigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const';
-import {ReactElement} from 'react';
 
-type PrivateRouteProps = {
+interface PrivateRouteProps {
     authorizationStatus: AuthorizationStatus;
     children: ReactElement;
 }

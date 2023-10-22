@@ -1,7 +1,7 @@
+import {Helmet} from 'react-helmet-async';
 import Card from '../../components/card/card.tsx';
 import HeaderLeft from '../../components/HeaderLeft/HeaderLeft.tsx';
 import HeaderNav from '../../components/HeaderNav/HeaderNav.tsx';
-import {Helmet} from 'react-helmet-async';
 
 
 interface MainScreenProps {
