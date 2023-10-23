@@ -24,12 +24,25 @@ function App({countRentOffer}: AppProps) {
               />
             }
           />
-          <Route path={AppRoute.Login} element={<LoginPage/>}/>
-          <Route path={AppRoute.Favorites} element={
-            <PrivateRoute authorizationStatus={AuthorizationStatus.NoAuth}>
-              <FavoritePage/>
-            </PrivateRoute>
-          }
+          <Route path={AppRoute.Login}
+            element={
+              <PrivateRoute
+                requiredAuthorizationStatus={AuthorizationStatus.NoAuth}
+                declinedElement={AppRoute.Main}
+              >
+                <LoginPage/>
+              </PrivateRoute>
+            }
+          />
+          <Route path={AppRoute.Favorites}
+            element={
+              <PrivateRoute
+                requiredAuthorizationStatus={AuthorizationStatus.Auth}
+                declinedElement={AppRoute.Login}
+              >
+                <FavoritePage/>
+              </PrivateRoute>
+            }
           />
           <Route path={AppRoute.Offer} element={<OfferPage/>}/>
           <Route path="*" element={<NotFoundPage/>}/>
