@@ -1,5 +1,5 @@
 import {Helmet} from 'react-helmet-async';
-import HeaderLeft from '../../components/HeaderLeft/HeaderLeft.tsx';
+import HeaderLeft from '../../components/header-left/header-left.tsx';
 
 function LoginPage() {
   return (

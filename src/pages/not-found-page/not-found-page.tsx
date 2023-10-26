@@ -1,11 +1,10 @@
 import {Helmet} from 'react-helmet-async';
 import {Link} from 'react-router-dom';
-import HeaderLeft from '../../components/HeaderLeft/HeaderLeft.tsx';
-import HeaderNav from '../../components/HeaderNav/HeaderNav.tsx';
+import HeaderLeft from '../../components/header-left/header-left.tsx';
+import HeaderNav from '../../components/header-nav/header-nav.tsx';
 import {AppRoute} from '../../const.ts';
 
 import styles from './not-found-page.module.css';
-console.log(styles);
 
 function NotFoundPage() {
   return (
