@@ -1,4 +1,4 @@
-function HeaderNav() {
+function NavigationMenu() {
   return (
     <nav className="header__nav">
       <ul className="header__nav-list">
@@ -20,4 +20,4 @@ function HeaderNav() {
   );
 }
 
-export default HeaderNav;
+export default NavigationMenu;

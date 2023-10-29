@@ -8,7 +8,7 @@ export interface Offer {
   isFavorite: boolean;
   isPremium: boolean;
   rating: number;
-  type: string;
+  type: 'apartment' | 'room' | 'house' | 'hotel';
   bedrooms: number;
   maxAdults: number;
   price: number;

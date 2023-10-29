@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
 
-function HeaderLeft() {
+function Logo() {
   return (
     <div className="header__left">
       <Link className="header__logo-link" to={AppRoute.Main}>
@@ -17,4 +17,4 @@ function HeaderLeft() {
   );
 }
 
-export default HeaderLeft;
+export default Logo;

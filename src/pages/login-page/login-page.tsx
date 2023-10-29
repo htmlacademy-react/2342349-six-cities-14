@@ -1,5 +1,5 @@
 import {Helmet} from 'react-helmet-async';
-import HeaderLeft from '../../components/header-left/header-left.tsx';
+import Logo from '../../components/logo/logo.tsx';
 
 function LoginPage() {
   return (
@@ -11,7 +11,7 @@ function LoginPage() {
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
-            <HeaderLeft />
+            <Logo />
           </div>
         </div>
       </header>

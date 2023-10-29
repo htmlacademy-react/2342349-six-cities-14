@@ -82,7 +82,7 @@ export const offers:Offer[] = [
     'title': 'House in countryside',
     'isFavorite': true,
     'isPremium': true,
-    'rating': 1,
+    'rating': 1.3,
     'type': 'room',
     'bedrooms': 1,
     'maxAdults': 2,
@@ -137,7 +137,7 @@ export const offers:Offer[] = [
     'isPremium': false,
     'rating': 2.9,
     'type': 'room',
-    'bedrooms': 1,
+    'bedrooms': 5,
     'maxAdults': 2,
     'price': 257,
     'goods': [

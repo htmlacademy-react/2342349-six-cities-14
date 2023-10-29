@@ -1,4 +1,4 @@
-import {CardCss} from '../card/card-css.ts';
+import {useState} from 'react';
 import {Offer} from '../../types/offer.ts';
 import Card from '../card/card.tsx';
 
@@ -7,28 +7,16 @@ interface AppProps {
   offers: Offer[];
 }
 
-const cardCss: CardCss = {
-  className: 'cities',
-  imgWidth: 260,
-  imgHeight: 200
-};
-
 function OfferList({countRentOffer, offers}: AppProps) {
-
+  const [activeCardId, setActiveCardId] = useState<Offer['id']>(0);
   const offerCards = offers
     .slice(0, countRentOffer)
     .map((offer) => (
       <Card
         key={offer.id}
-        cardCss={cardCss}
-        id={offer.id}
-        price={offer.price}
-        rating={offer.rating}
-        title={offer.title}
-        type={offer.type}
-        isFavorite={offer.isFavorite}
-        isPremium={offer.isPremium}
-        previewImage={offer.previewImage}
+        cardType={'cities'}
+        offer={offer}
+        onMouseOver={setActiveCardId}
       />
     ));
 

@@ -1,6 +1,6 @@
 import {Helmet} from 'react-helmet-async';
-import HeaderLeft from '../../components/header-left/header-left.tsx';
-import HeaderNav from '../../components/header-nav/header-nav.tsx';
+import Logo from '../../components/logo/logo.tsx';
+import NavigationMenu from '../../components/navigation-menu/navigation-menu.tsx';
 import OfferList from '../../components/offer-list/offer-list.tsx';
 import {Offer} from '../../types/offer.ts';
 
@@ -20,8 +20,8 @@ function MainPage({countRentOffer, offers}: MainScreenProps) {
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
-            <HeaderLeft />
-            <HeaderNav />
+            <Logo />
+            <NavigationMenu />
           </div>
         </div>
       </header>

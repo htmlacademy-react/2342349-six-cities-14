@@ -1,7 +1,7 @@
 import {Helmet} from 'react-helmet-async';
 import {Link} from 'react-router-dom';
-import HeaderLeft from '../../components/header-left/header-left.tsx';
-import HeaderNav from '../../components/header-nav/header-nav.tsx';
+import Logo from '../../components/logo/logo.tsx';
+import NavigationMenu from '../../components/navigation-menu/navigation-menu.tsx';
 import {AppRoute} from '../../const.ts';
 
 import styles from './not-found-page.module.css';
@@ -16,20 +16,20 @@ function NotFoundPage() {
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
-            <HeaderLeft/>
-            <HeaderNav/>
+            <Logo/>
+            <NavigationMenu/>
           </div>
         </div>
       </header>
 
       <main className="page__main">
-        <div className={styles.general}>
-          <h1 className={styles.h1}>
+        <div className={styles.generalStyle}>
+          <h1 className={styles.header1}>
             Oops!
             <br/>
-            <small className={styles.small}>Something went wrong</small>
+            <small className={styles.smallText}>Something went wrong</small>
           </h1>
-          <Link to={AppRoute.Main} className={styles.a}>Return Home</Link>
+          <Link to={AppRoute.Main} className={styles.anchorLink}>Return Home</Link>
         </div>
       </main>
     </div>

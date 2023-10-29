@@ -50,7 +50,13 @@ function App({countRentOffer, offers, reviews}: AppProps) {
             }
           />
           <Route path={AppRoute.OfferId}
-            element={<OfferPage offers={offers}/>}
+            element={
+              <OfferPage
+                offers={offers}
+                reviews={reviews}
+                nearbyOffers={offers}
+              />
+            }
           />
           <Route path="*" element={<NotFoundPage/>}/>
         </Routes>

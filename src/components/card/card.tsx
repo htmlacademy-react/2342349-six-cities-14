@@ -1,52 +1,66 @@
-import {useState} from 'react';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
-import {CardCss} from './card-css.ts';
-
+import {Offer} from '../../types/offer.ts';
 import styles from './card.module.css';
 
+const cardConfigurations = {
+  cities: {
+    className: 'cities',
+    imgWidth: 260,
+    imgHeight: 200
+  },
+  favorite: {
+    className: 'favorites',
+    imgWidth: 150,
+    imgHeight: 110
+  }
+};
+
+type CardOffer = Pick<
+  Offer, 'id' | 'title' | 'isFavorite' | 'isPremium' | 'rating' | 'type' | 'price' | 'previewImage'>;
+
 interface CardProps {
-  cardCss: CardCss;
-  id: number;
-  title: string;
-  isFavorite: boolean;
-  isPremium: boolean;
-  rating: number;
-  type: string;
-  price: number;
-  previewImage: string;
+  cardType: 'cities' | 'favorite';
+  offer: CardOffer;
+  onMouseOver?: (cardId: number) => void;
 }
 
-function Card({cardCss, id, title, isFavorite, isPremium, rating, type, price, previewImage}: CardProps) {
+function Card({cardType, offer, onMouseOver}: CardProps) {
+  const {id, title, isFavorite, isPremium,
+    rating, type, price, previewImage} = offer;
+  const {className, imgWidth, imgHeight} = cardConfigurations[cardType];
+
   const offerLink = `${AppRoute.Offer}/${id}`;
-  const [, setActiveCardId] = useState(0);
 
   const handleMouseOver = (hoveredCardId: number) => {
-    setActiveCardId(hoveredCardId);
+    if (onMouseOver) {
+      onMouseOver(hoveredCardId);
+    }
   };
+  const mouseOverHandler = onMouseOver ? () => handleMouseOver(id) : undefined;
 
   return (
     <article
-      className={`${cardCss.className}__card place-card`}
-      onMouseOver={() => handleMouseOver(id)}
+      className={`${className}__card place-card`}
+      onMouseOver={mouseOverHandler}
     >
       {isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       )}
-      <div className={`${cardCss.className}__image-wrapper place-card__image-wrapper`}>
+      <div className={`${className}__image-wrapper place-card__image-wrapper`}>
         <Link to={offerLink}>
           <img className="place-card__image"
             src={previewImage}
-            width={cardCss.imgWidth}
-            height={cardCss.imgHeight}
+            width={imgWidth}
+            height={imgHeight}
             alt={title}
           >
           </img>
         </Link>
       </div>
-      <div className={`${cardCss.className}__card-info place-card__info`}>
+      <div className={`${className}__card-info place-card__info`}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{price}</b>
@@ -71,7 +85,7 @@ function Card({cardCss, id, title, isFavorite, isPremium, rating, type, price, p
         <h2 className="place-card__name">
           <Link to={offerLink}>{title}</Link>
         </h2>
-        <p className={`place-card__type ${styles.card__type}`}>{type}</p>
+        <p className={`place-card__type ${styles.type}`}>{type}</p>
       </div>
     </article>
   );
