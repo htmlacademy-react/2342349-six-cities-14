@@ -1,4 +1,4 @@
-.generalStyle {
+.container {
   color: #478334;
   display: flex;
   flex-direction: column;
@@ -7,17 +7,17 @@
   height: 30vh;
 }
 
-.header1 {
+.heading {
   font-size: 2em;
   color: #be0c0c;
 }
 
-.smallText {
+.text {
   font-size: 1em;
   color: #603232;
 }
 
-.anchorLink {
+.link {
   text-decoration: none;
   color: blue;
 }

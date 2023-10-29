@@ -31,13 +31,7 @@ function Card({cardType, offer, onMouseOver}: CardProps) {
   const {className, imgWidth, imgHeight} = cardConfigurations[cardType];
 
   const offerLink = `${AppRoute.Offer}/${id}`;
-
-  const handleMouseOver = (hoveredCardId: number) => {
-    if (onMouseOver) {
-      onMouseOver(hoveredCardId);
-    }
-  };
-  const mouseOverHandler = onMouseOver ? () => handleMouseOver(id) : undefined;
+  const mouseOverHandler = onMouseOver ? () => onMouseOver(id) : undefined;
 
   return (
     <article

@@ -23,13 +23,13 @@ function NotFoundPage() {
       </header>
 
       <main className="page__main">
-        <div className={styles.generalStyle}>
-          <h1 className={styles.header1}>
+        <div className={styles.container}>
+          <h1 className={styles.heading}>
             Oops!
             <br/>
-            <small className={styles.smallText}>Something went wrong</small>
+            <small className={styles.text}>Something went wrong</small>
           </h1>
-          <Link to={AppRoute.Main} className={styles.anchorLink}>Return Home</Link>
+          <Link to={AppRoute.Main} className={styles.link}>Return Home</Link>
         </div>
       </main>
     </div>
