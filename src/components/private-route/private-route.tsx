@@ -3,15 +3,19 @@ import {Navigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const';
 
 interface PrivateRouteProps {
-    authorizationStatus: AuthorizationStatus;
-    children: ReactElement;
+  requiredAuthorizationStatus: AuthorizationStatus;
+  children: ReactElement;
+  declinedElement: AppRoute;
 }
 
-function PrivateRoute({ authorizationStatus, children }: PrivateRouteProps) {
+function PrivateRoute({ requiredAuthorizationStatus, children, declinedElement }: PrivateRouteProps) {
+  // const currentAuthorizationStatus = AuthorizationStatus.NoAuth;
+  const currentAuthorizationStatus = AuthorizationStatus.Auth;
+
   return (
-    authorizationStatus === AuthorizationStatus.Auth
+    requiredAuthorizationStatus === currentAuthorizationStatus
       ? children
-      : <Navigate to={AppRoute.Login}/>
+      : <Navigate to={declinedElement}/>
   );
 }
 
