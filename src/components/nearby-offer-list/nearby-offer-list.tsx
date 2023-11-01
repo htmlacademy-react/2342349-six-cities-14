@@ -4,7 +4,7 @@ import Card from '../card/card.tsx';
 interface NearbyOfferListProps {
     offers: Offer[];
 }
-function NearbyOfferList({offers}: NearbyOfferListProps) {
+function NearbyOfferList({offers}: Readonly<NearbyOfferListProps>) {
   const offerCards = offers
     .slice(0, 3)
     .map((offer) => (

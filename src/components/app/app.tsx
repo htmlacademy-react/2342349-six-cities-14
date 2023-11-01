@@ -16,7 +16,7 @@ interface AppProps {
   reviews: Review[];
 }
 
-function App({countRentOffer, offers, reviews}: AppProps) {
+function App({countRentOffer, offers, reviews}: Readonly<AppProps>) {
   return (
     <HelmetProvider>
       <BrowserRouter>

@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import {Offer} from '../../types/offer.ts';
 import {Review} from '../../types/review.ts';
 import ReviewForm from '../review-form/review-form.tsx';
@@ -9,7 +10,7 @@ interface SingleOfferProps {
   reviews: Review[];
 }
 
-function SingleOffer({offer, reviews}: SingleOfferProps) {
+function SingleOffer({offer, reviews}: Readonly<SingleOfferProps>) {
   const {title, isFavorite, isPremium, bedrooms, maxAdults, description,
     rating, type, price, images, goods, host} = offer;
 
@@ -91,7 +92,7 @@ function SingleOffer({offer, reviews}: SingleOfferProps) {
                 </img>
               </div>
               <span className="offer__user-name">{host.name}</span>
-              <span className="offer__user-status">{host.isPro ? 'Pro' : ''}</span>
+              <span className="offer__user-status">{classNames({'Pro': host.isPro})}</span>
             </div>
             <div className="offer__description">
               <p className="offer__text">

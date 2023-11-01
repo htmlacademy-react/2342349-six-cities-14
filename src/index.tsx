@@ -8,7 +8,7 @@ const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 
-const COUNT_RENT_OFFER = 50;
+const COUNT_RENT_OFFER = 5;
 
 root.render(
   <React.StrictMode>

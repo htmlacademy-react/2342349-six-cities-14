@@ -14,7 +14,7 @@ interface OfferPageProps {
   nearbyOffers: Offer[];
 }
 
-function OfferPage({offers, reviews, nearbyOffers}: OfferPageProps) {
+function OfferPage({offers, reviews, nearbyOffers}: Readonly<OfferPageProps>) {
   const { id: idString} = useParams<{ id: string }>();
   if (!idString) {
     return <Navigate to={AppRoute.Main}/>;

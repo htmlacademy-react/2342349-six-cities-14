@@ -1,15 +1,20 @@
 import {useState} from 'react';
+import {MapPoint} from '../../types/mapPoint.ts';
 import {Offer} from '../../types/offer.ts';
 import Card from '../card/card.tsx';
+import LeafletMap from '../leaflet-map/leaflet-map.tsx';
 
 interface AppProps {
   countRentOffer: number;
   offers: Offer[];
 }
+const currentCity = 'Amsterdam';
 
-function OfferList({countRentOffer, offers}: AppProps) {
+function OfferList({countRentOffer, offers}: Readonly<AppProps>) {
   const [activeCardId, setActiveCardId] = useState<Offer['id']>(0);
-  const offerCards = offers
+
+  const currentOffers = offers.filter((offer) => offer.city.name === currentCity);
+  const offerCards = currentOffers
     .slice(0, countRentOffer)
     .map((offer) => (
       <Card
@@ -19,6 +24,24 @@ function OfferList({countRentOffer, offers}: AppProps) {
         onMouseOver={setActiveCardId}
       />
     ));
+  const mapCity: MapPoint = {
+    title: currentOffers[0]?.city.name,
+    lat: currentOffers[0]?.city.location.latitude,
+    lng: currentOffers[0]?.city.location.longitude,
+    zoom: currentOffers[0]?.city.location.zoom
+  };
+
+  const selectedOffer = offers.filter((offer) => offer.id === activeCardId);
+  const selectedMapPoint: MapPoint = {
+    title: selectedOffer[0]?.title,
+    lat: selectedOffer[0]?.location.latitude,
+    lng: selectedOffer[0]?.location.longitude,
+    zoom: selectedOffer[0]?.location.zoom,
+  };
+
+  const mapPoints: MapPoint[] = currentOffers
+    .slice(0, countRentOffer)
+    .map((offer) => ({title: offer.title, lat: offer.location.latitude, lng: offer.location.longitude, zoom: offer.location.zoom}));
 
   return (
     <div className="cities">
@@ -46,7 +69,9 @@ function OfferList({countRentOffer, offers}: AppProps) {
           </div>
         </section>
         <div className="cities__right-section">
-          <section className="cities__map map"></section>
+          <section className="cities__map map">
+            <LeafletMap city={mapCity} points={mapPoints} selectedPoint={selectedMapPoint}/>
+          </section>
         </div>
       </div>
     </div>
