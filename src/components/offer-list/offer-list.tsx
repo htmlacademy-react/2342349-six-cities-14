@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {MapPoint} from '../../types/mapPoint.ts';
+import getMapDataFromOffers from '../../helpers/mapDataHelpers.ts';
 import {Offer} from '../../types/offer.ts';
 import Card from '../card/card.tsx';
 import LeafletMap from '../leaflet-map/leaflet-map.tsx';
@@ -8,10 +8,11 @@ interface AppProps {
   countRentOffer: number;
   offers: Offer[];
 }
+
 const currentCity = 'Amsterdam';
 
 function OfferList({countRentOffer, offers}: Readonly<AppProps>) {
-  const [activeCardId, setActiveCardId] = useState<Offer['id']>(0);
+  const [selectedOfferId, setSelectedOfferId] = useState<Offer['id']>(0);
 
   const currentOffers = offers.filter((offer) => offer.city.name === currentCity);
   const offerCards = currentOffers
@@ -21,27 +22,12 @@ function OfferList({countRentOffer, offers}: Readonly<AppProps>) {
         key={offer.id}
         cardType={'cities'}
         offer={offer}
-        onMouseOver={setActiveCardId}
+        onCardInteraction={setSelectedOfferId}
       />
     ));
-  const mapCity: MapPoint = {
-    title: currentOffers[0]?.city.name,
-    lat: currentOffers[0]?.city.location.latitude,
-    lng: currentOffers[0]?.city.location.longitude,
-    zoom: currentOffers[0]?.city.location.zoom
-  };
 
-  const selectedOffer = offers.filter((offer) => offer.id === activeCardId);
-  const selectedMapPoint: MapPoint = {
-    title: selectedOffer[0]?.title,
-    lat: selectedOffer[0]?.location.latitude,
-    lng: selectedOffer[0]?.location.longitude,
-    zoom: selectedOffer[0]?.location.zoom,
-  };
-
-  const mapPoints: MapPoint[] = currentOffers
-    .slice(0, countRentOffer)
-    .map((offer) => ({title: offer.title, lat: offer.location.latitude, lng: offer.location.longitude, zoom: offer.location.zoom}));
+  const [mapCity, mapPoints, selectedMapPoint] =
+    getMapDataFromOffers(currentOffers.slice(0, countRentOffer), selectedOfferId);
 
   return (
     <div className="cities">

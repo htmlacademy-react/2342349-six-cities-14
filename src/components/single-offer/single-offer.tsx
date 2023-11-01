@@ -1,6 +1,8 @@
 import classNames from 'classnames';
+import {MapPoint} from '../../types/mapPoint.ts';
 import {Offer} from '../../types/offer.ts';
 import {Review} from '../../types/review.ts';
+import LeafletMap from '../leaflet-map/leaflet-map.tsx';
 import ReviewForm from '../review-form/review-form.tsx';
 import ReviewList from '../review-list/review-list.tsx';
 import styles from './single-offer.module.css';
@@ -8,9 +10,12 @@ import styles from './single-offer.module.css';
 interface SingleOfferProps {
   offer: Offer;
   reviews: Review[];
+  city: MapPoint;
+  points: MapPoint[];
+  selectedPoint: MapPoint | undefined;
 }
 
-function SingleOffer({offer, reviews}: Readonly<SingleOfferProps>) {
+function SingleOffer({offer, reviews, city, points, selectedPoint}: Readonly<SingleOfferProps>) {
   const {title, isFavorite, isPremium, bedrooms, maxAdults, description,
     rating, type, price, images, goods, host} = offer;
 
@@ -108,7 +113,9 @@ function SingleOffer({offer, reviews}: Readonly<SingleOfferProps>) {
         </div>
       </div>
 
-      <section className="offer__map map"></section>
+      <section className="offer__map map">
+        <LeafletMap city={city} points={points} selectedPoint={selectedPoint}/>
+      </section>
     </section>
   );
 }

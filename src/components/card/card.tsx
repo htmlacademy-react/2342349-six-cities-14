@@ -23,21 +23,22 @@ type CardOffer = Pick<
 interface CardProps {
   cardType: 'cities' | 'favorite';
   offer: CardOffer;
-  onMouseOver?: (cardId: number) => void;
+  onCardInteraction?: (cardId: number) => void;
 }
 
-function Card({cardType, offer, onMouseOver}: Readonly<CardProps>) {
+function Card({cardType, offer, onCardInteraction}: Readonly<CardProps>) {
   const {id, title, isFavorite, isPremium,
     rating, type, price, previewImage} = offer;
   const {name, imgWidth, imgHeight} = cardConfigurations[cardType];
 
   const offerLink = `${AppRoute.Offer}/${id}`;
-  const mouseOverHandler = onMouseOver ? () => onMouseOver(id) : undefined;
+  const cardInteractionHandler = onCardInteraction ? () => onCardInteraction(id) : undefined;
 
   return (
     <article
       className={`${name}__card place-card`}
-      onMouseOver={mouseOverHandler}
+      onMouseOver={cardInteractionHandler}
+      onFocus={cardInteractionHandler}
     >
       {isPremium && (
         <div className="place-card__mark">
