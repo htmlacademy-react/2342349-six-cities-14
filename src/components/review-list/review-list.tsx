@@ -9,7 +9,7 @@ interface ReviewPageProps {
     reviews: Review[];
 }
 
-function ReviewList({reviews}: ReviewPageProps) {
+function ReviewList({reviews}: Readonly<ReviewPageProps>) {
   const reviewList = reviews.map(({id, user, rating, comment, date}) => (
     <li key={id} className="reviews__item">
       <div className="reviews__user user">

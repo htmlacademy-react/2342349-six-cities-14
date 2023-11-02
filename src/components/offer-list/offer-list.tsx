@@ -1,24 +1,33 @@
 import {useState} from 'react';
+import getMapDataFromOffers from '../leaflet-map/map-utils/map-data.ts';
 import {Offer} from '../../types/offer.ts';
 import Card from '../card/card.tsx';
+import LeafletMap from '../leaflet-map/leaflet-map.tsx';
 
-interface AppProps {
+interface OfferListProps {
   countRentOffer: number;
   offers: Offer[];
 }
 
-function OfferList({countRentOffer, offers}: AppProps) {
-  const [activeCardId, setActiveCardId] = useState<Offer['id']>(0);
-  const offerCards = offers
+const currentCity = 'Amsterdam';
+
+function OfferList({countRentOffer, offers}: Readonly<OfferListProps>) {
+  const [selectedOfferId, setSelectedOfferId] = useState<Offer['id']>(0);
+
+  const currentOffers = offers.filter((offer) => offer.city.name === currentCity);
+  const offerCards = currentOffers
     .slice(0, countRentOffer)
     .map((offer) => (
       <Card
         key={offer.id}
         cardType={'cities'}
         offer={offer}
-        onMouseOver={setActiveCardId}
+        onCardInteraction={setSelectedOfferId}
       />
     ));
+
+  const [mapCity, mapPoints, selectedMapPoint] =
+    getMapDataFromOffers(currentOffers.slice(0, countRentOffer), selectedOfferId);
 
   return (
     <div className="cities">
@@ -46,7 +55,9 @@ function OfferList({countRentOffer, offers}: AppProps) {
           </div>
         </section>
         <div className="cities__right-section">
-          <section className="cities__map map"></section>
+          <section className="cities__map map">
+            <LeafletMap city={mapCity} points={mapPoints} selectedPoint={selectedMapPoint}/>
+          </section>
         </div>
       </div>
     </div>

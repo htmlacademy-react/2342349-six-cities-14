@@ -9,7 +9,7 @@ interface FavoritePageProps {
   offers: Offer[];
 }
 
-function FavoritePage({offers}: FavoritePageProps) {
+function FavoritePage({offers}: Readonly<FavoritePageProps>) {
   return (
     <div className="page">
       <Helmet>

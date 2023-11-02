@@ -6,7 +6,7 @@ interface FavoriteListProps {
   offers: Offer[];
 }
 
-function FavoriteList({offers}: FavoriteListProps) {
+function FavoriteList({offers}: Readonly<FavoriteListProps>) {
   const cityOffersMap = offers
     .filter((offer) => offer.isFavorite)
     .reduce<Record<string, Offer[]>>((acc, offer) => {

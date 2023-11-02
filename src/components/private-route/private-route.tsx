@@ -8,8 +8,7 @@ interface PrivateRouteProps {
   declinedElement: AppRoute;
 }
 
-function PrivateRoute({ requiredAuthorizationStatus, children, declinedElement }: PrivateRouteProps) {
-  // const currentAuthorizationStatus = AuthorizationStatus.NoAuth;
+function PrivateRoute({ requiredAuthorizationStatus, children, declinedElement }: Readonly<PrivateRouteProps>) {
   const currentAuthorizationStatus = AuthorizationStatus.Auth;
 
   return (

@@ -10,7 +10,7 @@ interface MainScreenProps {
   offers: Offer[];
 }
 
-function MainPage({countRentOffer, offers}: MainScreenProps) {
+function MainPage({countRentOffer, offers}: Readonly<MainScreenProps>) {
   return (
     <div className="page page--gray page--main">
       <Helmet>

@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
 import {Offer} from '../../types/offer.ts';
@@ -5,12 +6,12 @@ import styles from './card.module.css';
 
 const cardConfigurations = {
   cities: {
-    className: 'cities',
+    name: 'cities',
     imgWidth: 260,
     imgHeight: 200
   },
   favorite: {
-    className: 'favorites',
+    name: 'favorites',
     imgWidth: 150,
     imgHeight: 110
   }
@@ -22,28 +23,29 @@ type CardOffer = Pick<
 interface CardProps {
   cardType: 'cities' | 'favorite';
   offer: CardOffer;
-  onMouseOver?: (cardId: number) => void;
+  onCardInteraction?: (cardId: number) => void;
 }
 
-function Card({cardType, offer, onMouseOver}: CardProps) {
+function Card({cardType, offer, onCardInteraction}: Readonly<CardProps>) {
   const {id, title, isFavorite, isPremium,
     rating, type, price, previewImage} = offer;
-  const {className, imgWidth, imgHeight} = cardConfigurations[cardType];
+  const {name, imgWidth, imgHeight} = cardConfigurations[cardType];
 
   const offerLink = `${AppRoute.Offer}/${id}`;
-  const mouseOverHandler = onMouseOver ? () => onMouseOver(id) : undefined;
+  const cardInteractionHandler = onCardInteraction ? () => onCardInteraction(id) : undefined;
 
   return (
     <article
-      className={`${className}__card place-card`}
-      onMouseOver={mouseOverHandler}
+      className={`${name}__card place-card`}
+      onMouseOver={cardInteractionHandler}
+      onFocus={cardInteractionHandler}
     >
       {isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       )}
-      <div className={`${className}__image-wrapper place-card__image-wrapper`}>
+      <div className={`${name}__image-wrapper place-card__image-wrapper`}>
         <Link to={offerLink}>
           <img className="place-card__image"
             src={previewImage}
@@ -54,14 +56,14 @@ function Card({cardType, offer, onMouseOver}: CardProps) {
           </img>
         </Link>
       </div>
-      <div className={`${className}__card-info place-card__info`}>
+      <div className={`${name}__card-info place-card__info`}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
-            className={`place-card__bookmark-button button ${isFavorite ? 'place-card__bookmark-button--active' : ''}`}
+            className={classNames('button', 'place-card__bookmark-button', {'place-card__bookmark-button--active': isFavorite})}
             type="button"
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
