@@ -6,7 +6,7 @@ import NavigationMenu from '../../components/navigation-menu/navigation-menu.tsx
 import NearbyOfferList from '../../components/nearby-offer-list/nearby-offer-list.tsx';
 import SingleOffer from '../../components/single-offer/single-offer.tsx';
 import {AppRoute} from '../../const.ts';
-import getMapDataFromOffers from '../../helpers/mapDataHelpers.ts';
+import getMapDataFromOffers from '../../components/leaflet-map/map-utils/map-data.ts';
 import {Offer} from '../../types/offer.ts';
 import {Review} from '../../types/review.ts';
 

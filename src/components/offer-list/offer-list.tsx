@@ -1,17 +1,17 @@
 import {useState} from 'react';
-import getMapDataFromOffers from '../../helpers/mapDataHelpers.ts';
+import getMapDataFromOffers from '../leaflet-map/map-utils/map-data.ts';
 import {Offer} from '../../types/offer.ts';
 import Card from '../card/card.tsx';
 import LeafletMap from '../leaflet-map/leaflet-map.tsx';
 
-interface AppProps {
+interface OfferListProps {
   countRentOffer: number;
   offers: Offer[];
 }
 
 const currentCity = 'Amsterdam';
 
-function OfferList({countRentOffer, offers}: Readonly<AppProps>) {
+function OfferList({countRentOffer, offers}: Readonly<OfferListProps>) {
   const [selectedOfferId, setSelectedOfferId] = useState<Offer['id']>(0);
 
   const currentOffers = offers.filter((offer) => offer.city.name === currentCity);
