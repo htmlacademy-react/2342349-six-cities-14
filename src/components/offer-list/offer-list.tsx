@@ -55,9 +55,7 @@ function OfferList({countRentOffer, offers}: Readonly<OfferListProps>) {
           </div>
         </section>
         <div className="cities__right-section">
-          <section className="cities__map map">
-            <LeafletMap city={mapCity} points={mapPoints} selectedPoint={selectedMapPoint}/>
-          </section>
+          <LeafletMap block={'cities'} city={mapCity} points={mapPoints} selectedPoint={selectedMapPoint}/>
         </div>
       </div>
     </div>

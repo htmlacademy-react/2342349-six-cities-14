@@ -113,9 +113,7 @@ function SingleOffer({offer, reviews, city, points, selectedPoint}: Readonly<Sin
         </div>
       </div>
 
-      <section className="offer__map map">
-        <LeafletMap city={city} points={points} selectedPoint={selectedPoint}/>
-      </section>
+      <LeafletMap block={'offer'} city={city} points={points} selectedPoint={selectedPoint}/>
     </section>
   );
 }
