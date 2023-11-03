@@ -21,10 +21,11 @@ type MapProps = {
   city: MapPoint;
   points: MapPoint[];
   selectedPoint: MapPoint | undefined;
+  block: string;
 };
 
 function LeafletMap(props: Readonly<MapProps>) {
-  const {city, points, selectedPoint} = props;
+  const {city, points, selectedPoint, block} = props;
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
 
@@ -50,7 +51,7 @@ function LeafletMap(props: Readonly<MapProps>) {
     }
   }, [map, points, selectedPoint]);
 
-  return <div style={{height: '100%'}} ref={mapRef}></div>;
+  return <section className={`${block}__map map`} ref={mapRef}></section>;
 }
 
 export default LeafletMap;
