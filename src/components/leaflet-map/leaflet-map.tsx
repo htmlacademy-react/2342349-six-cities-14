@@ -51,6 +51,18 @@ function LeafletMap(props: Readonly<MapProps>) {
     }
   }, [map, points, selectedPoint]);
 
+  useEffect(() => {
+    if (map && selectedPoint) {
+      map.setView([selectedPoint.lat, selectedPoint.lng], city.zoom);
+    }
+  }, [selectedPoint]);
+
+  useEffect(() => {
+    if (map && city) {
+      map.setView([city.lat, city.lng], city.zoom);
+    }
+  }, [city.title]);
+
   return <section className={`${block}__map map`} ref={mapRef}></section>;
 }
 

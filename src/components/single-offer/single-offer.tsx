@@ -13,9 +13,12 @@ interface SingleOfferProps {
   city: MapPoint;
   points: MapPoint[];
   selectedPoint: MapPoint | undefined;
+  minCommentLength: number;
+  maxCommentLength: number;
 }
 
-function SingleOffer({offer, reviews, city, points, selectedPoint}: Readonly<SingleOfferProps>) {
+function SingleOffer({offer, reviews, city, points,
+  selectedPoint, minCommentLength, maxCommentLength}: Readonly<SingleOfferProps>) {
   const {title, isFavorite, isPremium, bedrooms, maxAdults, description,
     rating, type, price, images, goods, host} = offer;
 
@@ -108,7 +111,10 @@ function SingleOffer({offer, reviews, city, points, selectedPoint}: Readonly<Sin
 
           <section className="offer__reviews reviews">
             <ReviewList reviews={reviews}/>
-            <ReviewForm />
+            <ReviewForm
+              minCommentLength={minCommentLength}
+              maxCommentLength={maxCommentLength}
+            />
           </section>
         </div>
       </div>

@@ -1,8 +1,11 @@
 import {ChangeEvent, FormEvent, useState} from 'react';
-import {MIN_COMMENT_LENGTH} from '../../const.ts';
 
+interface ReviewFormProps {
+  minCommentLength: number;
+  maxCommentLength: number;
+}
 
-function ReviewForm() {
+function ReviewForm({minCommentLength, maxCommentLength}: Readonly<ReviewFormProps>) {
   const [comment, setComment] = useState({
     rating: 0,
     text: ''
@@ -29,7 +32,9 @@ function ReviewForm() {
     event.preventDefault();
   };
 
-  const isSubmitDisabled = comment.text.length < MIN_COMMENT_LENGTH || comment.rating === 0;
+  const isSubmitDisabled =
+      (comment.text.length > maxCommentLength && comment.text.length < minCommentLength)
+      || comment.rating === 0;
 
   return (
     <form onSubmit={handleSubmit} className="reviews__form form" action="#" method="post">

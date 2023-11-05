@@ -2,10 +2,12 @@ import {Offer} from '../../types/offer.ts';
 import Card from '../card/card.tsx';
 
 interface NearbyOfferListProps {
-    offers: Offer[];
-    onCardInteraction?: (cardId: number) => void;
+  offers: Offer[];
+  selectedOffer: Offer;
+  onCardInteraction?: (cardId: number) => void;
 }
-function NearbyOfferList({offers, onCardInteraction}: Readonly<NearbyOfferListProps>) {
+
+function NearbyOfferList({offers, selectedOffer, onCardInteraction}: Readonly<NearbyOfferListProps>) {
   const offerCards = offers
     .slice(0, 3)
     .map((offer) => (
@@ -16,10 +18,14 @@ function NearbyOfferList({offers, onCardInteraction}: Readonly<NearbyOfferListPr
         onCardInteraction={onCardInteraction}
       />
     ));
+  const cardInteractionHandler = onCardInteraction ? () => onCardInteraction(selectedOffer.id) : undefined;
 
   return (
     <div className="container">
-      <section className="near-places places">
+      <section
+        className="near-places places"
+        onMouseLeave={cardInteractionHandler}
+      >
         <h2 className="near-places__title">Other places in the neighbourhood</h2>
         <div className="near-places__list places__list">
           {offerCards}
