@@ -3,13 +3,15 @@ import FavoriteList from '../../components/favorite-list/favorite-list.tsx';
 import Footer from '../../components/footer/footer.tsx';
 import Logo from '../../components/logo/logo.tsx';
 import NavigationMenu from '../../components/navigation-menu/navigation-menu.tsx';
-import {Offer} from '../../types/offer.ts';
+import {useAppSelector} from '../../hooks';
 
-interface FavoritePageProps {
-  offers: Offer[];
-}
+function FavoritePage() {
+  const offers = useAppSelector((state) => state.offers);
+  let isEmptyList = false;
+  if (!offers) {
+    isEmptyList = true;
+  }
 
-function FavoritePage({offers}: Readonly<FavoritePageProps>) {
   return (
     <div className="page">
       <Helmet>
@@ -25,7 +27,19 @@ function FavoritePage({offers}: Readonly<FavoritePageProps>) {
       </header>
 
       <main className="page__main page__main--favorites">
-        <FavoriteList offers={offers} />
+        {isEmptyList ? (
+          <div className="page__favorites-container container">
+            <section className="favorites favorites--empty">
+              <h1 className="visually-hidden">Favorites (empty)</h1>
+              <div className="favorites__status-wrapper">
+                <b className="favorites__status">Nothing yet saved.</b>
+                <p className="favorites__status-description">Save properties to narrow down search or plan your future trips.</p>
+              </div>
+            </section>
+          </div>
+        ) : (
+          <FavoriteList offers={offers} />
+        )}
       </main>
       <Footer/>
     </div>

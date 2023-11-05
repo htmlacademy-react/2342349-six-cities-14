@@ -11,7 +11,7 @@ export const reviews: Review[] = [
     },
     'rating': 4,
     'comment': 'Beautiful space, fantastic location and atmosphere, really a wonderful place to spend a few days. Will be back.',
-    'date': new Date('2023-09-09T09:23:20.316Z')
+    'date': '2023-09-09T09:23:20.316Z'
   },
   {
     'id': 2,
@@ -23,6 +23,6 @@ export const reviews: Review[] = [
     },
     'rating': 3,
     'comment': 'What an amazing view! The house is stunning and in an amazing location. The large glass wall had an amazing view of the river!',
-    'date': new Date('2023-09-09T09:23:20.316Z')
+    'date': '2023-09-09T09:23:20.316Z'
   }
 ];

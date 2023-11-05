@@ -1,22 +1,22 @@
 import {useState} from 'react';
-import getMapDataFromOffers from '../leaflet-map/map-utils/map-data.ts';
+import {City} from '../../types/city.ts';
 import {Offer} from '../../types/offer.ts';
 import Card from '../card/card.tsx';
 import LeafletMap from '../leaflet-map/leaflet-map.tsx';
+import getMapDataFromOffers from '../leaflet-map/map-utils/map-data.ts';
 
 interface OfferListProps {
-  countRentOffer: number;
   offers: Offer[];
+  selectedCity: City;
+  maxOfferLimit: number;
 }
 
-const currentCity = 'Amsterdam';
-
-function OfferList({countRentOffer, offers}: Readonly<OfferListProps>) {
+function OfferList({offers, selectedCity, maxOfferLimit}: Readonly<OfferListProps>) {
   const [selectedOfferId, setSelectedOfferId] = useState<Offer['id']>(0);
 
-  const currentOffers = offers.filter((offer) => offer.city.name === currentCity);
+  const currentOffers = offers.filter((offer) => offer.city.name === selectedCity.name);
   const offerCards = currentOffers
-    .slice(0, countRentOffer)
+    .slice(0, maxOfferLimit)
     .map((offer) => (
       <Card
         key={offer.id}
@@ -27,14 +27,14 @@ function OfferList({countRentOffer, offers}: Readonly<OfferListProps>) {
     ));
 
   const [mapCity, mapPoints, selectedMapPoint] =
-    getMapDataFromOffers(currentOffers.slice(0, countRentOffer), selectedOfferId);
+    getMapDataFromOffers(currentOffers.slice(0, maxOfferLimit), selectedCity, selectedOfferId);
 
   return (
     <div className="cities">
       <div className="cities__places-container container">
         <section className="cities__places places">
           <h2 className="visually-hidden">Places</h2>
-          <b className="places__found">312 places to stay in Amsterdam</b>
+          <b className="places__found">{currentOffers.length} places to stay in {selectedCity.name}</b>
           <form className="places__sorting" action="#" method="get">
             <span className="places__sorting-caption">Sort by</span>
             <span className="places__sorting-type" tabIndex={0}>
