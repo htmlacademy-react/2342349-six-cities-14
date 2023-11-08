@@ -1,15 +1,17 @@
 import {createReducer} from '@reduxjs/toolkit';
+import {SortOfferTypes} from '../components/sort-list/sort-offers.ts';
 import {CITY_FOR_EMPTY_LIST} from '../const.ts';
 import {City} from '../types/city.ts';
 import {Offer} from '../types/offer.ts';
 import {Review} from '../types/review.ts';
-import {updateCities, selectCity, updateOffers, updateReviews} from './action.ts';
+import {selectCity, updateCities, updateOffers, updateReviews, updateSortType} from './action.ts';
 
 interface State {
     selectedCity: City;
     cities: City[];
     offers: Offer[] | undefined;
     reviews: Review[] | undefined;
+    currentSortType: SortOfferTypes;
 }
 
 const initialState: State = {
@@ -17,6 +19,7 @@ const initialState: State = {
   cities: CITY_FOR_EMPTY_LIST,
   offers: undefined,
   reviews: undefined,
+  currentSortType: SortOfferTypes.POPULAR,
 };
 
 const dataReducer = createReducer(initialState, (builder) => {
@@ -32,6 +35,9 @@ const dataReducer = createReducer(initialState, (builder) => {
     })
     .addCase(updateReviews, (state, action) => {
       state.reviews = action.payload;
+    })
+    .addCase(updateSortType, (state, action) => {
+      state.currentSortType = action.payload;
     });
 });
 

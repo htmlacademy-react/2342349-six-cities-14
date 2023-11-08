@@ -55,13 +55,13 @@ function LeafletMap(props: Readonly<MapProps>) {
     if (map && selectedPoint) {
       map.setView([selectedPoint.lat, selectedPoint.lng], city.zoom);
     }
-  }, [selectedPoint]);
+  }, [map, selectedPoint, city.zoom]);
 
   useEffect(() => {
-    if (map && city) {
+    if (map && city.zoom) {
       map.setView([city.lat, city.lng], city.zoom);
     }
-  }, [city.title]);
+  }, [map, city.lat, city.lng, city.zoom]);
 
   return <section className={`${block}__map map`} ref={mapRef}></section>;
 }
