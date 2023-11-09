@@ -1,5 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {SortOfferTypes} from '../components/sort-list/sort-offers.ts';
+import {sortOptions} from '../components/sort-list/sort-offers.ts';
 import {CITY_FOR_EMPTY_LIST} from '../const.ts';
 import {City} from '../types/city.ts';
 import {Offer} from '../types/offer.ts';
@@ -11,7 +11,7 @@ interface State {
     cities: City[];
     offers: Offer[] | undefined;
     reviews: Review[] | undefined;
-    currentSortType: SortOfferTypes;
+    currentSortType: keyof typeof sortOptions;
 }
 
 const initialState: State = {
@@ -19,7 +19,7 @@ const initialState: State = {
   cities: CITY_FOR_EMPTY_LIST,
   offers: undefined,
   reviews: undefined,
-  currentSortType: SortOfferTypes.POPULAR,
+  currentSortType: 'POPULAR',
 };
 
 const dataReducer = createReducer(initialState, (builder) => {

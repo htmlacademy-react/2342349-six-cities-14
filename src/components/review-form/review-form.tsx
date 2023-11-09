@@ -1,5 +1,6 @@
-import React, {ChangeEvent, FormEvent, useState} from 'react';
+import {ChangeEvent, FormEvent, useState} from 'react';
 import {REVIEW_RATING} from '../../const.ts';
+import ReviewRating from '../review-rating/review-rating.tsx';
 
 interface ReviewFormProps {
   minCommentLength: number;
@@ -39,24 +40,12 @@ function ReviewForm({minCommentLength = 0, maxCommentLength = 2500}: Readonly<Re
       || comment.rating === 0;
 
   const ratingList = REVIEW_RATING.map((rating) => (
-    <React.Fragment key={rating.value}>
-      <input onChange={handleRatingSelect}
-        className="form__rating-input visually-hidden"
-        name="rating"
-        value={rating.value}
-        id={`${rating.value}-stars`}
-        type="radio"
-      >
-      </input>
-      <label htmlFor={`${rating.value}-stars`}
-        className="reviews__rating-label form__rating-label"
-        title="perfect"
-      >
-        <svg className="form__star-image" width="37" height="33">
-          <use xlinkHref="#icon-star"></use>
-        </svg>
-      </label>
-    </React.Fragment>
+    <ReviewRating
+      key={rating.value}
+      value={rating.value}
+      title={rating.title}
+      onRatingChange={handleRatingSelect}
+    />
   ));
 
   return (

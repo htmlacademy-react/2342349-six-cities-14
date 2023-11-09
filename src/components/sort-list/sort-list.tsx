@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {updateSortType} from '../../store/action.ts';
-import {SortOfferTypes} from './sort-offers.ts';
+import {sortOptions} from './sort-offers.ts';
 
 function SortList() {
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
@@ -13,9 +13,16 @@ function SortList() {
     setIsSortMenuOpen(!isSortMenuOpen);
   }
 
-  function handleSortChange(value: SortOfferTypes) {
+  function handleSortChange(value: keyof typeof sortOptions) {
     dispatch(updateSortType(value));
     toggleSortMenu();
+  }
+
+  function handleKeyDown(event: React.KeyboardEvent, action: () => void) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      action();
+    }
   }
 
   return (
@@ -23,11 +30,7 @@ function SortList() {
       <span className="places__sorting-caption">Sort by </span>
       <span className="places__sorting-type"
         onClick={toggleSortMenu}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            toggleSortMenu();
-          }
-        }}
+        onKeyDown={(event) => handleKeyDown(event, toggleSortMenu)}
         tabIndex={0}
       >{currentSortType}
         <svg className="places__sorting-arrow" width="7" height="4">
@@ -35,19 +38,15 @@ function SortList() {
         </svg>
       </span>
       <ul className={classNames('places__options', 'places__options--custom', {'places__options--opened': isSortMenuOpen})}>
-        {Object.entries(SortOfferTypes).map(([key, value], index) => (
+        {Object.entries(sortOptions).map(([key , {title}], index) => (
           <li
             key={key}
-            className={classNames('places__option', {'places__option--active': currentSortType === value})}
+            className={classNames('places__option', {'places__option--active': currentSortType === key})}
             tabIndex={index}
-            onClick={() => handleSortChange(value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                handleSortChange(value);
-              }
-            }}
+            onClick={() => handleSortChange(key as keyof typeof sortOptions)}
+            onKeyDown={(event) => handleKeyDown(event, () => handleSortChange(key as keyof typeof sortOptions))}
           >
-            {value}
+            {title}
           </li>
         ))}
       </ul>

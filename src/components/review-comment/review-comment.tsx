@@ -1,13 +1,15 @@
+import {Review} from '../../types/review.ts';
+
 interface ReviewCommentProps {
-    userAvatarUrl: string;
-    userName: string;
-    rating: number;
-    comment: string;
-    date: Date;
-    dataOptions: Intl.DateTimeFormatOptions;
+  review: Review;
+  dataOptions: Intl.DateTimeFormatOptions;
 }
 
-function ReviewComment({userAvatarUrl, userName, rating, comment, date, dataOptions}: Readonly<ReviewCommentProps>) {
+function ReviewComment({review, dataOptions}: Readonly<ReviewCommentProps>) {
+  const {comment, rating} = review;
+  const date = new Date(review.date);
+  const {avatarUrl: userAvatarUrl, name: userName} = review.user;
+
   return (
     <li className="reviews__item">
       <div className="reviews__user user">

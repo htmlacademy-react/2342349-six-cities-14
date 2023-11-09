@@ -7,18 +7,14 @@ const dataOptions: Intl.DateTimeFormatOptions = {
 };
 
 interface ReviewPageProps {
-    reviews: Review[];
+  reviews: Review[];
 }
 
 function ReviewList({reviews}: Readonly<ReviewPageProps>) {
-  const commentList = reviews.map(({id, user, rating, comment, date}) => (
+  const commentList = reviews.map((review) => (
     <ReviewComment
-      key={id}
-      userAvatarUrl={user.avatarUrl}
-      userName={user.name}
-      rating={rating}
-      comment={comment}
-      date={new Date(date)}
+      key={review.id}
+      review={review}
       dataOptions={dataOptions}
     />
   ));

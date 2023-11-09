@@ -1,26 +1,27 @@
 import {Offer} from '../../types/offer.ts';
 
-enum SortOfferTypes {
-    POPULAR = 'Popular',
-    LOW_TO_HIGH = 'Price: low to high',
-    HIGH_TO_LOW = 'Price: high to low',
-    TOP_RATED_FIRST = 'Top rated first',
+const sortOptions = {
+  POPULAR: {
+    title: 'Popular',
+    sortFn: (offers: Offer[]) => offers
+  },
+  LOW_TO_HIGH: {
+    title: 'Price: low to high',
+    sortFn: (offers: Offer[]) => offers.toSorted((a, b) => a.price - b.price)
+  },
+  HIGH_TO_LOW: {
+    title: 'Price: high to low',
+    sortFn: (offers: Offer[]) => offers.toSorted((a, b) => b.price - a.price)
+  },
+  TOP_RATED_FIRST: {
+    title: 'Top rated first',
+    sortFn: (offers: Offer[]) => offers.toSorted((a, b) => b.rating - a.rating)
+  },
+} as const;
+
+function sortOffers(offers: Offer[], sortType: keyof typeof sortOptions): Offer[] {
+  return sortOptions[sortType].sortFn(offers);
 }
 
-function sortOffers(offers: Offer[], sortType: SortOfferTypes): Offer[] {
-  const sortedOffers = structuredClone(offers);
-
-  switch (sortType) {
-    case SortOfferTypes.LOW_TO_HIGH:
-      return sortedOffers.sort((a, b) => a.price - b.price);
-    case SortOfferTypes.HIGH_TO_LOW:
-      return sortedOffers.sort((a, b) => b.price - a.price);
-    case SortOfferTypes.TOP_RATED_FIRST:
-      return sortedOffers.sort((a, b) => b.rating - a.rating);
-    default:
-      return sortedOffers;
-  }
-}
-
-export {SortOfferTypes, sortOffers};
+export {sortOptions, sortOffers};
 
