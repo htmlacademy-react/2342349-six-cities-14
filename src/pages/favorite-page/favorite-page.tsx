@@ -7,10 +7,6 @@ import {useAppSelector} from '../../hooks';
 
 function FavoritePage() {
   const offers = useAppSelector((state) => state.offers);
-  let isEmptyList = false;
-  if (!offers) {
-    isEmptyList = true;
-  }
 
   return (
     <div className="page">
@@ -27,7 +23,9 @@ function FavoritePage() {
       </header>
 
       <main className="page__main page__main--favorites">
-        {isEmptyList ? (
+        {offers ? (
+          <FavoriteList offers={offers}/>
+        ) : (
           <div className="page__favorites-container container">
             <section className="favorites favorites--empty">
               <h1 className="visually-hidden">Favorites (empty)</h1>
@@ -37,8 +35,6 @@ function FavoritePage() {
               </div>
             </section>
           </div>
-        ) : (
-          <FavoriteList offers={offers} />
         )}
       </main>
       <Footer/>

@@ -12,11 +12,6 @@ function MainPage() {
   const cities = useAppSelector((state) => state.cities);
   const selectedCity = useAppSelector((state) => state.selectedCity);
 
-  let isEmptyList = false;
-  if (!offers) {
-    isEmptyList = true;
-  }
-
   const dispatch = useAppDispatch();
 
   return (
@@ -42,28 +37,24 @@ function MainPage() {
           onSelect={(city) => dispatch(selectCity(city))}
         />
 
-        {isEmptyList ? (
-          <div className="cities">
-            <div className="cities__places-container cities__places-container--empty container">
-              <section className="cities__no-places">
-                <div className="cities__status-wrapper tabs__content">
-                  <b className="cities__status">
-                      No places to stay available
-                  </b>
-                  <p className="cities__status-description">
-                      We could not find any property available at the moment in {selectedCity.name}
-                  </p>
-                </div>
-              </section>
-              <div className="cities__right-section"></div>
-            </div>
-          </div>
-        ) : (
+        {offers ? (
           <OfferList
             offers={offers}
             selectedCity={selectedCity}
             maxOfferLimit={MAX_RENT_OFFERS}
           />
+        ) : (
+          <div className="cities">
+            <div className="cities__places-container cities__places-container--empty container">
+              <section className="cities__no-places">
+                <div className="cities__status-wrapper tabs__content">
+                  <b className="cities__status">No places to stay available</b>
+                  <p className="cities__status-description">We could not find any property available at the moment in {selectedCity.name}</p>
+                </div>
+              </section>
+              <div className="cities__right-section"></div>
+            </div>
+          </div>
         )}
 
       </main>
