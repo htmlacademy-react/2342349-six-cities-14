@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
-import {Offer} from '../../types/offer.ts';
+import {BriefOffer} from '../../types/brief-offer.ts';
 import styles from './card.module.css';
 
 const cardConfigurations = {
@@ -18,12 +18,12 @@ const cardConfigurations = {
 };
 
 type CardOffer = Pick<
-  Offer, 'id' | 'title' | 'isFavorite' | 'isPremium' | 'rating' | 'type' | 'price' | 'previewImage'>;
+  BriefOffer, 'id' | 'title' | 'isFavorite' | 'isPremium' | 'rating' | 'type' | 'price' | 'previewImage'>;
 
 interface CardProps {
   cardType: 'cities' | 'favorite';
   offer: CardOffer;
-  onCardInteraction?: (cardId: number) => void;
+  onCardInteraction?: (cardId: BriefOffer['id']) => void;
 }
 
 function Card({cardType, offer, onCardInteraction}: Readonly<CardProps>) {

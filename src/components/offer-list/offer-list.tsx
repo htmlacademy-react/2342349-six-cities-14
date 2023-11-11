@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useAppSelector} from '../../hooks';
+import {BriefOffer} from '../../types/brief-offer.ts';
 import {City} from '../../types/city.ts';
-import {Offer} from '../../types/offer.ts';
 import Card from '../card/card.tsx';
 import LeafletMap from '../leaflet-map/leaflet-map.tsx';
 import getMapDataFromOffers from '../leaflet-map/map-utils/map-data.ts';
@@ -9,14 +9,14 @@ import SortList from '../sort-list/sort-list.tsx';
 import {sortOffers} from '../sort-list/sort-offers.ts';
 
 interface OfferListProps {
-  offers: Offer[];
+  offers: BriefOffer[];
   selectedCity: City;
   maxOfferLimit: number;
 }
 
 function OfferList({offers, selectedCity, maxOfferLimit = 5}: Readonly<OfferListProps>) {
-  const [selectedOfferId, setSelectedOfferId] = useState<Offer['id']>(0);
-  const currentSortType = useAppSelector((state) => state.currentSortType);
+  const [selectedOfferId, setSelectedOfferId] = useState<BriefOffer['id']>('');
+  const currentSortType = useAppSelector((state) => state.data.currentSortType);
 
   const filteredOffers = offers.filter((offer) => offer.city.name === selectedCity.name);
   const currentOffers = sortOffers(filteredOffers, currentSortType);

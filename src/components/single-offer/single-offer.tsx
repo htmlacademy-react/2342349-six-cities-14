@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import {MapPoint} from '../../types/mapPoint.ts';
-import {Offer} from '../../types/offer.ts';
+import {FullOffer} from '../../types/full-offer.ts';
+import {MapPoint} from '../../types/map-point.ts';
 import {Review} from '../../types/review.ts';
 import LeafletMap from '../leaflet-map/leaflet-map.tsx';
 import ReviewForm from '../review-form/review-form.tsx';
@@ -8,7 +8,7 @@ import ReviewList from '../review-list/review-list.tsx';
 import styles from './single-offer.module.css';
 
 interface SingleOfferProps {
-  offer: Offer;
+  offer: FullOffer;
   reviews: Review[];
   city: MapPoint;
   points: MapPoint[];

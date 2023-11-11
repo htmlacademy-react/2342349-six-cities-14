@@ -1,15 +1,15 @@
 import {Link} from 'react-router-dom';
-import {Offer} from '../../types/offer.ts';
+import {BriefOffer} from '../../types/brief-offer.ts';
 import Card from '../card/card.tsx';
 
 interface FavoriteListProps {
-  offers: Offer[];
+  offers: BriefOffer[];
 }
 
 function FavoriteList({offers}: Readonly<FavoriteListProps>) {
   const cityOffersMap = offers
     .filter((offer) => offer.isFavorite)
-    .reduce<Record<string, Offer[]>>((acc, offer) => {
+    .reduce<Record<string, BriefOffer[]>>((acc, offer) => {
       acc[offer.city.name] = [...(acc[offer.city.name] ?? []), offer];
       return acc;
     }, {});

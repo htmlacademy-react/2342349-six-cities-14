@@ -6,7 +6,7 @@ import NavigationMenu from '../../components/navigation-menu/navigation-menu.tsx
 import {useAppSelector} from '../../hooks';
 
 function FavoritePage() {
-  const offers = useAppSelector((state) => state.offers);
+  const offers = useAppSelector((state) => state.data.offers);
 
   return (
     <div className="page">

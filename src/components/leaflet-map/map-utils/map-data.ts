@@ -1,30 +1,23 @@
+import {BriefOffer} from '../../../types/brief-offer.ts';
 import {City} from '../../../types/city.ts';
-import {MapPoint} from '../../../types/mapPoint.ts';
-import {Offer} from '../../../types/offer.ts';
+import {MapPoint} from '../../../types/map-point.ts';
 
-function createMapPoint(offer: Offer): MapPoint {
+function createMapPoint(entity: BriefOffer | City): MapPoint {
   return {
-    title: offer.title,
-    lat: offer.location.latitude,
-    lng: offer.location.longitude,
-    zoom: offer.location.zoom
+    id: 'id' in entity ? entity.id : '',
+    lat: entity.location.latitude,
+    lng: entity.location.longitude,
+    zoom: entity.location.zoom
   };
 }
 
 function getMapDataFromOffers(
-  offers: Offer[],
+  offers: BriefOffer[],
   selectedCity: City,
-  selectedOfferId: Offer['id']): [MapPoint, MapPoint[], MapPoint | undefined] {
+  selectedOfferId: BriefOffer['id']): [MapPoint, MapPoint[], MapPoint | undefined] {
 
   const mapPoints: MapPoint[] = offers.map(createMapPoint);
-
-  const mapCity: MapPoint = {
-    title: selectedCity.name,
-    lat: selectedCity.location.latitude,
-    lng: selectedCity.location.longitude,
-    zoom: selectedCity.location.zoom
-  };
-
+  const mapCity: MapPoint = createMapPoint(selectedCity);
   const selectedOffer = offers.find((offer) => offer.id === selectedOfferId);
   const selectedMapPoint: MapPoint | undefined = selectedOffer ? createMapPoint(selectedOffer) : undefined;
 

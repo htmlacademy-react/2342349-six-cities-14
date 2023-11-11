@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import React, {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {updateSortType} from '../../store/action.ts';
+import {setSortType} from '../../store/action.ts';
 import {sortOptions} from './sort-offers.ts';
 
 function SortList() {
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
-  const currentSortType = useAppSelector((state) => state.currentSortType);
+  const currentSortType = useAppSelector((state) => state.data.currentSortType);
   const dispatch = useAppDispatch();
 
   function toggleSortMenu() {
@@ -14,7 +14,7 @@ function SortList() {
   }
 
   function handleSortChange(value: keyof typeof sortOptions) {
-    dispatch(updateSortType(value));
+    dispatch(setSortType(value));
     toggleSortMenu();
   }
 
@@ -32,7 +32,7 @@ function SortList() {
         onClick={toggleSortMenu}
         onKeyDown={(event) => handleKeyDown(event, toggleSortMenu)}
         tabIndex={0}
-      >{currentSortType}
+      >{sortOptions[currentSortType].title}
         <svg className="places__sorting-arrow" width="7" height="4">
           <use xlinkHref="#icon-arrow-select"></use>
         </svg>
