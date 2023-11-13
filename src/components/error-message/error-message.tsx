@@ -1,6 +1,5 @@
 import {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {setError} from '../../store/action.ts';
 import {clearErrorAction} from '../../store/api-actions.ts';
 import styles from './error-screen.module.css';
 
@@ -9,7 +8,6 @@ function ErrorMessage() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setError(errorMessage));
     dispatch(clearErrorAction());
   });
 
