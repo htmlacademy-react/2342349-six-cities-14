@@ -6,19 +6,37 @@ export enum AppRoute {
     OfferId = '/offer/:id',
 }
 
+export const APIRoute = {
+  GetOffers: '/offers',
+  GetOffer: '/offers/:offerId',
+  GetOfferNearby: '/offers/:offerId/nearby',
+  GetFavorite: '/favorite',
+  PostFavorite: '/favorite/:offerId',
+  GetComments: '/comments/:offerId',
+  PostComment: '/comments/:offerId',
+  GetLogin: '/login',
+  PostLogin: '/login',
+  DeleteLogout: '/logout',
+} as const;
+
+
 export enum AuthorizationStatus {
     Auth = 'AUTH',
     NoAuth = 'NO_AUTH',
     Unknown = 'UNKNOWN',
 }
 
+export const BACKEND_URL = 'https://14.design.pages.academy/six-cities';
+export const BACKEND_REQUEST_TIMEOUT = 5000;
+
+export const AUTH_TOKEN_KEY_NAME = 'six-cities-token';
+export const TIMEOUT_SHOW_ERROR = 5000;
+
 export const MIN_COMMENT_LENGTH = 50;
 export const MAX_COMMENT_LENGTH = 2500;
-
-export const MAX_RENT_OFFERS = 5;
+export const MAX_RENT_OFFERS = 100;
 
 export const MAX_NEAR_OFFERS = 3;
-
 export const URL_MARKER_DEFAULT = '/img/pin.svg';
 
 export const URL_MARKER_CURRENT = '/img/pin-active.svg';

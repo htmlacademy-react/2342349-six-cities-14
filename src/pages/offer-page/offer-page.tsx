@@ -8,19 +8,20 @@ import NearbyOfferList from '../../components/nearby-offer-list/nearby-offer-lis
 import SingleOffer from '../../components/single-offer/single-offer.tsx';
 import {AppRoute, MAX_COMMENT_LENGTH, MAX_NEAR_OFFERS, MIN_COMMENT_LENGTH} from '../../const.ts';
 import {useAppSelector} from '../../hooks';
-import {Offer} from '../../types/offer.ts';
+import {BriefOffer} from '../../types/brief-offer.ts';
+import {FullOffer} from '../../types/full-offer.ts';
 
 interface OfferPageProps {
-  nearbyOffers: Offer[];
+  nearbyOffers: FullOffer[];
 }
 
 function OfferPage({nearbyOffers}: Readonly<OfferPageProps>) {
-  const [selectedOfferId, setSelectedOfferId] = useState<Offer['id']>(0);
+  const [selectedOfferId, setSelectedOfferId] = useState<BriefOffer['id']>('');
   const { id: idString} = useParams<{ id: string }>();
 
-  const offers = useAppSelector((state) => state.offers);
-  const reviews = useAppSelector((state) => state.reviews);
-  const selectedCity = useAppSelector((state) => state.selectedCity);
+  const offers = useAppSelector((state) => state.data.offers);
+  const reviews = useAppSelector((state) => state.data.reviews);
+  const selectedCity = useAppSelector((state) => state.data.selectedCity);
 
   if (!offers || !idString) {
     return <Navigate to={AppRoute.Main}/>;

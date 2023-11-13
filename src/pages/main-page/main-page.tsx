@@ -8,9 +8,9 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {selectCity} from '../../store/action.ts';
 
 function MainPage() {
-  const offers = useAppSelector((state) => state.offers);
-  const cities = useAppSelector((state) => state.cities);
-  const selectedCity = useAppSelector((state) => state.selectedCity);
+  const offers = useAppSelector((state) => state.data.offers);
+  const cities = useAppSelector((state) => state.data.cities);
+  const selectedCity = useAppSelector((state) => state.data.selectedCity);
 
   const dispatch = useAppDispatch();
 

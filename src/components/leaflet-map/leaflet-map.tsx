@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import {useEffect, useRef} from 'react';
 import {URL_MARKER_CURRENT, URL_MARKER_DEFAULT} from '../../const.ts';
 import useMap from '../../hooks/useMap.tsx';
-import {MapPoint} from '../../types/mapPoint.ts';
+import {MapPoint} from '../../types/map-point.ts';
 
 const defaultCustomIcon = new Icon({
   iconUrl: URL_MARKER_DEFAULT,
@@ -38,7 +38,7 @@ function LeafletMap(props: Readonly<MapProps>) {
           lng: point.lng
         });
         marker.setIcon(
-          selectedPoint !== undefined && point.title === selectedPoint.title
+          selectedPoint !== undefined && point.id === selectedPoint.id
             ? currentCustomIcon
             : defaultCustomIcon
         )

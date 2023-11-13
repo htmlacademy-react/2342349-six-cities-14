@@ -1,10 +1,10 @@
-import {Offer} from '../../types/offer.ts';
+import {BriefOffer} from '../../types/brief-offer.ts';
 import Card from '../card/card.tsx';
 
 interface NearbyOfferListProps {
-  offers: Offer[];
-  selectedOffer: Offer;
-  onCardInteraction?: (cardId: number) => void;
+  offers: BriefOffer[];
+  selectedOffer: BriefOffer;
+  onCardInteraction?: (cardId: BriefOffer['id']) => void;
 }
 
 function NearbyOfferList({offers, selectedOffer, onCardInteraction}: Readonly<NearbyOfferListProps>) {
