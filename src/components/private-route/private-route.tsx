@@ -1,18 +1,19 @@
 import {ReactElement} from 'react';
 import {Navigate} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus} from '../../const';
+import {AppRouteType, AuthorizationStatusType} from '../../const';
+import {useAppSelector} from '../../hooks';
 
 interface PrivateRouteProps {
-  requiredAuthorizationStatus: AuthorizationStatus;
+  requiredAuthorizationStatus: AuthorizationStatusType;
   children: ReactElement;
-  declinedElement: AppRoute;
+  declinedElement: AppRouteType;
 }
 
 function PrivateRoute({ requiredAuthorizationStatus, children, declinedElement }: Readonly<PrivateRouteProps>) {
-  const currentAuthorizationStatus = AuthorizationStatus.Auth;
+  const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
 
   return (
-    requiredAuthorizationStatus === currentAuthorizationStatus
+    requiredAuthorizationStatus === authorizationStatus
       ? children
       : <Navigate to={declinedElement}/>
   );

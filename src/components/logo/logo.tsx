@@ -4,7 +4,7 @@ import {AppRoute} from '../../const.ts';
 function Logo() {
   return (
     <div className="header__left">
-      <Link className="header__logo-link" to={AppRoute.Main}>
+      <Link className="header__logo-link" to={AppRoute.Login}>
         <img className="header__logo"
           src="img/logo.svg"
           alt="6 cities logo"

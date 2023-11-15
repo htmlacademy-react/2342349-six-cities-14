@@ -1,16 +1,16 @@
 import {createReducer} from '@reduxjs/toolkit';
 import {sortOptions} from '../components/sort-list/sort-offers.ts';
-import {CITY_FOR_EMPTY_LIST} from '../const.ts';
+import {AuthorizationStatus, AuthorizationStatusType, CITY_FOR_EMPTY_LIST} from '../const.ts';
 import {BriefOffer} from '../types/brief-offer.ts';
 import {City} from '../types/city.ts';
 import {Review} from '../types/review.ts';
 import {
   selectCity,
-  setOffersLoadingStatus,
+  setLoadingScreenShow,
   setCities,
   setOffers,
   setReviews,
-  setSortType, setError
+  setSortType, setError, setAuthorizationStatus
 } from './action.ts';
 
 interface State {
@@ -19,8 +19,9 @@ interface State {
     offers: BriefOffer[];
     reviews: Review[];
     currentSortType: keyof typeof sortOptions;
-    isOffersDataLoaded: boolean;
+    isLoadingScreenShow: boolean;
     error: string | null;
+    authorizationStatus: AuthorizationStatusType;
 }
 
 const initialState: State = {
@@ -29,8 +30,9 @@ const initialState: State = {
   offers: [],
   reviews: [],
   currentSortType: 'POPULAR',
-  isOffersDataLoaded: false,
+  isLoadingScreenShow: false,
   error: null,
+  authorizationStatus: AuthorizationStatus.Unknown
 };
 
 const dataReducer = createReducer(initialState, (builder) => {
@@ -50,11 +52,14 @@ const dataReducer = createReducer(initialState, (builder) => {
     .addCase(setSortType, (state, action) => {
       state.currentSortType = action.payload;
     })
-    .addCase(setOffersLoadingStatus, (state, action) => {
-      state.isOffersDataLoaded = action.payload;
+    .addCase(setLoadingScreenShow, (state, action) => {
+      state.isLoadingScreenShow = action.payload;
     })
     .addCase(setError, (state, action) => {
       state.error = action.payload;
+    })
+    .addCase(setAuthorizationStatus, (state, action) => {
+      state.authorizationStatus = action.payload;
     });
 });
 

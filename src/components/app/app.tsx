@@ -10,16 +10,17 @@ import MainPage from '../../pages/main-page/main-page.tsx';
 import NotFoundPage from '../../pages/not-found-page/not-found-page.tsx';
 import OfferPage from '../../pages/offer-page/offer-page.tsx';
 import {selectCity, setCities} from '../../store/action.ts';
-import {fetchOffersAction} from '../../store/api-actions.ts';
+import {checkAuthAction, fetchOffersAction} from '../../store/api-actions.ts';
 import {City} from '../../types/city.ts';
 import PrivateRoute from '../private-route/private-route.tsx';
 
 function App() {
   const offers = useAppSelector((state) => state.data.offers);
-  const isOffersDataLoaded = useAppSelector((state) => state.data.isOffersDataLoaded);
+  const isLoadingScreenShow = useAppSelector((state) => state.data.isLoadingScreenShow);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    dispatch(checkAuthAction());
     dispatch(fetchOffersAction());
   }, [dispatch]);
 
@@ -39,7 +40,7 @@ function App() {
     }
   }, [dispatch, offers]);
 
-  if (!isOffersDataLoaded) {
+  if (isLoadingScreenShow) {
     return (
       <LoadingScreen/>
     );

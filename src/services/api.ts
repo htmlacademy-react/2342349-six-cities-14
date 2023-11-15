@@ -8,6 +8,9 @@ import {getToken} from './token.ts';
 type DetailMessageType = {
   type: string;
   message: string;
+  details?: {
+    messages: string[];
+  }[];
 }
 
 const StatusCodeMapping: Record<number, boolean> = {
@@ -38,12 +41,15 @@ function createAPI(): AxiosInstance {
     (response) => response,
     (error: AxiosError<DetailMessageType>) => {
       if (error.response && shouldDisplayError(error.response)) {
-        const detailMessage = (error.response.data);
-        store.dispatch(setError(detailMessage.message));
+        const { message, details } = error.response.data;
+        const additionalMessages = details?.map((detail) => detail.messages.join(' ')).join(' ') ?? '';
+        const errorMessage = additionalMessages ? `${message} ${additionalMessages}` : message;
+        store.dispatch(setError(errorMessage.trim()));
       }
       throw error;
     }
   );
+
   return api;
 }
 
