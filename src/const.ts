@@ -1,10 +1,11 @@
-export enum AppRoute {
-    Main = '/',
-    Login = '/login',
-    Favorites = '/favorites',
-    Offer = '/offer',
-    OfferId = '/offer/:id',
-}
+export const AppRoute = {
+  Main: '/',
+  Login: '/login',
+  Favorites: '/favorites',
+  Offer: '/offer',
+  OfferId: '/offer/:id',
+} as const;
+export type AppRouteType = typeof AppRoute[keyof typeof AppRoute];
 
 export const APIRoute = {
   GetOffers: '/offers',
@@ -18,19 +19,21 @@ export const APIRoute = {
   PostLogin: '/login',
   DeleteLogout: '/logout',
 } as const;
+export type APIRouteType = typeof APIRoute[keyof typeof APIRoute];
 
+export const AuthorizationStatus = {
+  Auth: 'AUTH',
+  NoAuth: 'NO_AUTH',
+  Unknown: 'UNKNOWN',
+} as const ;
+export type AuthorizationStatusType = typeof AuthorizationStatus[keyof typeof AuthorizationStatus];
 
-export enum AuthorizationStatus {
-    Auth = 'AUTH',
-    NoAuth = 'NO_AUTH',
-    Unknown = 'UNKNOWN',
-}
 
 export const BACKEND_URL = 'https://14.design.pages.academy/six-cities';
 export const BACKEND_REQUEST_TIMEOUT = 5000;
 
 export const AUTH_TOKEN_KEY_NAME = 'six-cities-token';
-export const TIMEOUT_SHOW_ERROR = 5000;
+export const TIMEOUT_SHOW_ERROR = 3000;
 
 export const MIN_COMMENT_LENGTH = 50;
 export const MAX_COMMENT_LENGTH = 2500;

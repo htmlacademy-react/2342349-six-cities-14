@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
+import {TIMEOUT_SHOW_ERROR} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {clearErrorAction} from '../../store/api-actions.ts';
+import {clearErrorAction} from '../../store/action.ts';
 import styles from './error-screen.module.css';
 
 function ErrorMessage() {
@@ -8,8 +9,14 @@ function ErrorMessage() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(clearErrorAction());
-  });
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        dispatch(clearErrorAction());
+      }, TIMEOUT_SHOW_ERROR);
+
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage, dispatch]);
 
   if (!errorMessage) {
     return null;

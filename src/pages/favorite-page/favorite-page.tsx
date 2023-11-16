@@ -7,6 +7,7 @@ import {useAppSelector} from '../../hooks';
 
 function FavoritePage() {
   const offers = useAppSelector((state) => state.data.offers);
+  const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
 
   return (
     <div className="page">
@@ -17,7 +18,9 @@ function FavoritePage() {
         <div className="container">
           <div className="header__wrapper">
             <Logo/>
-            <NavigationMenu/>
+            <NavigationMenu
+              authorizationStatus={authorizationStatus}
+            />
           </div>
         </div>
       </header>

@@ -22,6 +22,7 @@ function OfferPage({nearbyOffers}: Readonly<OfferPageProps>) {
   const offers = useAppSelector((state) => state.data.offers);
   const reviews = useAppSelector((state) => state.data.reviews);
   const selectedCity = useAppSelector((state) => state.data.selectedCity);
+  const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
 
   if (!offers || !idString) {
     return <Navigate to={AppRoute.Main}/>;
@@ -45,7 +46,9 @@ function OfferPage({nearbyOffers}: Readonly<OfferPageProps>) {
         <div className="container">
           <div className="header__wrapper">
             <Logo />
-            <NavigationMenu />
+            <NavigationMenu
+              authorizationStatus={authorizationStatus}
+            />
           </div>
         </div>
       </header>

@@ -5,9 +5,12 @@ import {store} from '../store';
 import {setError} from '../store/action.ts';
 import {getToken} from './token.ts';
 
-type DetailMessageType = {
+type DetailMessage = {
   type: string;
   message: string;
+  details?: {
+    messages: string[];
+  }[];
 }
 
 const StatusCodeMapping: Record<number, boolean> = {
@@ -36,14 +39,17 @@ function createAPI(): AxiosInstance {
 
   api.interceptors.response.use(
     (response) => response,
-    (error: AxiosError<DetailMessageType>) => {
+    (error: AxiosError<DetailMessage>) => {
       if (error.response && shouldDisplayError(error.response)) {
-        const detailMessage = (error.response.data);
-        store.dispatch(setError(detailMessage.message));
+        const { message, details } = error.response.data;
+        const additionalMessages = details?.map((detail) => detail.messages.join(' ')).join(' ') ?? '';
+        const errorMessage = additionalMessages ? `${message} ${additionalMessages}` : message;
+        store.dispatch(setError(errorMessage.trim()));
       }
-      throw error;
+      return Promise.reject(error);
     }
   );
+
   return api;
 }
 
