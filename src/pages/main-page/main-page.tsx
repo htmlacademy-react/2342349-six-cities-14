@@ -11,6 +11,7 @@ function MainPage() {
   const offers = useAppSelector((state) => state.data.offers);
   const cities = useAppSelector((state) => state.data.cities);
   const selectedCity = useAppSelector((state) => state.data.selectedCity);
+  const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
 
   const dispatch = useAppDispatch();
 
@@ -24,7 +25,9 @@ function MainPage() {
         <div className="container">
           <div className="header__wrapper">
             <Logo/>
-            <NavigationMenu/>
+            <NavigationMenu
+              authorizationStatus={authorizationStatus}
+            />
           </div>
         </div>
       </header>

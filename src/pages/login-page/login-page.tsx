@@ -9,14 +9,19 @@ function LoginPage() {
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
 
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
     if (loginRef.current !== null && passwordRef.current !== null) {
-      dispatch(loginAction({
+      const result = await dispatch(loginAction({
         login: loginRef.current.value,
         password: passwordRef.current.value
-      }));
+      })).unwrap();
+
+      if (!result.success) {
+        loginRef.current.value = '';
+        passwordRef.current.value = '';
+      }
     }
   };
 
@@ -40,7 +45,7 @@ function LoginPage() {
             <h1 className="login__title">Sign in</h1>
             <form className="login__form form"
               action=""
-              onSubmit={handleSubmit}
+              onSubmit={submitHandler}
             >
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>

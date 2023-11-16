@@ -3,10 +3,13 @@ import {Link} from 'react-router-dom';
 import Logo from '../../components/logo/logo.tsx';
 import NavigationMenu from '../../components/navigation-menu/navigation-menu.tsx';
 import {AppRoute} from '../../const.ts';
+import {useAppSelector} from '../../hooks';
 
 import styles from './not-found-page.module.css';
 
 function NotFoundPage() {
+  const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
+
   return (
     <div className="page">
       <Helmet>
@@ -17,7 +20,9 @@ function NotFoundPage() {
         <div className="container">
           <div className="header__wrapper">
             <Logo/>
-            <NavigationMenu/>
+            <NavigationMenu
+              authorizationStatus={authorizationStatus}
+            />
           </div>
         </div>
       </header>

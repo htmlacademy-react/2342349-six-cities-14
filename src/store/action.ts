@@ -7,10 +7,12 @@ import {Review} from '../types/review.ts';
 
 export const setOffers = createAction<BriefOffer[]>('data/setOffers');
 export const setReviews = createAction<Review[]>('data/setReviews');
-export const setLoadingScreenShow = createAction<boolean>('data/setLoadingScreenShow');
+export const setLoadingInProgress = createAction<boolean>('data/loadingInProgress');
+export const clearErrorAction = createAction('data/clearError');
 
 export const setCities = createAction<City[]>('site/setCities');
 export const selectCity = createAction<City>('site/selectCity');
 export const setSortType = createAction<keyof typeof sortOptions>('site/setSortType');
 export const setError = createAction<string | null>('site/setError');
 export const setAuthorizationStatus = createAction<AuthorizationStatusType>('site/setAuthorizationStatus');
+

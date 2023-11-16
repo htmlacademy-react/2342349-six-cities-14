@@ -6,11 +6,11 @@ import {City} from '../types/city.ts';
 import {Review} from '../types/review.ts';
 import {
   selectCity,
-  setLoadingScreenShow,
+  setLoadingInProgress,
   setCities,
   setOffers,
   setReviews,
-  setSortType, setError, setAuthorizationStatus
+  setSortType, setError, setAuthorizationStatus, clearErrorAction
 } from './action.ts';
 
 interface State {
@@ -19,7 +19,7 @@ interface State {
     offers: BriefOffer[];
     reviews: Review[];
     currentSortType: keyof typeof sortOptions;
-    isLoadingScreenShow: boolean;
+    loadingInProgress: boolean;
     error: string | null;
     authorizationStatus: AuthorizationStatusType;
 }
@@ -30,7 +30,7 @@ const initialState: State = {
   offers: [],
   reviews: [],
   currentSortType: 'POPULAR',
-  isLoadingScreenShow: false,
+  loadingInProgress: false,
   error: null,
   authorizationStatus: AuthorizationStatus.Unknown
 };
@@ -52,11 +52,14 @@ const dataReducer = createReducer(initialState, (builder) => {
     .addCase(setSortType, (state, action) => {
       state.currentSortType = action.payload;
     })
-    .addCase(setLoadingScreenShow, (state, action) => {
-      state.isLoadingScreenShow = action.payload;
+    .addCase(setLoadingInProgress, (state, action) => {
+      state.loadingInProgress = action.payload;
     })
     .addCase(setError, (state, action) => {
       state.error = action.payload;
+    })
+    .addCase(clearErrorAction, (state) => {
+      state.error = null;
     })
     .addCase(setAuthorizationStatus, (state, action) => {
       state.authorizationStatus = action.payload;

@@ -46,7 +46,7 @@ function createAPI(): AxiosInstance {
         const errorMessage = additionalMessages ? `${message} ${additionalMessages}` : message;
         store.dispatch(setError(errorMessage.trim()));
       }
-      throw error;
+      return Promise.reject(error);
     }
   );
 
