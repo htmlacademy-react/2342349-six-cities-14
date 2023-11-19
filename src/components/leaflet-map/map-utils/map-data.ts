@@ -1,5 +1,6 @@
 import {BriefOffer} from '../../../types/brief-offer.ts';
 import {City} from '../../../types/city.ts';
+import {FullOffer} from '../../../types/full-offer.ts';
 import {MapPoint} from '../../../types/map-point.ts';
 
 function createMapPoint(entity: BriefOffer | City): MapPoint {
@@ -12,7 +13,7 @@ function createMapPoint(entity: BriefOffer | City): MapPoint {
 }
 
 function getMapDataFromOffers(
-  offers: BriefOffer[],
+  offers: BriefOffer[] | FullOffer[],
   selectedCity: City,
   selectedOfferId: BriefOffer['id']): [MapPoint, MapPoint[], MapPoint | undefined] {
 

@@ -12,7 +12,6 @@ function MainPage() {
   const cities = useAppSelector((state) => state.data.cities);
   const selectedCity = useAppSelector((state) => state.data.selectedCity);
   const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
-
   const dispatch = useAppDispatch();
 
   return (

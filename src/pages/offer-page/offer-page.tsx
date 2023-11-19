@@ -1,40 +1,61 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Helmet} from 'react-helmet-async';
-import {Navigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import getMapDataFromOffers from '../../components/leaflet-map/map-utils/map-data.ts';
 import Logo from '../../components/logo/logo.tsx';
 import NavigationMenu from '../../components/navigation-menu/navigation-menu.tsx';
 import NearbyOfferList from '../../components/nearby-offer-list/nearby-offer-list.tsx';
 import SingleOffer from '../../components/single-offer/single-offer.tsx';
-import {AppRoute, MAX_COMMENT_LENGTH, MAX_NEAR_OFFERS, MIN_COMMENT_LENGTH} from '../../const.ts';
-import {useAppSelector} from '../../hooks';
+import {MAX_COMMENT_LENGTH, MAX_NEAR_OFFERS, MIN_COMMENT_LENGTH} from '../../const.ts';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {clearNearbyOffers, clearOffer, clearReviews, setLoadingInProgress} from '../../store/action.ts';
+import {fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction} from '../../store/api-actions.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
-import {FullOffer} from '../../types/full-offer.ts';
+import NotFoundPage from '../not-found-page/not-found-page.tsx';
 
-interface OfferPageProps {
-  nearbyOffers: FullOffer[];
-}
-
-function OfferPage({nearbyOffers}: Readonly<OfferPageProps>) {
+function OfferPage() {
   const [selectedOfferId, setSelectedOfferId] = useState<BriefOffer['id']>('');
-  const { id: idString} = useParams<{ id: string }>();
+  const {id: urlId} = useParams<{ id: string }>();
+  const dispatch = useAppDispatch();
 
   const offers = useAppSelector((state) => state.data.offers);
+  const isOfferExist = offers.some((offerItem) => offerItem.id === urlId);
+  const offer = useAppSelector((state) => state.data.offer);
+  const nearbyOffers = useAppSelector((state) => state.data.nearbyOffers);
   const reviews = useAppSelector((state) => state.data.reviews);
   const selectedCity = useAppSelector((state) => state.data.selectedCity);
   const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
 
-  if (!offers || !idString) {
-    return <Navigate to={AppRoute.Main}/>;
+  useEffect(() => {
+    async function fetchData() {
+      if (urlId && isOfferExist) {
+        dispatch(setLoadingInProgress(true));
+        dispatch(clearOffer());
+        dispatch(clearNearbyOffers());
+        dispatch(clearReviews());
+
+        await Promise.all([
+          dispatch(fetchOfferAction(urlId)),
+          dispatch(fetchNearbyOffersAction(urlId)),
+          dispatch(fetchReviewsAction(urlId))
+        ]);
+
+        dispatch(setLoadingInProgress(false));
+      }
+    }
+    fetchData();
+  }, [dispatch, urlId, isOfferExist]);
+
+  if (offers.length > 0 && !isOfferExist) {
+    return <NotFoundPage text={`Offer with id '${urlId}' not found.`}/>;
   }
-  const id = parseInt(idString, 10);
-  const offer = offers.find((offerItem) => offerItem.id === id);
-  if (!offer) {
-    return <Navigate to={AppRoute.Main}/>;
+
+  if (!offer || !urlId || !nearbyOffers || !reviews) {
+    return null;
   }
 
   const [mapCity, mapPoints, selectedMapPoint] =
-        getMapDataFromOffers([offer, ...nearbyOffers.slice(0, MAX_NEAR_OFFERS)], selectedCity, selectedOfferId);
+    getMapDataFromOffers([offer, ...nearbyOffers.slice(0, MAX_NEAR_OFFERS)], selectedCity, selectedOfferId);
 
   return (
     <div className="page">
@@ -45,7 +66,7 @@ function OfferPage({nearbyOffers}: Readonly<OfferPageProps>) {
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
-            <Logo />
+            <Logo/>
             <NavigationMenu
               authorizationStatus={authorizationStatus}
             />
@@ -55,8 +76,10 @@ function OfferPage({nearbyOffers}: Readonly<OfferPageProps>) {
 
       <main className="page__main page__main--offer">
         <SingleOffer
+          authorizationStatus={authorizationStatus}
+          offerId={urlId}
           offer={offer}
-          reviews={reviews ?? []}
+          reviews={reviews}
           city={mapCity}
           points={mapPoints}
           selectedPoint={selectedMapPoint}

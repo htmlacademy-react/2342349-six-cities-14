@@ -4,9 +4,19 @@ import {APIRoute, AuthorizationStatus} from '../const.ts';
 import {dropToken, saveToken} from '../services/token.ts';
 import {AuthData} from '../types/auth-data.ts';
 import {BriefOffer} from '../types/brief-offer.ts';
+import {FullOffer} from '../types/full-offer.ts';
+import {ReviewData} from '../types/review-data.ts';
+import {Review} from '../types/review.ts';
 import {AppDispatch, State} from '../types/state.ts';
 import {UserData} from '../types/user-data.ts';
-import {setAuthorizationStatus, setLoadingInProgress, setOffers} from './action.ts';
+import {
+  setAuthorizationStatus,
+  setLoadingInProgress,
+  setNearbyOffers,
+  setOffer,
+  setOffers,
+  setReviews
+} from './action.ts';
 
 export const fetchOffersAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;
@@ -21,6 +31,54 @@ export const fetchOffersAction = createAsyncThunk<void, undefined, {
     dispatch(setLoadingInProgress(false));
   },
 );
+
+export const fetchOfferAction = createAsyncThunk<
+  void,
+  BriefOffer['id'],
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }>(
+    'data/fetchOffer',
+    async (id, {dispatch, extra: api}) => {
+      const url = APIRoute.GetOffer.replace(':offerId', id.toString());
+      const {data} = await api.get<FullOffer>(url);
+      dispatch(setOffer(data));
+    },
+  );
+
+export const fetchNearbyOffersAction = createAsyncThunk<
+  void,
+  BriefOffer['id'],
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }>(
+    'data/fetchNearbyOffersAction',
+    async (id, {dispatch, extra: api}) => {
+      const url = APIRoute.GetOfferNearby.replace(':offerId', id.toString());
+      const {data} = await api.get<BriefOffer[]>(url);
+      dispatch(setNearbyOffers(data));
+    },
+  );
+
+export const fetchReviewsAction = createAsyncThunk<
+  void,
+  BriefOffer['id'],
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }>(
+    'data/fetchReviewsAction',
+    async (id, {dispatch, extra: api}) => {
+      const url = APIRoute.GetComments.replace(':offerId', id.toString());
+      const {data} = await api.get<Review[]>(url);
+      dispatch(setReviews(data));
+    },
+  );
 
 export const checkAuthAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;
@@ -57,11 +115,11 @@ export const loginAction = createAsyncThunk<
       const token = response.data?.token ?? '';
       saveToken(token);
       dispatch(setAuthorizationStatus(AuthorizationStatus.Auth));
-      dispatch(setLoadingInProgress(false));
       return {success: true, token};
     } catch {
-      dispatch(setLoadingInProgress(false));
       return {success: false};
+    } finally {
+      dispatch(setLoadingInProgress(false));
     }
   },
 );
@@ -78,5 +136,32 @@ export const logoutAction = createAsyncThunk<void, undefined, {
     dropToken();
     dispatch(setAuthorizationStatus(AuthorizationStatus.NoAuth));
     dispatch(setLoadingInProgress(false));
+  },
+);
+
+export const postReview = createAsyncThunk<
+  { success: boolean },
+  {
+    reviewData: ReviewData;
+    id: BriefOffer['id'];
+  }, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}
+>(
+  'user/postReview',
+  async ({id, reviewData}, {dispatch, extra: api}) => {
+    const {comment, rating} = reviewData;
+    dispatch(setLoadingInProgress(true));
+    try {
+      const url = APIRoute.PostComment.replace(':offerId', id.toString());
+      await api.post<UserData>(url, {comment, rating});
+      return {success: true};
+    } catch {
+      return {success: false};
+    } finally {
+      dispatch(setLoadingInProgress(false));
+    }
   },
 );

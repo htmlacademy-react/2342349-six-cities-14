@@ -1,8 +1,7 @@
 import axios, {AxiosError, AxiosInstance, AxiosResponse} from 'axios';
 import {StatusCodes} from 'http-status-codes';
+import {toast} from 'react-toastify';
 import {BACKEND_REQUEST_TIMEOUT, BACKEND_URL} from '../const.ts';
-import {store} from '../store';
-import {setError} from '../store/action.ts';
 import {getToken} from './token.ts';
 
 type DetailMessage = {
@@ -44,7 +43,7 @@ function createAPI(): AxiosInstance {
         const { message, details } = error.response.data;
         const additionalMessages = details?.map((detail) => detail.messages.join(' ')).join(' ') ?? '';
         const errorMessage = additionalMessages ? `${message} ${additionalMessages}` : message;
-        store.dispatch(setError(errorMessage.trim()));
+        toast.warning(errorMessage);
       }
       return Promise.reject(error);
     }

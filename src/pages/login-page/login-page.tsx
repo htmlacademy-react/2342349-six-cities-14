@@ -9,19 +9,21 @@ function LoginPage() {
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
 
-  const submitHandler = async (evt: FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
+  const submitHandler = (event: FormEvent) => {
+    event.preventDefault();
 
-    if (loginRef.current !== null && passwordRef.current !== null) {
-      const result = await dispatch(loginAction({
+    if (loginRef.current && passwordRef.current) {
+      dispatch(loginAction({
         login: loginRef.current.value,
         password: passwordRef.current.value
-      })).unwrap();
-
-      if (!result.success) {
-        loginRef.current.value = '';
-        passwordRef.current.value = '';
-      }
+      }))
+        .unwrap()
+        .then((result) => {
+          if (!result.success && loginRef.current && passwordRef.current) {
+            loginRef.current.value = '';
+            passwordRef.current.value = '';
+          }
+        });
     }
   };
 

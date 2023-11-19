@@ -1,4 +1,6 @@
 import classNames from 'classnames';
+import {AuthorizationStatusType} from '../../const.ts';
+import {BriefOffer} from '../../types/brief-offer.ts';
 import {FullOffer} from '../../types/full-offer.ts';
 import {MapPoint} from '../../types/map-point.ts';
 import {Review} from '../../types/review.ts';
@@ -15,9 +17,11 @@ interface SingleOfferProps {
   selectedPoint: MapPoint | undefined;
   minCommentLength: number;
   maxCommentLength: number;
+  authorizationStatus: AuthorizationStatusType;
+  offerId: BriefOffer['id'];
 }
 
-function SingleOffer({offer, reviews, city, points,
+function SingleOffer({authorizationStatus, offerId, offer, reviews, city, points,
   selectedPoint, minCommentLength, maxCommentLength}: Readonly<SingleOfferProps>) {
   const {title, isFavorite, isPremium, bedrooms, maxAdults, description,
     rating, type, price, images, goods, host} = offer;
@@ -112,6 +116,8 @@ function SingleOffer({offer, reviews, city, points,
           <section className="offer__reviews reviews">
             <ReviewList reviews={reviews}/>
             <ReviewForm
+              offerId={offerId}
+              authorizationStatus={authorizationStatus}
               minCommentLength={minCommentLength}
               maxCommentLength={maxCommentLength}
             />

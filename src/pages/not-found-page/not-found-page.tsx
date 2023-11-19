@@ -7,8 +7,15 @@ import {useAppSelector} from '../../hooks';
 
 import styles from './not-found-page.module.css';
 
-function NotFoundPage() {
+interface NotFoundPageProps {
+  text?: string;
+}
+
+function NotFoundPage({text}: Readonly<NotFoundPageProps>) {
   const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
+  if (!text) {
+    text = 'Something went wrong';
+  }
 
   return (
     <div className="page">
@@ -32,7 +39,7 @@ function NotFoundPage() {
           <h1 className={styles.heading}>
             Oops!
             <br/>
-            <small className={styles.text}>Something went wrong</small>
+            <small className={styles.text}>{text}</small>
           </h1>
           <Link to={AppRoute.Main} className={styles.link}>Return Home</Link>
         </div>
