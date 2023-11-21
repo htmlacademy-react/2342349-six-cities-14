@@ -12,10 +12,10 @@ import {UserData} from '../types/user-data.ts';
 import {
   setAuthorizationStatus,
   setLoadingInProgress,
-  setNearbyOffers,
-  setOffer,
+  setCurrentNearbyOffers,
+  setCurrentOffer,
   setOffers,
-  setReviews
+  setCurrentReviews
 } from './action.ts';
 
 export const fetchOffersAction = createAsyncThunk<void, undefined, {
@@ -26,13 +26,16 @@ export const fetchOffersAction = createAsyncThunk<void, undefined, {
   'data/fetchOffers',
   async (_arg, {dispatch, extra: api}) => {
     dispatch(setLoadingInProgress(true));
-    const {data} = await api.get<BriefOffer[]>(APIRoute.GetOffers);
-    dispatch(setOffers(data));
-    dispatch(setLoadingInProgress(false));
+    try {
+      const {data} = await api.get<BriefOffer[]>(APIRoute.GetOffers);
+      dispatch(setOffers(data));
+    } finally {
+      dispatch(setLoadingInProgress(false));
+    }
   },
 );
 
-export const fetchOfferAction = createAsyncThunk<
+export const fetchCurrentOfferAction = createAsyncThunk<
   void,
   BriefOffer['id'],
   {
@@ -40,15 +43,15 @@ export const fetchOfferAction = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }>(
-    'data/fetchOffer',
+    'data/fetchCurrentOfferAction',
     async (id, {dispatch, extra: api}) => {
       const url = APIRoute.GetOffer.replace(':offerId', id.toString());
       const {data} = await api.get<FullOffer>(url);
-      dispatch(setOffer(data));
+      dispatch(setCurrentOffer(data));
     },
   );
 
-export const fetchNearbyOffersAction = createAsyncThunk<
+export const fetchCurrentNearbyOffersAction = createAsyncThunk<
   void,
   BriefOffer['id'],
   {
@@ -56,15 +59,15 @@ export const fetchNearbyOffersAction = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }>(
-    'data/fetchNearbyOffersAction',
+    'data/fetchCurrentNearbyOffersAction',
     async (id, {dispatch, extra: api}) => {
       const url = APIRoute.GetOfferNearby.replace(':offerId', id.toString());
       const {data} = await api.get<BriefOffer[]>(url);
-      dispatch(setNearbyOffers(data));
+      dispatch(setCurrentNearbyOffers(data));
     },
   );
 
-export const fetchReviewsAction = createAsyncThunk<
+export const fetchCurrentReviewsAction = createAsyncThunk<
   void,
   BriefOffer['id'],
   {
@@ -72,11 +75,11 @@ export const fetchReviewsAction = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }>(
-    'data/fetchReviewsAction',
+    'data/fetchCurrentReviewsAction',
     async (id, {dispatch, extra: api}) => {
       const url = APIRoute.GetComments.replace(':offerId', id.toString());
       const {data} = await api.get<Review[]>(url);
-      dispatch(setReviews(data));
+      dispatch(setCurrentReviews(data));
     },
   );
 
@@ -93,8 +96,9 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
       dispatch(setAuthorizationStatus(AuthorizationStatus.Auth));
     } catch {
       dispatch(setAuthorizationStatus(AuthorizationStatus.NoAuth));
+    } finally {
+      dispatch(setLoadingInProgress(false));
     }
-    dispatch(setLoadingInProgress(false));
   },
 );
 
@@ -110,17 +114,19 @@ export const loginAction = createAsyncThunk<
   'user/login',
   async ({login: email, password}, {dispatch, extra: api}) => {
     dispatch(setLoadingInProgress(true));
+    let result;
     try {
       const response = await api.post<UserData>(APIRoute.PostLogin, {email, password});
       const token = response.data?.token ?? '';
       saveToken(token);
       dispatch(setAuthorizationStatus(AuthorizationStatus.Auth));
-      return {success: true, token};
+      result = {success: true, token};
     } catch {
-      return {success: false};
+      result = {success: false};
     } finally {
       dispatch(setLoadingInProgress(false));
     }
+    return result;
   },
 );
 
@@ -132,10 +138,13 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   'user/logout',
   async (_arg, {dispatch, extra: api}) => {
     dispatch(setLoadingInProgress(true));
-    await api.delete(APIRoute.DeleteLogout);
-    dropToken();
-    dispatch(setAuthorizationStatus(AuthorizationStatus.NoAuth));
-    dispatch(setLoadingInProgress(false));
+    try {
+      await api.delete(APIRoute.DeleteLogout);
+      dropToken();
+      dispatch(setAuthorizationStatus(AuthorizationStatus.NoAuth));
+    } finally {
+      dispatch(setLoadingInProgress(false));
+    }
   },
 );
 

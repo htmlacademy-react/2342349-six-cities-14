@@ -11,13 +11,13 @@ interface NavigationMenuProps {
 function NavigationMenu({authorizationStatus}: Readonly<NavigationMenuProps>) {
   const dispatch = useAppDispatch();
 
-  const signOutClickHandler = () => {
+  const handleSignOutClick = () => {
     dispatch(logoutAction());
   };
 
-  const keyDownHandler = (event: React.KeyboardEvent) => {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
-      signOutClickHandler();
+      handleSignOutClick();
     }
   };
 
@@ -34,8 +34,8 @@ function NavigationMenu({authorizationStatus}: Readonly<NavigationMenuProps>) {
           </li>
           <li
             className="header__nav-item"
-            onClick={signOutClickHandler}
-            onKeyDown={keyDownHandler}
+            onClick={handleSignOutClick}
+            onKeyDown={handleKeyDown}
           >
             <Link className="header__nav-link" to="#">
               <span className="header__signout">Sign out</span>

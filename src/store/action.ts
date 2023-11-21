@@ -7,12 +7,12 @@ import {FullOffer} from '../types/full-offer.ts';
 import {Review} from '../types/review.ts';
 
 export const setOffers = createAction<BriefOffer[]>('data/setOffers');
-export const setOffer = createAction<FullOffer>('data/setOffer');
-export const clearOffer = createAction('data/clearOffer');
-export const setNearbyOffers = createAction<BriefOffer[]>('data/setNearbyOffers');
-export const clearNearbyOffers = createAction('data/clearNearbyOffers');
-export const setReviews = createAction<Review[]>('data/setReviews');
-export const clearReviews = createAction('data/clearReviews');
+export const setCurrentOffer = createAction<FullOffer>('data/setCurrentOffer');
+export const clearCurrentOffer = createAction('data/clearCurrentOffer');
+export const setCurrentNearbyOffers = createAction<BriefOffer[]>('data/setCurrentNearbyOffers');
+export const clearCurrentNearbyOffers = createAction('data/clearCurrentNearbyOffers');
+export const setCurrentReviews = createAction<Review[]>('data/setCurrentReviews');
+export const clearCurrentReviews = createAction('data/clearCurrentReviews');
 export const setLoadingInProgress = createAction<boolean>('data/loadingInProgress');
 
 export const setCities = createAction<City[]>('site/setCities');

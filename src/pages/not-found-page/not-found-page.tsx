@@ -1,9 +1,7 @@
 import {Helmet} from 'react-helmet-async';
 import {Link} from 'react-router-dom';
-import Logo from '../../components/logo/logo.tsx';
-import NavigationMenu from '../../components/navigation-menu/navigation-menu.tsx';
+import Header from '../../components/header/header.tsx';
 import {AppRoute} from '../../const.ts';
-import {useAppSelector} from '../../hooks';
 
 import styles from './not-found-page.module.css';
 
@@ -11,28 +9,14 @@ interface NotFoundPageProps {
   text?: string;
 }
 
-function NotFoundPage({text}: Readonly<NotFoundPageProps>) {
-  const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
-  if (!text) {
-    text = 'Something went wrong';
-  }
+function NotFoundPage({text = 'Something went wrong'}: Readonly<NotFoundPageProps>) {
 
   return (
     <div className="page">
       <Helmet>
         <title>6 Sites - 404</title>
       </Helmet>
-
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <Logo/>
-            <NavigationMenu
-              authorizationStatus={authorizationStatus}
-            />
-          </div>
-        </div>
-      </header>
+      <Header/>
 
       <main className="page__main">
         <div className={styles.container}>

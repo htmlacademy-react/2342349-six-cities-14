@@ -9,7 +9,7 @@ function LoginPage() {
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
 
-  const submitHandler = (event: FormEvent) => {
+  const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
     if (loginRef.current && passwordRef.current) {
@@ -47,7 +47,7 @@ function LoginPage() {
             <h1 className="login__title">Sign in</h1>
             <form className="login__form form"
               action=""
-              onSubmit={submitHandler}
+              onSubmit={handleSubmit}
             >
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>

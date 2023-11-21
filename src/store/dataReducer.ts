@@ -6,16 +6,16 @@ import {City} from '../types/city.ts';
 import {FullOffer} from '../types/full-offer.ts';
 import {Review} from '../types/review.ts';
 import {
-  clearNearbyOffers,
-  clearOffer,
+  clearCurrentNearbyOffers,
+  clearCurrentOffer,
   selectCity,
   setAuthorizationStatus,
   setCities,
   setLoadingInProgress,
-  setNearbyOffers,
-  setOffer,
+  setCurrentNearbyOffers,
+  setCurrentOffer,
   setOffers,
-  setReviews,
+  setCurrentReviews,
   setSortType
 } from './action.ts';
 
@@ -23,9 +23,9 @@ interface State {
     selectedCity: City;
     cities: City[];
     offers: BriefOffer[];
-    offer: FullOffer | null;
-    nearbyOffers: BriefOffer[] | null;
-    reviews: Review[] | null;
+    currentOffer: FullOffer | null;
+    currentNearbyOffers: BriefOffer[] | null;
+    currentReviews: Review[] | null;
     currentSortType: keyof typeof sortOptions;
     loadingInProgress: boolean;
     authorizationStatus: AuthorizationStatusType;
@@ -35,9 +35,9 @@ const initialState: State = {
   selectedCity: CITY_FOR_EMPTY_LIST[0],
   cities: CITY_FOR_EMPTY_LIST,
   offers: [],
-  offer: null,
-  nearbyOffers: null,
-  reviews: null,
+  currentOffer: null,
+  currentNearbyOffers: null,
+  currentReviews: null,
   currentSortType: 'POPULAR',
   loadingInProgress: false,
   authorizationStatus: AuthorizationStatus.Unknown
@@ -54,20 +54,20 @@ const dataReducer = createReducer(initialState, (builder) => {
     .addCase(setOffers, (state, action) => {
       state.offers = action.payload;
     })
-    .addCase(setOffer, (state, action) => {
-      state.offer = action.payload;
+    .addCase(setCurrentOffer, (state, action) => {
+      state.currentOffer = action.payload;
     })
-    .addCase(clearOffer, (state) => {
-      state.offer = null;
+    .addCase(clearCurrentOffer, (state) => {
+      state.currentOffer = null;
     })
-    .addCase(setNearbyOffers, (state, action) => {
-      state.nearbyOffers = action.payload;
+    .addCase(setCurrentNearbyOffers, (state, action) => {
+      state.currentNearbyOffers = action.payload;
     })
-    .addCase(clearNearbyOffers, (state) => {
-      state.nearbyOffers = null;
+    .addCase(clearCurrentNearbyOffers, (state) => {
+      state.currentNearbyOffers = null;
     })
-    .addCase(setReviews, (state, action) => {
-      state.reviews = action.payload;
+    .addCase(setCurrentReviews, (state, action) => {
+      state.currentReviews = action.payload;
     })
     .addCase(setSortType, (state, action) => {
       state.currentSortType = action.payload;

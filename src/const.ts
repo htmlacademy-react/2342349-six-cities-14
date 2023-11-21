@@ -19,7 +19,6 @@ export const APIRoute = {
   PostLogin: '/login',
   DeleteLogout: '/logout',
 } as const;
-export type APIRouteType = typeof APIRoute[keyof typeof APIRoute];
 
 export const AuthorizationStatus = {
   Auth: 'AUTH',
@@ -38,6 +37,7 @@ export const MIN_COMMENT_LENGTH = 50;
 export const MAX_COMMENT_LENGTH = 300;
 export const MAX_RENT_OFFERS = 100;
 
+export const MAX_IMAGES_PER_OFFER = 6;
 export const MAX_NEAR_OFFERS = 3;
 export const URL_MARKER_DEFAULT = '/img/pin.svg';
 

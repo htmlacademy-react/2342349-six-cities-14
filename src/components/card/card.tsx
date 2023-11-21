@@ -32,13 +32,13 @@ function Card({cardType, offer, onCardInteraction}: Readonly<CardProps>) {
   const {name, imgWidth, imgHeight} = cardConfigurations[cardType];
 
   const offerLink = `${AppRoute.Offer}/${id}`;
-  const cardInteractionHandler = onCardInteraction ? () => onCardInteraction(id) : undefined;
+  const handleCardInteraction = onCardInteraction ? () => onCardInteraction(id) : undefined;
 
   return (
     <article
       className={`${name}__card place-card`}
-      onMouseOver={cardInteractionHandler}
-      onFocus={cardInteractionHandler}
+      onMouseOver={handleCardInteraction}
+      onFocus={handleCardInteraction}
     >
       {isPremium && (
         <div className="place-card__mark">

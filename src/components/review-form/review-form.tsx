@@ -2,7 +2,7 @@ import {ChangeEvent, FormEvent, useState} from 'react';
 import {toast} from 'react-toastify';
 import {AuthorizationStatus, AuthorizationStatusType, REVIEW_RATING} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
-import {fetchReviewsAction, postReview} from '../../store/api-actions.ts';
+import {fetchCurrentReviewsAction, postReview} from '../../store/api-actions.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import ReviewRating from '../review-rating/review-rating.tsx';
 
@@ -13,7 +13,12 @@ interface ReviewFormProps {
   maxCommentLength: number;
 }
 
-function ReviewForm({authorizationStatus, offerId, minCommentLength = 0, maxCommentLength = 2500}: Readonly<ReviewFormProps>) {
+function ReviewForm({
+  authorizationStatus,
+  offerId,
+  minCommentLength = 0,
+  maxCommentLength = 2500
+}: Readonly<ReviewFormProps>) {
   const dispatch = useAppDispatch();
   const [comment, setComment] = useState({
     rating: 0,
@@ -26,12 +31,14 @@ function ReviewForm({authorizationStatus, offerId, minCommentLength = 0, maxComm
 
   const handleRatingSelect = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    if (!isNaN(Number(value))) {
-      setComment({
-        ...comment,
-        rating: parseInt(value, 10)
-      });
+    if (isNaN(Number(value))) {
+      return;
     }
+
+    setComment({
+      ...comment,
+      rating: parseInt(value, 10)
+    });
   };
 
   const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -43,26 +50,28 @@ function ReviewForm({authorizationStatus, offerId, minCommentLength = 0, maxComm
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    if (comment.text && comment.rating) {
-      dispatch(postReview({
-        id: offerId,
-        reviewData: {
-          comment: comment.text,
-          rating: comment.rating
-        }
-      }))
-        .unwrap()
-        .then((result) => {
-          if (result.success) {
-            setComment({
-              rating: 0,
-              text: ''
-            });
-            toast.success('Review submitted.');
-            dispatch(fetchReviewsAction(offerId));
-          }
-        });
+    if (!comment.text || !comment.rating) {
+      return;
     }
+
+    dispatch(postReview({
+      id: offerId,
+      reviewData: {
+        comment: comment.text,
+        rating: comment.rating
+      }
+    }))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          setComment({
+            rating: 0,
+            text: ''
+          });
+          toast.success('Review submitted.');
+          dispatch(fetchCurrentReviewsAction(offerId));
+        }
+      });
   };
 
   const isSubmitDisabled =
@@ -98,7 +107,10 @@ function ReviewForm({authorizationStatus, offerId, minCommentLength = 0, maxComm
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe
-          your stay with at least <b className="reviews__text-amount">{minCommentLength}</b> and no more than <b className="reviews__text-amount">{maxCommentLength} characters</b>.
+          your stay with at least <b className="reviews__text-amount">{minCommentLength}</b> and no more than <b
+            className="reviews__text-amount"
+          >{maxCommentLength} characters
+          </b>.
         </p>
         <button className="reviews__submit form__submit button"
           type="submit"
