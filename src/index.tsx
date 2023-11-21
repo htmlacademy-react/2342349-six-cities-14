@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {Provider} from 'react-redux';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import App from './app.tsx';
-import ErrorMessage from './components/error-message/error-message.tsx';
 import LoadingScreen from './pages/loading-screen/loading-screen.tsx';
 import {store} from './store';
 
@@ -13,7 +14,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ErrorMessage />
+      <ToastContainer />
       <LoadingScreen />
       <App />
     </Provider>

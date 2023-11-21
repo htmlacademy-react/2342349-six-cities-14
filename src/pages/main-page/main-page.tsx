@@ -1,7 +1,6 @@
 import {Helmet} from 'react-helmet-async';
 import CityList from '../../components/city-list/city-list.tsx';
-import Logo from '../../components/logo/logo.tsx';
-import NavigationMenu from '../../components/navigation-menu/navigation-menu.tsx';
+import Header from '../../components/header/header.tsx';
 import OfferList from '../../components/offer-list/offer-list.tsx';
 import {MAX_RENT_OFFERS} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
@@ -11,8 +10,6 @@ function MainPage() {
   const offers = useAppSelector((state) => state.data.offers);
   const cities = useAppSelector((state) => state.data.cities);
   const selectedCity = useAppSelector((state) => state.data.selectedCity);
-  const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
-
   const dispatch = useAppDispatch();
 
   return (
@@ -20,17 +17,7 @@ function MainPage() {
       <Helmet>
         <title>6 Sites - Main</title>
       </Helmet>
-
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <Logo/>
-            <NavigationMenu
-              authorizationStatus={authorizationStatus}
-            />
-          </div>
-        </div>
-      </header>
+      <Header/>
 
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>

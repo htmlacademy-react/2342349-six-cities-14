@@ -1,73 +1,111 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Helmet} from 'react-helmet-async';
-import {Navigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
+import Header from '../../components/header/header.tsx';
+import LeafletMap from '../../components/leaflet-map/leaflet-map.tsx';
 import getMapDataFromOffers from '../../components/leaflet-map/map-utils/map-data.ts';
-import Logo from '../../components/logo/logo.tsx';
-import NavigationMenu from '../../components/navigation-menu/navigation-menu.tsx';
 import NearbyOfferList from '../../components/nearby-offer-list/nearby-offer-list.tsx';
-import SingleOffer from '../../components/single-offer/single-offer.tsx';
-import {AppRoute, MAX_COMMENT_LENGTH, MAX_NEAR_OFFERS, MIN_COMMENT_LENGTH} from '../../const.ts';
-import {useAppSelector} from '../../hooks';
+import OfferDetails from '../../components/offer-details/offer-details.tsx';
+import ReviewForm from '../../components/review-form/review-form.tsx';
+import ReviewList from '../../components/review-list/review-list.tsx';
+import {MAX_COMMENT_LENGTH, MAX_IMAGES_PER_OFFER, MAX_NEAR_OFFERS, MIN_COMMENT_LENGTH} from '../../const.ts';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {clearCurrentNearbyOffers, clearCurrentOffer, clearCurrentReviews} from '../../store/action.ts';
+import {fetchCurrentNearbyOffersAction, fetchCurrentOfferAction, fetchCurrentReviewsAction} from '../../store/api-actions.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
-import {FullOffer} from '../../types/full-offer.ts';
+import NotFoundPage from '../not-found-page/not-found-page.tsx';
 
-interface OfferPageProps {
-  nearbyOffers: FullOffer[];
-}
-
-function OfferPage({nearbyOffers}: Readonly<OfferPageProps>) {
+function OfferPage() {
   const [selectedOfferId, setSelectedOfferId] = useState<BriefOffer['id']>('');
-  const { id: idString} = useParams<{ id: string }>();
+  const {id: urlId} = useParams<{ id: string }>();
+  const dispatch = useAppDispatch();
 
   const offers = useAppSelector((state) => state.data.offers);
-  const reviews = useAppSelector((state) => state.data.reviews);
+  const isOfferExist = offers.some((offerItem) => offerItem.id === urlId);
+  const currentOffer = useAppSelector((state) => state.data.currentOffer);
+  const currentNearbyOffers = useAppSelector((state) => state.data.currentNearbyOffers);
+  const currentReviews = useAppSelector((state) => state.data.currentReviews);
   const selectedCity = useAppSelector((state) => state.data.selectedCity);
   const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
 
-  if (!offers || !idString) {
-    return <Navigate to={AppRoute.Main}/>;
-  }
-  const id = parseInt(idString, 10);
-  const offer = offers.find((offerItem) => offerItem.id === id);
-  if (!offer) {
-    return <Navigate to={AppRoute.Main}/>;
+  useEffect(() => {
+    if (urlId && isOfferExist) {
+      dispatch(clearCurrentOffer());
+      dispatch(clearCurrentNearbyOffers());
+      dispatch(clearCurrentReviews());
+      dispatch(fetchCurrentOfferAction(urlId));
+      dispatch(fetchCurrentNearbyOffersAction(urlId));
+      dispatch(fetchCurrentReviewsAction(urlId));
+    }
+
+  }, [dispatch, urlId, isOfferExist]);
+
+  if (offers.length > 0 && !isOfferExist || !urlId) {
+    return <NotFoundPage text={`Offer with id '${urlId}' not found.`}/>;
   }
 
-  const [mapCity, mapPoints, selectedMapPoint] =
-        getMapDataFromOffers([offer, ...nearbyOffers.slice(0, MAX_NEAR_OFFERS)], selectedCity, selectedOfferId);
+  if (!currentOffer && !currentNearbyOffers && !currentReviews) {
+    return null;
+  }
+
+  const imageList = currentOffer?.images.slice(0, MAX_IMAGES_PER_OFFER).map((image) => (
+    <div key={image} className="offer__image-wrapper">
+      <img className="offer__image" src={image} alt="Photo studio"></img>
+    </div>
+  ));
+
+  let mapCity, mapPoints, selectedMapPoint;
+  if (currentOffer && currentNearbyOffers) {
+    [mapCity, mapPoints, selectedMapPoint] =
+      getMapDataFromOffers([currentOffer, ...currentNearbyOffers.slice(0, MAX_NEAR_OFFERS)], selectedCity, selectedOfferId);
+  }
 
   return (
     <div className="page">
       <Helmet>
         <title>6 Sites - Offers</title>
       </Helmet>
-
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <Logo />
-            <NavigationMenu
-              authorizationStatus={authorizationStatus}
-            />
-          </div>
-        </div>
-      </header>
+      <Header/>
 
       <main className="page__main page__main--offer">
-        <SingleOffer
-          offer={offer}
-          reviews={reviews ?? []}
-          city={mapCity}
-          points={mapPoints}
-          selectedPoint={selectedMapPoint}
-          maxCommentLength={MAX_COMMENT_LENGTH}
-          minCommentLength={MIN_COMMENT_LENGTH}
-        />
-        <NearbyOfferList
-          offers={nearbyOffers}
-          selectedOffer={offer}
-          onCardInteraction={setSelectedOfferId}
-        />
+        {currentOffer && (
+          <section className="offer">
+            <div className="offer__gallery-container container">
+              <div className="offer__gallery">
+                {imageList}
+              </div>
+            </div>
+            <div className="offer__container container">
+              <div className="offer__wrapper">
+                <OfferDetails offer={currentOffer}/>
+
+                <section className="offer__reviews reviews">
+                  {currentReviews && (
+                    <ReviewList reviews={currentReviews}/>
+                  )}
+                  <ReviewForm
+                    offerId={urlId}
+                    authorizationStatus={authorizationStatus}
+                    minCommentLength={MIN_COMMENT_LENGTH}
+                    maxCommentLength={MAX_COMMENT_LENGTH}
+                  />
+                </section>
+              </div>
+            </div>
+
+            {mapCity && mapPoints && (
+              <LeafletMap block={'offer'} city={mapCity} points={mapPoints} selectedPoint={selectedMapPoint}/>
+            )}
+          </section>
+        )}
+
+        {currentOffer && currentNearbyOffers && (
+          <NearbyOfferList
+            offers={currentNearbyOffers}
+            selectedOffer={currentOffer}
+            onCardInteraction={setSelectedOfferId}
+          />
+        )}
       </main>
     </div>
   );

@@ -18,13 +18,13 @@ function NearbyOfferList({offers, selectedOffer, onCardInteraction}: Readonly<Ne
         onCardInteraction={onCardInteraction}
       />
     ));
-  const cardInteractionHandler = onCardInteraction ? () => onCardInteraction(selectedOffer.id) : undefined;
+  const handleCardInteraction = onCardInteraction ? () => onCardInteraction(selectedOffer.id) : undefined;
 
   return (
     <div className="container">
       <section
         className="near-places places"
-        onMouseLeave={cardInteractionHandler}
+        onMouseLeave={handleCardInteraction}
       >
         <h2 className="near-places__title">Other places in the neighbourhood</h2>
         <div className="near-places__list places__list">

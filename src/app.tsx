@@ -72,7 +72,7 @@ function App() {
           />
           <Route path={AppRoute.OfferId}
             element={
-              <OfferPage nearbyOffers={offers}/>
+              <OfferPage/>
             }
           />
           <Route path="*"
