@@ -12,6 +12,13 @@ import {MAX_COMMENT_LENGTH, MAX_IMAGES_PER_OFFER, MAX_NEAR_OFFERS, MIN_COMMENT_L
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {clearCurrentNearbyOffers, clearCurrentOffer, clearCurrentReviews} from '../../store/action.ts';
 import {fetchCurrentNearbyOffersAction, fetchCurrentOfferAction, fetchCurrentReviewsAction} from '../../store/api-actions.ts';
+import {getSelectedCity} from '../../store/site-data/site-data.selectors.ts';
+import {
+  getCurrentNearbyOffers, getCurrentOffer,
+  getCurrentReviews,
+  getOffers
+} from '../../store/site-process/site-process.selectors.ts';
+import {getAuthorizationStatus} from '../../store/user-process/user-process.selectors.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import NotFoundPage from '../not-found-page/not-found-page.tsx';
 
@@ -20,13 +27,13 @@ function OfferPage() {
   const {id: urlId} = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
 
-  const offers = useAppSelector((state) => state.data.offers);
+  const offers = useAppSelector(getOffers);
   const isOfferExist = offers.some((offerItem) => offerItem.id === urlId);
-  const currentOffer = useAppSelector((state) => state.data.currentOffer);
-  const currentNearbyOffers = useAppSelector((state) => state.data.currentNearbyOffers);
-  const currentReviews = useAppSelector((state) => state.data.currentReviews);
-  const selectedCity = useAppSelector((state) => state.data.selectedCity);
-  const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
+  const currentOffer = useAppSelector(getCurrentOffer);
+  const currentNearbyOffers = useAppSelector(getCurrentNearbyOffers);
+  const currentReviews = useAppSelector(getCurrentReviews);
+  const selectedCity = useAppSelector(getSelectedCity);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   useEffect(() => {
     if (urlId && isOfferExist) {

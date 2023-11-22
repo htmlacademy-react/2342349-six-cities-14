@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {useAppSelector} from '../../hooks';
+import {getCurrentSortType} from '../../store/site-data/site-data.selectors.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import {City} from '../../types/city.ts';
 import Card from '../card/card.tsx';
@@ -16,7 +17,7 @@ interface OfferListProps {
 
 function OfferList({offers, selectedCity, maxOfferLimit = 5}: Readonly<OfferListProps>) {
   const [selectedOfferId, setSelectedOfferId] = useState<BriefOffer['id']>('');
-  const currentSortType = useAppSelector((state) => state.data.currentSortType);
+  const currentSortType = useAppSelector(getCurrentSortType);
 
   const filteredOffers = offers.filter((offer) => offer.city.name === selectedCity.name);
   const currentOffers = sortOffers(filteredOffers, currentSortType);

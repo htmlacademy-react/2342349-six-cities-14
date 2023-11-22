@@ -2,7 +2,7 @@ import {ChangeEvent, FormEvent, useState} from 'react';
 import {toast} from 'react-toastify';
 import {AuthorizationStatus, AuthorizationStatusType, REVIEW_RATING} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
-import {fetchCurrentReviewsAction, postReview} from '../../store/api-actions.ts';
+import {fetchCurrentReviewsAction, postReviewAction} from '../../store/api-actions.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import ReviewRating from '../review-rating/review-rating.tsx';
 
@@ -54,7 +54,7 @@ function ReviewForm({
       return;
     }
 
-    dispatch(postReview({
+    dispatch(postReviewAction({
       id: offerId,
       reviewData: {
         comment: comment.text,
@@ -106,11 +106,9 @@ function ReviewForm({
       </textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
-          To submit review please make sure to set <span className="reviews__star">rating</span> and describe
-          your stay with at least <b className="reviews__text-amount">{minCommentLength}</b> and no more than <b
-            className="reviews__text-amount"
-          >{maxCommentLength} characters
-          </b>.
+          To submit review please make sure to set <span className="reviews__star">rating</span> and describe{' '}
+          your stay with at least <b className="reviews__text-amount">{minCommentLength}</b>{' '}
+          and no more than <b className="reviews__text-amount">{maxCommentLength} characters.</b>
         </p>
         <button className="reviews__submit form__submit button"
           type="submit"

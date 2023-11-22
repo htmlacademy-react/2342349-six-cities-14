@@ -5,11 +5,13 @@ import OfferList from '../../components/offer-list/offer-list.tsx';
 import {MAX_RENT_OFFERS} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {selectCity} from '../../store/action.ts';
+import {getCities, getSelectedCity} from '../../store/site-data/site-data.selectors.ts';
+import {getOffers} from '../../store/site-process/site-process.selectors.ts';
 
 function MainPage() {
-  const offers = useAppSelector((state) => state.data.offers);
-  const cities = useAppSelector((state) => state.data.cities);
-  const selectedCity = useAppSelector((state) => state.data.selectedCity);
+  const offers = useAppSelector(getOffers);
+  const cities = useAppSelector(getCities);
+  const selectedCity = useAppSelector(getSelectedCity);
   const dispatch = useAppDispatch();
 
   return (

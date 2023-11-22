@@ -1,8 +1,9 @@
 import {useAppSelector} from '../../hooks';
+import {getLoadingInProgress} from '../../store/site-process/site-process.selectors.ts';
 import styles from './loading-screen.module.css';
 
 function LoadingScreen() {
-  const loadingInProgress = useAppSelector((state) => state.data.loadingInProgress);
+  const loadingInProgress = useAppSelector(getLoadingInProgress);
 
   return loadingInProgress ? (
     <div className={styles.loadingOverlay}>

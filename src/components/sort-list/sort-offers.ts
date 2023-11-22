@@ -1,6 +1,6 @@
 import {BriefOffer} from '../../types/brief-offer.ts';
 
-const sortOptions = {
+const SortOptions = {
   POPULAR: {
     title: 'Popular',
     sortFn: (offers: BriefOffer[]) => offers
@@ -18,10 +18,11 @@ const sortOptions = {
     sortFn: (offers: BriefOffer[]) => offers.toSorted((a, b) => b.rating - a.rating)
   },
 } as const;
+export type SortOptionsType = keyof typeof SortOptions;
 
-function sortOffers(offers: BriefOffer[], sortType: keyof typeof sortOptions): BriefOffer[] {
-  return sortOptions[sortType].sortFn(offers);
+function sortOffers(offers: BriefOffer[], sortType: keyof typeof SortOptions): BriefOffer[] {
+  return SortOptions[sortType].sortFn(offers);
 }
 
-export {sortOptions, sortOffers};
+export {SortOptions, sortOffers};
 

@@ -1,6 +1,5 @@
 import {createAction} from '@reduxjs/toolkit';
-import {sortOptions} from '../components/sort-list/sort-offers.ts';
-import {AuthorizationStatusType} from '../const.ts';
+import {SortOptions} from '../components/sort-list/sort-offers.ts';
 import {BriefOffer} from '../types/brief-offer.ts';
 import {City} from '../types/city.ts';
 import {FullOffer} from '../types/full-offer.ts';
@@ -17,6 +16,4 @@ export const setLoadingInProgress = createAction<boolean>('data/loadingInProgres
 
 export const setCities = createAction<City[]>('site/setCities');
 export const selectCity = createAction<City>('site/selectCity');
-export const setSortType = createAction<keyof typeof sortOptions>('site/setSortType');
-export const setAuthorizationStatus = createAction<AuthorizationStatusType>('site/setAuthorizationStatus');
-
+export const setSortType = createAction<keyof typeof SortOptions>('site/setSortType');

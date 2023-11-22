@@ -3,9 +3,10 @@ import FavoriteList from '../../components/favorite-list/favorite-list.tsx';
 import Footer from '../../components/footer/footer.tsx';
 import Header from '../../components/header/header.tsx';
 import {useAppSelector} from '../../hooks';
+import {getOffers} from '../../store/site-process/site-process.selectors.ts';
 
 function FavoritePage() {
-  const offers = useAppSelector((state) => state.data.offers);
+  const offers = useAppSelector(getOffers);
 
   return (
     <div className="page">

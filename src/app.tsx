@@ -11,11 +11,13 @@ import NotFoundPage from './pages/not-found-page/not-found-page.tsx';
 import OfferPage from './pages/offer-page/offer-page.tsx';
 import {selectCity, setCities} from './store/action.ts';
 import {checkAuthAction, fetchOffersAction} from './store/api-actions.ts';
+import {getOffers} from './store/site-process/site-process.selectors.ts';
+import {getAuthorizationStatus} from './store/user-process/user-process.selectors.ts';
 import {City} from './types/city.ts';
 
 function App() {
-  const offers = useAppSelector((state) => state.data.offers);
-  const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
+  const offers = useAppSelector(getOffers);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
