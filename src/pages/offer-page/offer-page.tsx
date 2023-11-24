@@ -10,8 +10,15 @@ import ReviewForm from '../../components/review-form/review-form.tsx';
 import ReviewList from '../../components/review-list/review-list.tsx';
 import {MAX_COMMENT_LENGTH, MAX_IMAGES_PER_OFFER, MAX_NEAR_OFFERS, MIN_COMMENT_LENGTH} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {clearCurrentNearbyOffers, clearCurrentOffer, clearCurrentReviews} from '../../store/action.ts';
-import {fetchCurrentNearbyOffersAction, fetchCurrentOfferAction, fetchCurrentReviewsAction} from '../../store/api-actions.ts';
+import {fetchOfferDetails} from '../../store/api-actions/data-api-actions.ts';
+import {
+  getCurrentNearbyOffers,
+  getCurrentOffer,
+  getCurrentReviews,
+  getOffers
+} from '../../store/api-communication/api-communication.selectors.ts';
+import {getSelectedCity} from '../../store/session-state/session-state.selectors.ts';
+import {getAuthorizationStatus} from '../../store/user-preferences/user-preferences.selectors.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import NotFoundPage from '../not-found-page/not-found-page.tsx';
 
@@ -20,24 +27,18 @@ function OfferPage() {
   const {id: urlId} = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
 
-  const offers = useAppSelector((state) => state.data.offers);
+  const offers = useAppSelector(getOffers);
   const isOfferExist = offers.some((offerItem) => offerItem.id === urlId);
-  const currentOffer = useAppSelector((state) => state.data.currentOffer);
-  const currentNearbyOffers = useAppSelector((state) => state.data.currentNearbyOffers);
-  const currentReviews = useAppSelector((state) => state.data.currentReviews);
-  const selectedCity = useAppSelector((state) => state.data.selectedCity);
-  const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
+  const currentOffer = useAppSelector(getCurrentOffer);
+  const currentNearbyOffers = useAppSelector(getCurrentNearbyOffers);
+  const currentReviews = useAppSelector(getCurrentReviews);
+  const selectedCity = useAppSelector(getSelectedCity);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   useEffect(() => {
     if (urlId && isOfferExist) {
-      dispatch(clearCurrentOffer());
-      dispatch(clearCurrentNearbyOffers());
-      dispatch(clearCurrentReviews());
-      dispatch(fetchCurrentOfferAction(urlId));
-      dispatch(fetchCurrentNearbyOffersAction(urlId));
-      dispatch(fetchCurrentReviewsAction(urlId));
+      dispatch(fetchOfferDetails(urlId));
     }
-
   }, [dispatch, urlId, isOfferExist]);
 
   if (offers.length > 0 && !isOfferExist || !urlId) {

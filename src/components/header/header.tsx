@@ -1,9 +1,10 @@
 import {useAppSelector} from '../../hooks';
+import {getAuthorizationStatus} from '../../store/user-preferences/user-preferences.selectors.ts';
 import Logo from '../logo/logo.tsx';
 import NavigationMenu from '../navigation-menu/navigation-menu.tsx';
 
 function Header() {
-  const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   return (
     <header className="header">

@@ -1,24 +1,6 @@
-import axios, {AxiosError, AxiosInstance, AxiosResponse} from 'axios';
-import {StatusCodes} from 'http-status-codes';
-import {toast} from 'react-toastify';
+import axios, {AxiosInstance} from 'axios';
 import {BACKEND_REQUEST_TIMEOUT, BACKEND_URL} from '../const.ts';
 import {getToken} from './token.ts';
-
-type DetailMessage = {
-  type: string;
-  message: string;
-  details?: {
-    messages: string[];
-  }[];
-}
-
-const StatusCodeMapping: Record<number, boolean> = {
-  [StatusCodes.BAD_REQUEST]: true,
-  [StatusCodes.UNAUTHORIZED]: true,
-  [StatusCodes.NOT_FOUND]: true
-};
-
-const shouldDisplayError = (response: AxiosResponse) => StatusCodeMapping[response.status];
 
 function createAPI(): AxiosInstance {
   const api = axios.create({
@@ -34,19 +16,6 @@ function createAPI(): AxiosInstance {
       }
       return config;
     },
-  );
-
-  api.interceptors.response.use(
-    (response) => response,
-    (error: AxiosError<DetailMessage>) => {
-      if (error.response && shouldDisplayError(error.response)) {
-        const { message, details } = error.response.data;
-        const additionalMessages = details?.map((detail) => detail.messages.join(' ')).join(' ') ?? '';
-        const errorMessage = additionalMessages ? `${message} ${additionalMessages}` : message;
-        toast.warning(errorMessage);
-      }
-      return Promise.reject(error);
-    }
   );
 
   return api;

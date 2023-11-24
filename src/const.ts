@@ -27,6 +27,11 @@ export const AuthorizationStatus = {
 } as const ;
 export type AuthorizationStatusType = typeof AuthorizationStatus[keyof typeof AuthorizationStatus];
 
+export const NameSpace = {
+  SessionState: 'SESSION_STATE',
+  ApiCommunication: 'API_COMMUNICATION',
+  UserPreferences: 'USER_PREFERENCES',
+} as const;
 
 export const BACKEND_URL = 'https://14.design.pages.academy/six-cities';
 export const BACKEND_REQUEST_TIMEOUT = 5000;

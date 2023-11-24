@@ -1,4 +1,4 @@
-export type AuthData = {
+export interface AuthData {
   login: string;
   password: string;
-};
+}

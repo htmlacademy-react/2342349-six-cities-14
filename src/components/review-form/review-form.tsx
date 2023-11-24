@@ -1,8 +1,9 @@
-import {ChangeEvent, FormEvent, useState} from 'react';
-import {toast} from 'react-toastify';
+import {ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import {AuthorizationStatus, AuthorizationStatusType, REVIEW_RATING} from '../../const.ts';
-import {useAppDispatch} from '../../hooks';
-import {fetchCurrentReviewsAction, postReview} from '../../store/api-actions.ts';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {submitReviewAndUpdate} from '../../store/api-actions/data-api-actions.ts';
+import {getIsReviewSubmitted} from '../../store/api-communication/api-communication.selectors.ts';
+import {setReviewSubmitted} from '../../store/api-communication/api-communication.slice.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import ReviewRating from '../review-rating/review-rating.tsx';
 
@@ -24,6 +25,17 @@ function ReviewForm({
     rating: 0,
     text: ''
   });
+  const isReviewSubmitted = useAppSelector(getIsReviewSubmitted);
+
+  useEffect(() => {
+    if (isReviewSubmitted) {
+      setComment({
+        rating: 0,
+        text: ''
+      });
+      dispatch(setReviewSubmitted(false));
+    }
+  }, [dispatch, isReviewSubmitted]);
 
   if (authorizationStatus !== AuthorizationStatus.Auth) {
     return null;
@@ -54,24 +66,13 @@ function ReviewForm({
       return;
     }
 
-    dispatch(postReview({
+    dispatch(submitReviewAndUpdate({
       id: offerId,
       reviewData: {
         comment: comment.text,
         rating: comment.rating
       }
-    }))
-      .unwrap()
-      .then((result) => {
-        if (result.success) {
-          setComment({
-            rating: 0,
-            text: ''
-          });
-          toast.success('Review submitted.');
-          dispatch(fetchCurrentReviewsAction(offerId));
-        }
-      });
+    }));
   };
 
   const isSubmitDisabled =
@@ -106,11 +107,9 @@ function ReviewForm({
       </textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
-          To submit review please make sure to set <span className="reviews__star">rating</span> and describe
-          your stay with at least <b className="reviews__text-amount">{minCommentLength}</b> and no more than <b
-            className="reviews__text-amount"
-          >{maxCommentLength} characters
-          </b>.
+          To submit review please make sure to set <span className="reviews__star">rating</span> and describe{' '}
+          your stay with at least <b className="reviews__text-amount">{minCommentLength}</b>{' '}
+          and no more than <b className="reviews__text-amount">{maxCommentLength} characters.</b>
         </p>
         <button className="reviews__submit form__submit button"
           type="submit"

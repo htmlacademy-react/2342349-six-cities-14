@@ -9,13 +9,16 @@ import LoginPage from './pages/login-page/login-page.tsx';
 import MainPage from './pages/main-page/main-page.tsx';
 import NotFoundPage from './pages/not-found-page/not-found-page.tsx';
 import OfferPage from './pages/offer-page/offer-page.tsx';
-import {selectCity, setCities} from './store/action.ts';
-import {checkAuthAction, fetchOffersAction} from './store/api-actions.ts';
+import {fetchOffersAction} from './store/api-actions/data-api-actions.ts';
+import {checkAuthAction} from './store/api-actions/user-api-actions.ts';
+import {getOffers} from './store/api-communication/api-communication.selectors.ts';
+import {selectCity, setCities} from './store/session-state/session-state.slice.ts';
+import {getAuthorizationStatus} from './store/user-preferences/user-preferences.selectors.ts';
 import {City} from './types/city.ts';
 
 function App() {
-  const offers = useAppSelector((state) => state.data.offers);
-  const authorizationStatus = useAppSelector((state) => state.data.authorizationStatus);
+  const offers = useAppSelector(getOffers);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

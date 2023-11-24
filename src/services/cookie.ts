@@ -1,4 +1,4 @@
-export function getCookie(key: string): string {
+function getCookie(key: string): string {
   try {
     const cookieValue = document.cookie
       .split('; ')
@@ -11,7 +11,7 @@ export function getCookie(key: string): string {
   }
 }
 
-export function saveCookie(key: string, value: string = ''): void {
+function saveCookie(key: string, value: string = ''): void {
   try {
     document.cookie = `${encodeURIComponent(key)}=${encodeURIComponent(value)}; path=/; max-age=86400`;
   } catch (error) {
@@ -19,10 +19,12 @@ export function saveCookie(key: string, value: string = ''): void {
   }
 }
 
-export function dropCookie(key: string): void {
+function dropCookie(key: string): void {
   try {
     document.cookie = `${encodeURIComponent(key)}=; path=/; max-age=0`;
   } catch (error) {
     throw new Error(`Error processing cookie. ${error instanceof Error ? error.message : ''}`);
   }
 }
+
+export {getCookie, saveCookie, dropCookie};

@@ -4,12 +4,14 @@ import Header from '../../components/header/header.tsx';
 import OfferList from '../../components/offer-list/offer-list.tsx';
 import {MAX_RENT_OFFERS} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {selectCity} from '../../store/action.ts';
+import {getCities, getSelectedCity} from '../../store/session-state/session-state.selectors.ts';
+import {getOffers} from '../../store/api-communication/api-communication.selectors.ts';
+import {selectCity} from '../../store/session-state/session-state.slice.ts';
 
 function MainPage() {
-  const offers = useAppSelector((state) => state.data.offers);
-  const cities = useAppSelector((state) => state.data.cities);
-  const selectedCity = useAppSelector((state) => state.data.selectedCity);
+  const offers = useAppSelector(getOffers);
+  const cities = useAppSelector(getCities);
+  const selectedCity = useAppSelector(getSelectedCity);
   const dispatch = useAppDispatch();
 
   return (

@@ -2,7 +2,8 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus, AuthorizationStatusType} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
-import {logoutAction} from '../../store/api-actions.ts';
+
+import {logoutAction} from '../../store/api-actions/user-api-actions.ts';
 
 interface NavigationMenuProps {
   authorizationStatus: AuthorizationStatusType;
@@ -11,13 +12,17 @@ interface NavigationMenuProps {
 function NavigationMenu({authorizationStatus}: Readonly<NavigationMenuProps>) {
   const dispatch = useAppDispatch();
 
-  const handleSignOutClick = () => {
+  const logout = () => {
     dispatch(logoutAction());
+  };
+
+  const handleSignOutClick = () => {
+    logout();
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
-      handleSignOutClick();
+      logout();
     }
   };
 
