@@ -1,13 +1,26 @@
-import {FormEvent, useRef} from 'react';
+import {FormEvent, useEffect, useRef} from 'react';
 import {Helmet} from 'react-helmet-async';
 import Logo from '../../components/logo/logo.tsx';
-import {useAppDispatch} from '../../hooks';
-import {loginAction} from '../../store/api-actions.ts';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {loginAction} from '../../store/api-actions/user-api-actions.ts';
+import {getIsInvalidCredentialsEntered} from '../../store/user-preferences/user-preferences.selectors.ts';
+import {setInvalidCredentialsEntered} from '../../store/user-preferences/user-preferences.slice.ts';
 
 function LoginPage() {
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
+  const isInvalidCredentialsEntered = useAppSelector(getIsInvalidCredentialsEntered);
+
+  useEffect(() => {
+    if (isInvalidCredentialsEntered) {
+      if (loginRef.current && passwordRef.current) {
+        loginRef.current.value = '';
+        passwordRef.current.value = '';
+      }
+      dispatch(setInvalidCredentialsEntered(false));
+    }
+  }, [dispatch, isInvalidCredentialsEntered]);
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -16,14 +29,7 @@ function LoginPage() {
       dispatch(loginAction({
         login: loginRef.current.value,
         password: passwordRef.current.value
-      }))
-        .unwrap()
-        .then((result) => {
-          if (!result.success && loginRef.current && passwordRef.current) {
-            loginRef.current.value = '';
-            passwordRef.current.value = '';
-          }
-        });
+      }));
     }
   };
 

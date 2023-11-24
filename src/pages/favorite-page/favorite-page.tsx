@@ -3,7 +3,7 @@ import FavoriteList from '../../components/favorite-list/favorite-list.tsx';
 import Footer from '../../components/footer/footer.tsx';
 import Header from '../../components/header/header.tsx';
 import {useAppSelector} from '../../hooks';
-import {getOffers} from '../../store/site-process/site-process.selectors.ts';
+import {getOffers} from '../../store/api-communication/api-communication.selectors.ts';
 
 function FavoritePage() {
   const offers = useAppSelector(getOffers);

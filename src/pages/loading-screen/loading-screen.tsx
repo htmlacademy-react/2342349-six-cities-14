@@ -1,11 +1,13 @@
 import {useAppSelector} from '../../hooks';
-import {getLoadingInProgress} from '../../store/site-process/site-process.selectors.ts';
+import {getIsLoading} from '../../store/api-communication/api-communication.selectors.ts';
+import {getIsAuthLoading} from '../../store/user-preferences/user-preferences.selectors.ts';
 import styles from './loading-screen.module.css';
 
 function LoadingScreen() {
-  const loadingInProgress = useAppSelector(getLoadingInProgress);
+  const isLoading = useAppSelector(getIsLoading);
+  const isAuthLoading = useAppSelector(getIsAuthLoading);
 
-  return loadingInProgress ? (
+  return isLoading || isAuthLoading ? (
     <div className={styles.loadingOverlay}>
       <div className={styles.loadingContainer}>
         <div className={styles.spinner}></div>

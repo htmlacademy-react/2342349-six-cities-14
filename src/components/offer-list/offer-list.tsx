@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {useAppSelector} from '../../hooks';
-import {getCurrentSortType} from '../../store/site-data/site-data.selectors.ts';
+import {getCurrentSortType} from '../../store/session-state/session-state.selectors.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import {City} from '../../types/city.ts';
 import Card from '../card/card.tsx';

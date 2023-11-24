@@ -1,5 +1,5 @@
-export type UserData = {
+export interface UserData {
   id: number;
   email: string;
   token: string;
-};
+}

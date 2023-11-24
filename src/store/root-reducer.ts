@@ -1,11 +1,11 @@
 import {combineReducers} from '@reduxjs/toolkit';
 import {NameSpace} from '../const.ts';
-import siteData from './site-data/site-data.slice.ts';
-import siteProcess from './site-process/site-process.slice.ts';
-import userProcess from './user-process/user-process.slice.ts';
+import {sessionStateSlice} from './session-state/session-state.slice.ts';
+import {apiCommunicationSlice} from './api-communication/api-communication.slice.ts';
+import {userPreferencesSlice} from './user-preferences/user-preferences.slice.ts';
 
 export const rootReducer = combineReducers({
-  [NameSpace.Data]: siteData.reducer,
-  [NameSpace.Site]: siteProcess.reducer,
-  [NameSpace.User]: userProcess.reducer,
+  [NameSpace.SessionState]: sessionStateSlice.reducer,
+  [NameSpace.ApiCommunication]: apiCommunicationSlice.reducer,
+  [NameSpace.UserPreferences]: userPreferencesSlice.reducer,
 });

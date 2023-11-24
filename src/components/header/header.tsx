@@ -1,5 +1,5 @@
 import {useAppSelector} from '../../hooks';
-import {getAuthorizationStatus} from '../../store/user-process/user-process.selectors.ts';
+import {getAuthorizationStatus} from '../../store/user-preferences/user-preferences.selectors.ts';
 import Logo from '../logo/logo.tsx';
 import NavigationMenu from '../navigation-menu/navigation-menu.tsx';
 
