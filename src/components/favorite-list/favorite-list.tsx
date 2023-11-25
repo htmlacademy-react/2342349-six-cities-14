@@ -1,4 +1,6 @@
 import {Link} from 'react-router-dom';
+import {useAppSelector} from '../../hooks';
+import {getAuthorizationStatus} from '../../store/user-preferences/user-preferences.selectors.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import Card from '../card/card.tsx';
 
@@ -7,6 +9,8 @@ interface FavoriteListProps {
 }
 
 function FavoriteList({offers}: Readonly<FavoriteListProps>) {
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+
   const cityOffersMap = offers
     .filter((offer) => offer.isFavorite)
     .reduce<Record<string, BriefOffer[]>>((acc, offer) => {
@@ -34,6 +38,7 @@ function FavoriteList({offers}: Readonly<FavoriteListProps>) {
                     key={offer.id}
                     cardType={'favorite'}
                     offer={offer}
+                    authorizationStatus={authorizationStatus}
                   />
                 ))}
               </div>

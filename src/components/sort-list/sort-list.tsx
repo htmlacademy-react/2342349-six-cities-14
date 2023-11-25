@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React, {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {getCurrentSortType} from '../../store/session-state/session-state.selectors.ts';
-import {setSortType} from '../../store/session-state/session-state.slice.ts';
+import {getCurrentSortType} from '../../store/ui-settings/ui-settings.selectors.ts';
+import {setSortType} from '../../store/ui-settings/ui-settings.slice.ts';
 import {SortOptions} from './sort-offers.ts';
 
 function SortList() {

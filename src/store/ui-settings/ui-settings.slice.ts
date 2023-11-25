@@ -15,7 +15,7 @@ const initialState: SessionState = {
   currentSortType: 'POPULAR',
 };
 
-export const sessionStateSlice = createSlice({
+export const uiSettingsSlice = createSlice({
   name: NameSpace.SessionState,
   initialState,
   reducers: {
@@ -35,4 +35,4 @@ export const {
   selectCity,
   setCities,
   setSortType
-} = sessionStateSlice.actions;
+} = uiSettingsSlice.actions;

@@ -1,3 +1,4 @@
+import {AuthorizationStatusType} from '../../const.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import Card from '../card/card.tsx';
 
@@ -5,13 +6,15 @@ interface NearbyOfferListProps {
   offers: BriefOffer[];
   selectedOffer: BriefOffer;
   onCardInteraction?: (cardId: BriefOffer['id']) => void;
+  authorizationStatus: AuthorizationStatusType;
 }
 
-function NearbyOfferList({offers, selectedOffer, onCardInteraction}: Readonly<NearbyOfferListProps>) {
+function NearbyOfferList({offers, selectedOffer, onCardInteraction, authorizationStatus}: Readonly<NearbyOfferListProps>) {
   const offerCards = offers
     .slice(0, 3)
     .map((offer) => (
       <Card
+        authorizationStatus={authorizationStatus}
         key={offer.id}
         cardType={'cities'}
         offer={offer}

@@ -103,6 +103,7 @@ function ReviewForm({
         id="review"
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
+        disabled={isReviewSubmitted}
       >
       </textarea>
       <div className="reviews__button-wrapper">
@@ -113,7 +114,7 @@ function ReviewForm({
         </p>
         <button className="reviews__submit form__submit button"
           type="submit"
-          disabled={isSubmitDisabled}
+          disabled={isSubmitDisabled || isReviewSubmitted}
         >Submit
         </button>
       </div>

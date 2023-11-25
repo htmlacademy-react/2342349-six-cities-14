@@ -8,7 +8,13 @@ import NearbyOfferList from '../../components/nearby-offer-list/nearby-offer-lis
 import OfferDetails from '../../components/offer-details/offer-details.tsx';
 import ReviewForm from '../../components/review-form/review-form.tsx';
 import ReviewList from '../../components/review-list/review-list.tsx';
-import {MAX_COMMENT_LENGTH, MAX_IMAGES_PER_OFFER, MAX_NEAR_OFFERS, MIN_COMMENT_LENGTH} from '../../const.ts';
+import {
+  MAX_COMMENT_LENGTH,
+  MAX_IMAGES_PER_OFFER,
+  MAX_NEAR_OFFERS,
+  MAX_REVIEWS_PER_OFFER,
+  MIN_COMMENT_LENGTH
+} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchOfferDetails} from '../../store/api-actions/data-api-actions.ts';
 import {
@@ -17,7 +23,7 @@ import {
   getCurrentReviews,
   getOffers
 } from '../../store/api-communication/api-communication.selectors.ts';
-import {getSelectedCity} from '../../store/session-state/session-state.selectors.ts';
+import {getSelectedCity} from '../../store/ui-settings/ui-settings.selectors.ts';
 import {getAuthorizationStatus} from '../../store/user-preferences/user-preferences.selectors.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import NotFoundPage from '../not-found-page/not-found-page.tsx';
@@ -78,11 +84,14 @@ function OfferPage() {
             </div>
             <div className="offer__container container">
               <div className="offer__wrapper">
-                <OfferDetails offer={currentOffer}/>
+                <OfferDetails
+                  offer={currentOffer}
+                  authorizationStatus={authorizationStatus}
+                />
 
                 <section className="offer__reviews reviews">
                   {currentReviews && (
-                    <ReviewList reviews={currentReviews}/>
+                    <ReviewList reviews={currentReviews.slice(0, MAX_REVIEWS_PER_OFFER)}/>
                   )}
                   <ReviewForm
                     offerId={urlId}
@@ -105,6 +114,7 @@ function OfferPage() {
             offers={currentNearbyOffers}
             selectedOffer={currentOffer}
             onCardInteraction={setSelectedOfferId}
+            authorizationStatus={authorizationStatus}
           />
         )}
       </main>

@@ -1,12 +1,21 @@
 import {Helmet} from 'react-helmet-async';
+import {useNavigate} from 'react-router-dom';
 import FavoriteList from '../../components/favorite-list/favorite-list.tsx';
 import Footer from '../../components/footer/footer.tsx';
 import Header from '../../components/header/header.tsx';
+import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import {useAppSelector} from '../../hooks';
-import {getOffers} from '../../store/api-communication/api-communication.selectors.ts';
+import {getFavorites} from '../../store/api-communication/api-communication.selectors.ts';
+import {getAuthorizationStatus} from '../../store/user-preferences/user-preferences.selectors.ts';
 
 function FavoritePage() {
-  const offers = useAppSelector(getOffers);
+  const favorites = useAppSelector(getFavorites);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const navigate = useNavigate();
+
+  if (authorizationStatus !== AuthorizationStatus.Auth) {
+    navigate(AppRoute.Login);
+  }
 
   return (
     <div className="page">
@@ -16,8 +25,8 @@ function FavoritePage() {
       <Header/>
 
       <main className="page__main page__main--favorites">
-        {offers ? (
-          <FavoriteList offers={offers}/>
+        {favorites.length > 0 ? (
+          <FavoriteList offers={favorites}/>
         ) : (
           <div className="page__favorites-container container">
             <section className="favorites favorites--empty">

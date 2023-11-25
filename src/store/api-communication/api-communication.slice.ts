@@ -6,9 +6,11 @@ import {FullOffer} from '../../types/full-offer.ts';
 import {Review} from '../../types/review.ts';
 
 import {
-  fetchCurrentNearbyOffersAction, fetchCurrentOfferAction,
-  fetchCurrentReviewsAction, fetchOffersAction,
-  postReviewAction
+  fetchCurrentNearbyOffersAction,
+  fetchCurrentOfferAction,
+  fetchCurrentReviewsAction, fetchFavoritesAction,
+  fetchOffersAction,
+  postReviewAction, updateFavoriteAction
 } from '../api-actions/data-api-actions.ts';
 
 interface ApiCommunicationState {
@@ -16,6 +18,7 @@ interface ApiCommunicationState {
     currentOffer: FullOffer | null;
     currentNearbyOffers: BriefOffer[] | null;
     currentReviews: Review[] | null;
+    favorites: BriefOffer[];
     isLoading: boolean;
     isReviewSubmitted: boolean;
 }
@@ -25,6 +28,7 @@ const initialState: ApiCommunicationState = {
   currentOffer: null,
   currentNearbyOffers: null,
   currentReviews: null,
+  favorites: [],
   isLoading: false,
   isReviewSubmitted: false,
 };
@@ -128,6 +132,38 @@ export const apiCommunicationSlice = createSlice({
         state.isReviewSubmitted = true;
         state.isLoading = false;
         toast.success('Your review has been posted successfully.');
+      })
+
+      .addCase(fetchFavoritesAction.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchFavoritesAction.rejected, (state, action) => {
+        state.isLoading = false;
+        if (typeof action.payload === 'string') {
+          toast.warning(action.payload);
+        } else {
+          toast.error('An error occurred during to fetch favorites offers.');
+        }
+      })
+      .addCase(fetchFavoritesAction.fulfilled, (state, action) => {
+        state.favorites = action.payload;
+        state.isLoading = false;
+      })
+
+      .addCase(updateFavoriteAction.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateFavoriteAction.rejected, (state, action) => {
+        state.isLoading = false;
+        if (typeof action.payload === 'string') {
+          toast.warning(action.payload);
+        } else {
+          toast.error('An error occurred during to update favorite offer.');
+        }
+      })
+      .addCase(updateFavoriteAction.fulfilled, (state) => {
+        state.isLoading = false;
+        toast.success('Update favorite offer successfully.');
       });
   }
 });

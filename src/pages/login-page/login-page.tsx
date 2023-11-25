@@ -1,8 +1,12 @@
 import {FormEvent, useEffect, useRef} from 'react';
 import {Helmet} from 'react-helmet-async';
+import {Link} from 'react-router-dom';
 import Logo from '../../components/logo/logo.tsx';
+import {AppRoute} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {loginAction} from '../../store/api-actions/user-api-actions.ts';
+import {getCities} from '../../store/ui-settings/ui-settings.selectors.ts';
+import {selectCity} from '../../store/ui-settings/ui-settings.slice.ts';
 import {getIsInvalidCredentialsEntered} from '../../store/user-preferences/user-preferences.selectors.ts';
 import {setInvalidCredentialsEntered} from '../../store/user-preferences/user-preferences.slice.ts';
 
@@ -11,6 +15,9 @@ function LoginPage() {
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
   const isInvalidCredentialsEntered = useAppSelector(getIsInvalidCredentialsEntered);
+  const cities = useAppSelector(getCities);
+
+  const defaultCity = cities[Math.floor(Math.random() * cities.length)];
 
   useEffect(() => {
     if (isInvalidCredentialsEntered) {
@@ -32,6 +39,10 @@ function LoginPage() {
       }));
     }
   };
+
+  function handlerDefaultCityNameClick() {
+    dispatch(selectCity(defaultCity));
+  }
 
   return (
     <div className="page page--gray page--login">
@@ -85,9 +96,13 @@ function LoginPage() {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
-                <span>Amsterdam</span>
-              </a>
+              <Link
+                onClick={handlerDefaultCityNameClick}
+                className="locations__item-link"
+                to={AppRoute.Main}
+              >
+                <span>{defaultCity.name}</span>
+              </Link>
             </div>
           </section>
         </div>

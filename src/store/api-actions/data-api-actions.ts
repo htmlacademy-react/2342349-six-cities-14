@@ -18,7 +18,7 @@ export const fetchOffersAction = createAsyncThunk<
   undefined,
   ThunkApiConfig
 >(
-  'data/fetchOffers',
+  'data/fetchOffersAction',
   async (_arg, {extra: api, rejectWithValue}) => {
     try {
       const {data} = await api.get<BriefOffer[]>(APIRoute.GetOffers);
@@ -127,5 +127,43 @@ export const submitReviewAndUpdate = createAsyncThunk<
   async ({id, reviewData}, {dispatch}) => {
     await dispatch(postReviewAction({reviewData, id}));
     await dispatch(fetchCurrentReviewsAction(id));
+  },
+);
+
+export const fetchFavoritesAction = createAsyncThunk<
+  BriefOffer[],
+  undefined,
+  ThunkApiConfig
+>(
+  'data/fetchFavoritesAction',
+  async (_arg, {extra: api, rejectWithValue}) => {
+    try {
+      const {data} = await api.get<BriefOffer[]>(APIRoute.GetFavorite);
+      return data;
+    } catch (error) {
+      return rejectWithValue(handleApiError(error));
+    }
+  }
+);
+
+export const updateFavoriteAction = createAsyncThunk<
+  void,
+  {
+    status: number;
+    id: BriefOffer['id'];
+  },
+  ThunkApiConfig
+>(
+  'data/updateFavoriteAction',
+  async ({id, status}, {extra: api, dispatch, rejectWithValue}) => {
+    try {
+      const url = APIRoute.PostFavorite.replace(':offerId', id.toString()).replace(':statusId', status.toString());
+      await api.post(url);
+      await dispatch(fetchFavoritesAction());
+      await dispatch(fetchOffersAction());
+      await dispatch(fetchCurrentOfferAction(id));
+    } catch (error) {
+      return rejectWithValue(handleApiError(error));
+    }
   },
 );
