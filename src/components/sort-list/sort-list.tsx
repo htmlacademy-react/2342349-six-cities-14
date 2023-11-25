@@ -26,6 +26,18 @@ function SortList() {
     }
   }
 
+  const SortOptionList = Object.entries(SortOptions).map(([key , {title}], index) => (
+    <li
+      key={key}
+      className={classNames('places__option', {'places__option--active': currentSortType === key})}
+      tabIndex={index}
+      onClick={() => handleSortChange(key as keyof typeof SortOptions)}
+      onKeyDown={(event) => handleKeyDown(event, () => handleSortChange(key as keyof typeof SortOptions))}
+    >
+      {title}
+    </li>
+  ));
+
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by </span>
@@ -39,17 +51,7 @@ function SortList() {
         </svg>
       </span>
       <ul className={classNames('places__options', 'places__options--custom', {'places__options--opened': isSortMenuOpen})}>
-        {Object.entries(SortOptions).map(([key , {title}], index) => (
-          <li
-            key={key}
-            className={classNames('places__option', {'places__option--active': currentSortType === key})}
-            tabIndex={index}
-            onClick={() => handleSortChange(key as keyof typeof SortOptions)}
-            onKeyDown={(event) => handleKeyDown(event, () => handleSortChange(key as keyof typeof SortOptions))}
-          >
-            {title}
-          </li>
-        ))}
+        {SortOptionList}
       </ul>
     </form>
   );

@@ -39,6 +39,7 @@ function Card({cardType, offer, onCardInteraction, authorizationStatus}: Readonl
   const offerLink = `${AppRoute.Offer}/${id}`;
   const ratingRound = Math.round(rating) * 100 / MAX_OFFER_STARS;
   const handleCardInteraction = onCardInteraction ? () => onCardInteraction(id) : undefined;
+  const favoriteText = isFavorite ? 'In bookmarks' : 'To bookmarks';
 
   function handleBookmarkClick() {
     if (authorizationStatus === AuthorizationStatus.Auth) {
@@ -87,7 +88,7 @@ function Card({cardType, offer, onCardInteraction, authorizationStatus}: Readonl
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
-            <span className="visually-hidden">{isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
+            <span className="visually-hidden">{favoriteText}</span>
           </button>
         </div>
         <div className="place-card__rating rating">

@@ -4,6 +4,7 @@ import {useParams} from 'react-router-dom';
 import Header from '../../components/header/header.tsx';
 import LeafletMap from '../../components/leaflet-map/leaflet-map.tsx';
 import getMapDataFromOffers from '../../components/leaflet-map/map-utils/map-data.ts';
+import LoadingText from '../../components/loading-text/loading-text.tsx';
 import NearbyOfferList from '../../components/nearby-offer-list/nearby-offer-list.tsx';
 import OfferDetails from '../../components/offer-details/offer-details.tsx';
 import ReviewForm from '../../components/review-form/review-form.tsx';
@@ -67,6 +68,53 @@ function OfferPage() {
       getMapDataFromOffers([currentOffer, ...currentNearbyOffers.slice(0, MAX_NEAR_OFFERS)], selectedCity, selectedOfferId);
   }
 
+  const mapBlock = (mapCity && mapPoints) ? (
+    <LeafletMap block={'offer'} city={mapCity} points={mapPoints} selectedPoint={selectedMapPoint}/>
+  ) : <LoadingText/>;
+
+  const reviewBlock = currentReviews ? (
+    <ReviewList reviews={currentReviews.slice(0, MAX_REVIEWS_PER_OFFER)}/>
+  ) : <LoadingText/>;
+
+  const offerBlock = currentOffer ? (
+    <section className="offer">
+      <div className="offer__gallery-container container">
+        <div className="offer__gallery">
+          {imageList}
+        </div>
+      </div>
+      <div className="offer__container container">
+        <div className="offer__wrapper">
+          <OfferDetails
+            offer={currentOffer}
+            authorizationStatus={authorizationStatus}
+          />
+
+          <section className="offer__reviews reviews">
+            {reviewBlock}
+            <ReviewForm
+              offerId={urlId}
+              authorizationStatus={authorizationStatus}
+              minCommentLength={MIN_COMMENT_LENGTH}
+              maxCommentLength={MAX_COMMENT_LENGTH}
+            />
+          </section>
+        </div>
+      </div>
+
+      {mapBlock}
+    </section>
+  ) : <LoadingText/>;
+
+  const nearbyOfferBlock = (currentOffer && currentNearbyOffers) ? (
+    <NearbyOfferList
+      offers={currentNearbyOffers}
+      selectedOffer={currentOffer}
+      onCardInteraction={setSelectedOfferId}
+      authorizationStatus={authorizationStatus}
+    />
+  ) : <LoadingText/>;
+
   return (
     <div className="page">
       <Helmet>
@@ -75,48 +123,8 @@ function OfferPage() {
       <Header/>
 
       <main className="page__main page__main--offer">
-        {currentOffer && (
-          <section className="offer">
-            <div className="offer__gallery-container container">
-              <div className="offer__gallery">
-                {imageList}
-              </div>
-            </div>
-            <div className="offer__container container">
-              <div className="offer__wrapper">
-                <OfferDetails
-                  offer={currentOffer}
-                  authorizationStatus={authorizationStatus}
-                />
-
-                <section className="offer__reviews reviews">
-                  {currentReviews && (
-                    <ReviewList reviews={currentReviews.slice(0, MAX_REVIEWS_PER_OFFER)}/>
-                  )}
-                  <ReviewForm
-                    offerId={urlId}
-                    authorizationStatus={authorizationStatus}
-                    minCommentLength={MIN_COMMENT_LENGTH}
-                    maxCommentLength={MAX_COMMENT_LENGTH}
-                  />
-                </section>
-              </div>
-            </div>
-
-            {mapCity && mapPoints && (
-              <LeafletMap block={'offer'} city={mapCity} points={mapPoints} selectedPoint={selectedMapPoint}/>
-            )}
-          </section>
-        )}
-
-        {currentOffer && currentNearbyOffers && (
-          <NearbyOfferList
-            offers={currentNearbyOffers}
-            selectedOffer={currentOffer}
-            onCardInteraction={setSelectedOfferId}
-            authorizationStatus={authorizationStatus}
-          />
-        )}
+        {offerBlock}
+        {nearbyOfferBlock}
       </main>
     </div>
   );

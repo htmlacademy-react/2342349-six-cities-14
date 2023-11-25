@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import {useNavigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus, AuthorizationStatusType, MAX_OFFER_STARS} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
@@ -25,6 +24,16 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
     </li>
   ));
 
+  const bookmarkText = isFavorite ? 'In bookmarks' : 'To bookmarks';
+  const adultText = maxAdults > 1 ? 'adults' : 'adult';
+  const bedroomText = bedrooms > 1 ? 'Bedrooms' : 'Bedroom';
+  const textPro = isPro ? 'Pro' : '';
+  const premiumText = isPremium ? (
+    <div className="offer__mark">
+      <span>Premium</span>
+    </div>
+  ) : '';
+
   function handleBookmarkClick() {
     if (authorizationStatus === AuthorizationStatus.Auth) {
       dispatch(updateFavoriteAction({
@@ -38,11 +47,7 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
 
   return (
     <>
-      {isPremium && (
-        <div className="offer__mark">
-          <span>Premium</span>
-        </div>
-      )}
+      {premiumText}
       <div className="offer__name-wrapper">
         <h1 className="offer__name">{title}</h1>
         <button
@@ -53,7 +58,7 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
           <svg className="offer__bookmark-icon" width="31" height="33">
             <use xlinkHref="#icon-bookmark"></use>
           </svg>
-          <span className="visually-hidden">{isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
+          <span className="visually-hidden">{bookmarkText}</span>
         </button>
       </div>
       <div className="offer__rating rating">
@@ -69,10 +74,10 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
           {type}
         </li>
         <li className="offer__feature offer__feature--bedrooms">
-          {`${bedrooms} ${bedrooms > 1 ? 'Bedrooms' : 'Bedroom'}`}
+          {`${bedrooms} ${bedroomText}`}
         </li>
         <li className="offer__feature offer__feature--adults">
-          {`Max ${maxAdults} ${maxAdults > 1 ? 'adults' : 'adult'}`}
+          {`Max ${maxAdults} ${adultText}`}
         </li>
       </ul>
 
@@ -100,7 +105,7 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
             </img>
           </div>
           <span className="offer__user-name">{name}</span>
-          <span className="offer__user-status">{classNames({'Pro': isPro})}</span>
+          <span className="offer__user-status">{textPro}</span>
         </div>
         <div className="offer__description">
           <p className="offer__text">
