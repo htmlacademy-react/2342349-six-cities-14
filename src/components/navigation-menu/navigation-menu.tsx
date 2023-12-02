@@ -1,20 +1,14 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus, AuthorizationStatusType} from '../../const.ts';
+import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
+import useUserData from '../../hooks/useUserData.ts';
 
 import {logoutAction} from '../../store/api-actions/user-api-actions.ts';
-import {BriefOffer} from '../../types/brief-offer.ts';
 
-interface NavigationMenuProps {
-  authorizationStatus: AuthorizationStatusType;
-  userLogin: string;
-  userAvatarUrl: string;
-  favorites: BriefOffer[];
-}
-
-function NavigationMenu({authorizationStatus, userLogin, userAvatarUrl, favorites}: Readonly<NavigationMenuProps>) {
+function NavigationMenu() {
   const dispatch = useAppDispatch();
+  const {authorizationStatus, userAvatarUrl, userLogin, favorites} = useUserData();
 
   const logout = () => {
     dispatch(logoutAction());

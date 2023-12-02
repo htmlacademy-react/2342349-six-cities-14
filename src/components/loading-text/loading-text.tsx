@@ -1,9 +1,9 @@
 import styles from './loading-text.module.css';
 
-function loadingText() {
+function LoadingText() {
   return (
     <div className={styles.loadingContainer}>Loading...</div>
   );
 }
 
-export default loadingText;
+export default LoadingText;

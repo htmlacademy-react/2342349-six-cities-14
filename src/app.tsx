@@ -12,6 +12,7 @@ import OfferPage from './pages/offer-page/offer-page.tsx';
 import {fetchFavoritesAction, fetchOffersAction} from './store/api-actions/data-api-actions.ts';
 import {checkAuthAction} from './store/api-actions/user-api-actions.ts';
 import {getOffers} from './store/api-communication/api-communication.selectors.ts';
+import {getSelectedCity} from './store/ui-settings/ui-settings.selectors.ts';
 import {selectCity, setCities} from './store/ui-settings/ui-settings.slice.ts';
 import {getAuthorizationStatus} from './store/user-preferences/user-preferences.selectors.ts';
 import {City} from './types/city.ts';
@@ -19,6 +20,7 @@ import {City} from './types/city.ts';
 function App() {
   const offers = useAppSelector(getOffers);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const selectedCity = useAppSelector(getSelectedCity);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -35,11 +37,13 @@ function App() {
         }
         return unique;
       }, [] as City[]);
-
       dispatch(setCities(cities));
-      const cityByDefault = offers
-        .find((offer) => offer.city.name === CITY_BY_DEFAULT)?.city ?? offers[0].city;
-      dispatch(selectCity(cityByDefault));
+
+      if (!selectedCity) {
+        const cityByDefault = offers
+          .find((offer) => offer.city.name === CITY_BY_DEFAULT)?.city ?? offers[0].city;
+        dispatch(selectCity(cityByDefault));
+      }
     }
   }, [dispatch, offers]);
 

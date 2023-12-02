@@ -1,8 +1,7 @@
-import {Link} from 'react-router-dom';
 import {useAppSelector} from '../../hooks';
 import {getAuthorizationStatus} from '../../store/user-preferences/user-preferences.selectors.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
-import Card from '../card/card.tsx';
+import FavoriteCityList from '../favorite-city-list/favorite-city-list.tsx';
 
 interface FavoriteListProps {
   offers: BriefOffer[];
@@ -19,25 +18,12 @@ function FavoriteList({offers}: Readonly<FavoriteListProps>) {
     }, {});
 
   const favoriteList = Object.entries(cityOffersMap).map(([cityName, cityOffers]) => (
-    <li key={cityName} className="favorites__locations-items">
-      <div className="favorites__locations locations locations--current">
-        <div className="locations__item">
-          <Link className="locations__item-link" to="#">
-            <span>{cityName}</span>
-          </Link>
-        </div>
-      </div>
-      <div className="favorites__places">
-        {cityOffers.map((offer) => (
-          <Card
-            key={offer.id}
-            cardType={'favorite'}
-            offer={offer}
-            authorizationStatus={authorizationStatus}
-          />
-        ))}
-      </div>
-    </li>
+    <FavoriteCityList
+      key={cityName}
+      cityName={cityName}
+      cityOffers={cityOffers}
+      authorizationStatus={authorizationStatus}
+    />
   ));
 
   return (

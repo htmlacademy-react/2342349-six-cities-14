@@ -1,10 +1,8 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {toast} from 'react-toastify';
 import {NameSpace} from '../../const.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import {FullOffer} from '../../types/full-offer.ts';
 import {Review} from '../../types/review.ts';
-
 import {
   fetchCurrentNearbyOffersAction,
   fetchCurrentOfferAction,
@@ -55,13 +53,8 @@ export const apiCommunicationSlice = createSlice({
       .addCase(fetchOffersAction.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(fetchOffersAction.rejected, (state, action) => {
+      .addCase(fetchOffersAction.rejected, (state) => {
         state.isLoading = false;
-        if (typeof action.payload === 'string') {
-          toast.warning(action.payload);
-        } else {
-          toast.error('An error occurred during to to fetch offers.');
-        }
       })
       .addCase(fetchOffersAction.fulfilled, (state, action) => {
         state.offers = action.payload;
@@ -71,13 +64,8 @@ export const apiCommunicationSlice = createSlice({
       .addCase(fetchCurrentOfferAction.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(fetchCurrentOfferAction.rejected, (state, action) => {
+      .addCase(fetchCurrentOfferAction.rejected, (state) => {
         state.isLoading = false;
-        if (typeof action.payload === 'string') {
-          toast.warning(action.payload);
-        } else {
-          toast.error('An error occurred during to fetch current offer.');
-        }
       })
       .addCase(fetchCurrentOfferAction.fulfilled, (state, action) => {
         state.currentOffer = action.payload;
@@ -87,13 +75,8 @@ export const apiCommunicationSlice = createSlice({
       .addCase(fetchCurrentNearbyOffersAction.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(fetchCurrentNearbyOffersAction.rejected, (state, action) => {
+      .addCase(fetchCurrentNearbyOffersAction.rejected, (state) => {
         state.isLoading = false;
-        if (typeof action.payload === 'string') {
-          toast.warning(action.payload);
-        } else {
-          toast.error('An error occurred during to fetch nearby offers.');
-        }
       })
       .addCase(fetchCurrentNearbyOffersAction.fulfilled, (state, action) => {
         state.currentNearbyOffers = action.payload;
@@ -103,13 +86,8 @@ export const apiCommunicationSlice = createSlice({
       .addCase(fetchCurrentReviewsAction.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(fetchCurrentReviewsAction.rejected, (state, action) => {
+      .addCase(fetchCurrentReviewsAction.rejected, (state) => {
         state.isLoading = false;
-        if (typeof action.payload === 'string') {
-          toast.warning(action.payload);
-        } else {
-          toast.error('An error occurred during to update reviews');
-        }
       })
       .addCase(fetchCurrentReviewsAction.fulfilled, (state, action) => {
         state.currentReviews = action.payload;
@@ -119,31 +97,20 @@ export const apiCommunicationSlice = createSlice({
       .addCase(postReviewAction.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(postReviewAction.rejected, (state, action) => {
+      .addCase(postReviewAction.rejected, (state) => {
         state.isReviewSubmitted = false;
         state.isLoading = false;
-        if (typeof action.payload === 'string') {
-          toast.warning(action.payload);
-        } else {
-          toast.error('An error occurred during to post review.');
-        }
       })
       .addCase(postReviewAction.fulfilled, (state) => {
         state.isReviewSubmitted = true;
         state.isLoading = false;
-        toast.success('Your review has been posted successfully.');
       })
 
       .addCase(fetchFavoritesAction.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(fetchFavoritesAction.rejected, (state, action) => {
+      .addCase(fetchFavoritesAction.rejected, (state) => {
         state.isLoading = false;
-        if (typeof action.payload === 'string') {
-          toast.warning(action.payload);
-        } else {
-          toast.error('An error occurred during to fetch favorites offers.');
-        }
       })
       .addCase(fetchFavoritesAction.fulfilled, (state, action) => {
         state.favorites = action.payload;
@@ -153,17 +120,11 @@ export const apiCommunicationSlice = createSlice({
       .addCase(updateFavoriteAction.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateFavoriteAction.rejected, (state, action) => {
+      .addCase(updateFavoriteAction.rejected, (state) => {
         state.isLoading = false;
-        if (typeof action.payload === 'string') {
-          toast.warning(action.payload);
-        } else {
-          toast.error('An error occurred during to update favorite offer.');
-        }
       })
       .addCase(updateFavoriteAction.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success('Update favorite offer successfully.');
       });
   }
 });
