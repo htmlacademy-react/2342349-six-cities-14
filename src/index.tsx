@@ -4,7 +4,7 @@ import {Provider} from 'react-redux';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import App from './app.tsx';
-import LoadingScreen from './pages/loading-screen/loading-screen.tsx';
+import LoadingScreen from './components/loading-screen/loading-screen.tsx';
 import {store} from './store';
 
 const root = ReactDOM.createRoot(

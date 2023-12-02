@@ -1,16 +1,14 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus, AuthorizationStatusType} from '../../const.ts';
+import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
+import useUserData from '../../hooks/useUserData.ts';
 
 import {logoutAction} from '../../store/api-actions/user-api-actions.ts';
 
-interface NavigationMenuProps {
-  authorizationStatus: AuthorizationStatusType;
-}
-
-function NavigationMenu({authorizationStatus}: Readonly<NavigationMenuProps>) {
+function NavigationMenu() {
   const dispatch = useAppDispatch();
+  const {authorizationStatus, userAvatarUrl, userLogin, favorites} = useUserData();
 
   const logout = () => {
     dispatch(logoutAction());
@@ -32,9 +30,17 @@ function NavigationMenu({authorizationStatus}: Readonly<NavigationMenuProps>) {
         <ul className="header__nav-list">
           <li className="header__nav-item user">
             <Link className="header__nav-link header__nav-link--profile" to="/favorites">
-              <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-              <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-              <span className="header__favorite-count">3</span>
+              <div className="header__avatar-wrapper user__avatar-wrapper">
+                <img className="reviews__avatar user__avatar"
+                  src={userAvatarUrl}
+                  width="54"
+                  height="54"
+                  alt="User avatar"
+                >
+                </img>
+              </div>
+              <span className="header__user-name user__name">{userLogin}</span>
+              <span className="header__favorite-count">{favorites.length}</span>
             </Link>
           </li>
           <li

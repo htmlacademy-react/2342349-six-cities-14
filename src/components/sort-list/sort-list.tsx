@@ -1,22 +1,15 @@
-import classNames from 'classnames';
 import React, {useState} from 'react';
-import {useAppDispatch, useAppSelector} from '../../hooks';
-import {getCurrentSortType} from '../../store/session-state/session-state.selectors.ts';
-import {setSortType} from '../../store/session-state/session-state.slice.ts';
+import {useAppSelector} from '../../hooks';
+import {getCurrentSortType} from '../../store/ui-settings/ui-settings.selectors.ts';
+import SortOptionList from '../sort-option-list/sort-option-list.tsx';
 import {SortOptions} from './sort-offers.ts';
 
 function SortList() {
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
   const currentSortType = useAppSelector(getCurrentSortType);
-  const dispatch = useAppDispatch();
 
   function toggleSortMenu() {
     setIsSortMenuOpen(!isSortMenuOpen);
-  }
-
-  function handleSortChange(value: keyof typeof SortOptions) {
-    dispatch(setSortType(value));
-    toggleSortMenu();
   }
 
   function handleKeyDown(event: React.KeyboardEvent, action: () => void) {
@@ -25,7 +18,6 @@ function SortList() {
       action();
     }
   }
-
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by </span>
@@ -38,19 +30,11 @@ function SortList() {
           <use xlinkHref="#icon-arrow-select"></use>
         </svg>
       </span>
-      <ul className={classNames('places__options', 'places__options--custom', {'places__options--opened': isSortMenuOpen})}>
-        {Object.entries(SortOptions).map(([key , {title}], index) => (
-          <li
-            key={key}
-            className={classNames('places__option', {'places__option--active': currentSortType === key})}
-            tabIndex={index}
-            onClick={() => handleSortChange(key as keyof typeof SortOptions)}
-            onKeyDown={(event) => handleKeyDown(event, () => handleSortChange(key as keyof typeof SortOptions))}
-          >
-            {title}
-          </li>
-        ))}
-      </ul>
+      <SortOptionList
+        isSortMenuOpen={isSortMenuOpen}
+        toggleSortMenu={toggleSortMenu}
+        currentSortType={currentSortType}
+      />
     </form>
   );
 }

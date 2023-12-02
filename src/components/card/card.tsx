@@ -1,6 +1,8 @@
 import classNames from 'classnames';
-import {Link} from 'react-router-dom';
-import {AppRoute} from '../../const.ts';
+import {Link, useNavigate} from 'react-router-dom';
+import {AppRoute, AuthorizationStatus, AuthorizationStatusType, MAX_OFFER_STARS} from '../../const.ts';
+import {useAppDispatch} from '../../hooks';
+import {updateFavoriteAction} from '../../store/api-actions/data-api-actions.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import styles from './card.module.css';
 
@@ -24,15 +26,31 @@ interface CardProps {
   cardType: 'cities' | 'favorite';
   offer: CardOffer;
   onCardInteraction?: (cardId: BriefOffer['id']) => void;
+  authorizationStatus: AuthorizationStatusType;
 }
 
-function Card({cardType, offer, onCardInteraction}: Readonly<CardProps>) {
+function Card({cardType, offer, onCardInteraction, authorizationStatus}: Readonly<CardProps>) {
   const {id, title, isFavorite, isPremium,
     rating, type, price, previewImage} = offer;
   const {name, imgWidth, imgHeight} = cardConfigurations[cardType];
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const offerLink = `${AppRoute.Offer}/${id}`;
+  const ratingRound = Math.round(rating) * 100 / MAX_OFFER_STARS;
   const handleCardInteraction = onCardInteraction ? () => onCardInteraction(id) : undefined;
+  const favoriteText = isFavorite ? 'In bookmarks' : 'To bookmarks';
+
+  function handleBookmarkClick() {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(updateFavoriteAction({
+        id: id,
+        status: +!isFavorite
+      }));
+    } else {
+      navigate(AppRoute.Login);
+    }
+  }
 
   return (
     <article
@@ -63,18 +81,19 @@ function Card({cardType, offer, onCardInteraction}: Readonly<CardProps>) {
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
+            onClick={handleBookmarkClick}
             className={classNames('button', 'place-card__bookmark-button', {'place-card__bookmark-button--active': isFavorite})}
             type="button"
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
-            <span className="visually-hidden">{isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
+            <span className="visually-hidden">{favoriteText}</span>
           </button>
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: `${rating * 100 / 5}%`}}></span>
+            <span style={{width: `${ratingRound}%`}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

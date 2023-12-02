@@ -1,6 +1,7 @@
-import {useState} from 'react';
+import {memo, useMemo, useState} from 'react';
 import {useAppSelector} from '../../hooks';
-import {getCurrentSortType} from '../../store/session-state/session-state.selectors.ts';
+import {getCurrentSortType} from '../../store/ui-settings/ui-settings.selectors.ts';
+import {getAuthorizationStatus} from '../../store/user-preferences/user-preferences.selectors.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import {City} from '../../types/city.ts';
 import Card from '../card/card.tsx';
@@ -18,17 +19,29 @@ interface OfferListProps {
 function OfferList({offers, selectedCity, maxOfferLimit = 5}: Readonly<OfferListProps>) {
   const [selectedOfferId, setSelectedOfferId] = useState<BriefOffer['id']>('');
   const currentSortType = useAppSelector(getCurrentSortType);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const MemoizedCard = memo(Card);
+  const MemoizedSortList = memo(SortList);
 
-  const filteredOffers = offers.filter((offer) => offer.city.name === selectedCity.name);
-  const currentOffers = sortOffers(filteredOffers, currentSortType);
+  const filteredOffers = useMemo(() =>
+    offers.filter((offer) => offer.city.name === selectedCity.name),
+  [offers, selectedCity]
+  );
+
+  const currentOffers = useMemo(() =>
+    sortOffers(filteredOffers, currentSortType),
+  [filteredOffers, currentSortType]
+  );
+
   const offerCards = currentOffers
     .slice(0, maxOfferLimit)
     .map((offer) => (
-      <Card
+      <MemoizedCard
         key={offer.id}
         cardType={'cities'}
         offer={offer}
         onCardInteraction={setSelectedOfferId}
+        authorizationStatus={authorizationStatus}
       />
     ));
 
@@ -41,7 +54,7 @@ function OfferList({offers, selectedCity, maxOfferLimit = 5}: Readonly<OfferList
         <section className="cities__places places">
           <h2 className="visually-hidden">Places</h2>
           <b className="places__found">{currentOffers.length} places to stay in {selectedCity.name}</b>
-          <SortList/>
+          <MemoizedSortList/>
 
           <div className="cities__places-list places__list tabs__content">
             {offerCards}

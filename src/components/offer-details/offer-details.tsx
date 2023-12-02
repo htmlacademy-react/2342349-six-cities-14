@@ -1,41 +1,69 @@
-import classNames from 'classnames';
-import styles from './offer-details.module.css';
+import {useNavigate} from 'react-router-dom';
+import {AppRoute, AuthorizationStatus, AuthorizationStatusType, MAX_OFFER_STARS} from '../../const.ts';
+import {useAppDispatch} from '../../hooks';
+import {updateFavoriteAction} from '../../store/api-actions/data-api-actions.ts';
 import {FullOffer} from '../../types/full-offer.ts';
+import styles from './offer-details.module.css';
 
 interface OfferDetailsProps {
   offer: FullOffer;
+  authorizationStatus: AuthorizationStatusType;
 }
 
-function OfferDetails({offer} : Readonly<OfferDetailsProps>) {
-  const {isPremium, title, isFavorite, rating, type,
+function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>) {
+  const {id, isPremium, title, isFavorite, rating, type,
     bedrooms, maxAdults, price, host, description} = offer;
   const {avatarUrl, name, isPro} = host;
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
+  const ratingRound = Math.round(rating) * 100 / MAX_OFFER_STARS;
   const goodList = offer.goods.map((good) => (
     <li key={good} className="offer__inside-item">
       {good}
     </li>
   ));
 
+  const bookmarkText = isFavorite ? 'In bookmarks' : 'To bookmarks';
+  const adultText = maxAdults > 1 ? 'adults' : 'adult';
+  const bedroomText = bedrooms > 1 ? 'Bedrooms' : 'Bedroom';
+  const textPro = isPro ? 'Pro' : '';
+  const premiumText = isPremium ? (
+    <div className="offer__mark">
+      <span>Premium</span>
+    </div>
+  ) : '';
+
+  function handleBookmarkClick() {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(updateFavoriteAction({
+        id: id,
+        status: +!isFavorite
+      }));
+    } else {
+      navigate(AppRoute.Login);
+    }
+  }
+
   return (
     <>
-      {isPremium && (
-        <div className="offer__mark">
-          <span>Premium</span>
-        </div>
-      )}
+      {premiumText}
       <div className="offer__name-wrapper">
         <h1 className="offer__name">{title}</h1>
-        <button className="offer__bookmark-button button" type="button">
+        <button
+          onClick={handleBookmarkClick}
+          className="offer__bookmark-button button"
+          type="button"
+        >
           <svg className="offer__bookmark-icon" width="31" height="33">
             <use xlinkHref="#icon-bookmark"></use>
           </svg>
-          <span className="visually-hidden">{isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
+          <span className="visually-hidden">{bookmarkText}</span>
         </button>
       </div>
       <div className="offer__rating rating">
         <div className="offer__stars rating__stars">
-          <span style={{width: `${rating * 100 / 5}%`}}></span>
+          <span style={{width: `${ratingRound}%`}}></span>
           <span className="visually-hidden">Rating</span>
         </div>
         <span className="offer__rating-value rating__value">{rating}</span>
@@ -46,10 +74,10 @@ function OfferDetails({offer} : Readonly<OfferDetailsProps>) {
           {type}
         </li>
         <li className="offer__feature offer__feature--bedrooms">
-          {`${bedrooms} ${bedrooms > 1 ? 'Bedrooms' : 'Bedroom'}`}
+          {`${bedrooms} ${bedroomText}`}
         </li>
         <li className="offer__feature offer__feature--adults">
-          {`Max ${maxAdults} ${maxAdults > 1 ? 'adults' : 'adult'}`}
+          {`Max ${maxAdults} ${adultText}`}
         </li>
       </ul>
 
@@ -77,7 +105,7 @@ function OfferDetails({offer} : Readonly<OfferDetailsProps>) {
             </img>
           </div>
           <span className="offer__user-name">{name}</span>
-          <span className="offer__user-status">{classNames({'Pro': isPro})}</span>
+          <span className="offer__user-status">{textPro}</span>
         </div>
         <div className="offer__description">
           <p className="offer__text">

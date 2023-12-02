@@ -1,4 +1,5 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
+import {toast} from 'react-toastify';
 import {APIRoute} from '../../const.ts';
 import {handleApiError} from '../../services/api-error-handler.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
@@ -18,12 +19,13 @@ export const fetchOffersAction = createAsyncThunk<
   undefined,
   ThunkApiConfig
 >(
-  'data/fetchOffers',
+  'data/fetchOffersAction',
   async (_arg, {extra: api, rejectWithValue}) => {
     try {
       const {data} = await api.get<BriefOffer[]>(APIRoute.GetOffers);
       return data;
     } catch (error) {
+      toast.warning(handleApiError(error));
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -41,6 +43,7 @@ export const fetchCurrentOfferAction = createAsyncThunk<
       const {data} = await api.get<FullOffer>(url);
       return data;
     } catch (error) {
+      toast.warning(handleApiError(error));
       return rejectWithValue(handleApiError(error));
     }
   },
@@ -58,6 +61,7 @@ export const fetchCurrentNearbyOffersAction = createAsyncThunk<
       const {data} = await api.get<BriefOffer[]>(url);
       return data;
     } catch (error) {
+      toast.warning(handleApiError(error));
       return rejectWithValue(handleApiError(error));
     }
   },
@@ -75,6 +79,7 @@ export const fetchCurrentReviewsAction = createAsyncThunk<
       const {data} = await api.get<Review[]>(url);
       return data;
     } catch (error) {
+      toast.warning(handleApiError(error));
       return rejectWithValue(handleApiError(error));
     }
   },
@@ -109,7 +114,9 @@ export const postReviewAction = createAsyncThunk<
     try {
       const url = APIRoute.PostComment.replace(':offerId', id.toString());
       await api.post<UserData>(url, reviewData);
+      toast.success('Your review has been posted successfully.');
     } catch (error) {
+      toast.warning(handleApiError(error));
       return rejectWithValue(handleApiError(error));
     }
   },
@@ -127,5 +134,46 @@ export const submitReviewAndUpdate = createAsyncThunk<
   async ({id, reviewData}, {dispatch}) => {
     await dispatch(postReviewAction({reviewData, id}));
     await dispatch(fetchCurrentReviewsAction(id));
+  },
+);
+
+export const fetchFavoritesAction = createAsyncThunk<
+  BriefOffer[],
+  undefined,
+  ThunkApiConfig
+>(
+  'data/fetchFavoritesAction',
+  async (_arg, {extra: api, rejectWithValue}) => {
+    try {
+      const {data} = await api.get<BriefOffer[]>(APIRoute.GetFavorite);
+      return data;
+    } catch (error) {
+      toast.warning(handleApiError(error));
+      return rejectWithValue(handleApiError(error));
+    }
+  }
+);
+
+export const updateFavoriteAction = createAsyncThunk<
+  void,
+  {
+    status: number;
+    id: BriefOffer['id'];
+  },
+  ThunkApiConfig
+>(
+  'data/updateFavoriteAction',
+  async ({id, status}, {extra: api, dispatch, rejectWithValue}) => {
+    try {
+      const url = APIRoute.PostFavorite.replace(':offerId', id.toString()).replace(':statusId', status.toString());
+      await api.post(url);
+      await dispatch(fetchFavoritesAction());
+      await dispatch(fetchOffersAction());
+      await dispatch(fetchCurrentOfferAction(id));
+      toast.success('Update favorite offer successfully.');
+    } catch (error) {
+      toast.warning(handleApiError(error));
+      return rejectWithValue(handleApiError(error));
+    }
   },
 );
