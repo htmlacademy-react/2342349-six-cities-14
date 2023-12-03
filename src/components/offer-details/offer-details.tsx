@@ -1,7 +1,9 @@
+import classNames from 'classnames';
+import {useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus, AuthorizationStatusType, MAX_OFFER_STARS} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
-import {updateFavoriteAction} from '../../store/api-actions/data-api-actions.ts';
+import {updateFavoriteCurrentOfferAction} from '../../store/api-actions/data-api-actions.ts';
 import {decreaseFavoritesCount, increaseFavoritesCount} from '../../store/api-communication/api-communication.slice.ts';
 import {FullOffer} from '../../types/full-offer.ts';
 import styles from './offer-details.module.css';
@@ -17,6 +19,7 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
   const {avatarUrl, name, isPro} = host;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const bookmarkButtonRef = useRef<HTMLButtonElement>(null);
 
   const ratingRound = Math.round(rating) * 100 / MAX_OFFER_STARS;
   const goodList = offer.goods.map((good) => (
@@ -28,7 +31,7 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
   const bookmarkText = isFavorite ? 'In bookmarks' : 'To bookmarks';
   const adultText = maxAdults > 1 ? 'adults' : 'adult';
   const bedroomText = bedrooms > 1 ? 'Bedrooms' : 'Bedroom';
-  const textPro = isPro ? 'Pro' : '';
+  const proStatus = isPro ? <span className="offer__user-status">Pro</span> : '';
   const premiumText = isPremium ? (
     <div className="offer__mark">
       <span>Premium</span>
@@ -36,17 +39,19 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
   ) : '';
 
   function handleBookmarkClick() {
-    if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(updateFavoriteAction({
+    if (authorizationStatus === AuthorizationStatus.Auth && bookmarkButtonRef.current) {
+      if (isFavorite) {
+        bookmarkButtonRef.current.classList.remove('offer__bookmark-button--active');
+        dispatch(decreaseFavoritesCount());
+      } else {
+        bookmarkButtonRef.current.classList.add('offer__bookmark-button--active');
+        dispatch(increaseFavoritesCount());
+      }
+
+      dispatch(updateFavoriteCurrentOfferAction({
         id: id,
         status: +!isFavorite
       }));
-
-      if (isFavorite) {
-        dispatch(decreaseFavoritesCount());
-      } else {
-        dispatch(increaseFavoritesCount());
-      }
     } else {
       navigate(AppRoute.Login);
     }
@@ -58,8 +63,9 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
       <div className="offer__name-wrapper">
         <h1 className="offer__name">{title}</h1>
         <button
+          ref={bookmarkButtonRef}
           onClick={handleBookmarkClick}
-          className="offer__bookmark-button button"
+          className={classNames('offer__bookmark-button', 'button', {'offer__bookmark-button--active' : isFavorite})}
           type="button"
         >
           <svg className="offer__bookmark-icon" width="31" height="33">
@@ -102,7 +108,7 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
       <div className="offer__host">
         <h2 className="offer__host-title">Meet the host</h2>
         <div className="offer__host-user user">
-          <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
+          <div className={classNames('offer__avatar-wrapper', 'user__avatar-wrapper', {'offer__avatar-wrapper--pro' : isPro })}>
             <img className="offer__avatar user__avatar"
               src={avatarUrl}
               width="74"
@@ -112,7 +118,7 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
             </img>
           </div>
           <span className="offer__user-name">{name}</span>
-          <span className="offer__user-status">{textPro}</span>
+          {proStatus}
         </div>
         <div className="offer__description">
           <p className="offer__text">

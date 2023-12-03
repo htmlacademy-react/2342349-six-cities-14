@@ -23,6 +23,7 @@ interface ApiCommunicationState {
     favoritesCount: number;
     isLoading: boolean;
     isReviewSubmitted: boolean;
+    isCurrentOfferExist: boolean | null;
 }
 
 const initialState: ApiCommunicationState = {
@@ -35,6 +36,7 @@ const initialState: ApiCommunicationState = {
   favoritesCount: 0,
   isLoading: false,
   isReviewSubmitted: false,
+  isCurrentOfferExist: null,
 };
 
 export const apiCommunicationSlice = createSlice({
@@ -81,13 +83,16 @@ export const apiCommunicationSlice = createSlice({
 
       .addCase(fetchCurrentOfferAction.pending, (state) => {
         state.isLoading = true;
+        state.isCurrentOfferExist = null;
       })
       .addCase(fetchCurrentOfferAction.rejected, (state) => {
         state.isLoading = false;
+        state.isCurrentOfferExist = false;
       })
       .addCase(fetchCurrentOfferAction.fulfilled, (state, action) => {
         state.currentOffer = action.payload;
         state.isLoading = false;
+        state.isCurrentOfferExist = true;
       })
 
       .addCase(fetchCurrentNearbyOffersAction.pending, (state) => {
@@ -119,6 +124,7 @@ export const apiCommunicationSlice = createSlice({
       .addCase(postReviewAction.rejected, (state) => {
         state.isReviewSubmitted = false;
         state.isLoading = false;
+        state.currentReviewsCount--;
       })
       .addCase(postReviewAction.fulfilled, (state) => {
         state.isReviewSubmitted = true;

@@ -44,16 +44,17 @@ function Card({cardType, offer, onCardInteraction, authorizationStatus}: Readonl
 
   function handleBookmarkClick() {
     if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(updateFavoriteAction({
-        id: id,
-        status: +!isFavorite
-      }));
-
       if (isFavorite) {
         dispatch(decreaseFavoritesCount());
       } else {
         dispatch(increaseFavoritesCount());
       }
+
+      dispatch(updateFavoriteAction({
+        id: id,
+        status: +!isFavorite
+      }));
+
     } else {
       navigate(AppRoute.Login);
     }

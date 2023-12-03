@@ -7,5 +7,7 @@ export const getFavoritesCount = (state: State) => state[NameSpace.ApiCommunicat
 export const getCurrentOffer = (state: State) => state[NameSpace.ApiCommunication].currentOffer;
 export const getCurrentNearbyOffers = (state: State) => state[NameSpace.ApiCommunication].currentNearbyOffers;
 export const getCurrentReviews = (state: State) => state[NameSpace.ApiCommunication].currentReviews;
+export const getCurrentReviewsCount = (state: State) => state[NameSpace.ApiCommunication].currentReviewsCount;
 export const getIsLoading = (state: State) => state[NameSpace.ApiCommunication].isLoading;
 export const getIsReviewSubmitted = (state: State) => state[NameSpace.ApiCommunication].isReviewSubmitted;
+export const getIsCurrentOfferExist = (state: State) => state[NameSpace.ApiCommunication].isCurrentOfferExist;

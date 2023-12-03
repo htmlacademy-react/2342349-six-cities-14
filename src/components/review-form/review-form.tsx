@@ -68,7 +68,7 @@ function ReviewForm({
     if (!comment.text || !comment.rating) {
       return;
     }
-
+    dispatch(increaseCurrentReviewsCount());
     dispatch(submitReviewAndUpdate({
       id: offerId,
       reviewData: {
@@ -76,7 +76,6 @@ function ReviewForm({
         rating: comment.rating
       }
     }));
-    dispatch(increaseCurrentReviewsCount());
   };
 
   const isSubmitDisabled =

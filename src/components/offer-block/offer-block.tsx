@@ -10,7 +10,7 @@ import {useAppSelector} from '../../hooks';
 import {
   getCurrentNearbyOffers,
   getCurrentOffer,
-  getCurrentReviews
+  getCurrentReviews, getCurrentReviewsCount
 } from '../../store/api-communication/api-communication.selectors.ts';
 import {getSelectedCity} from '../../store/ui-settings/ui-settings.selectors.ts';
 import {getAuthorizationStatus} from '../../store/user-preferences/user-preferences.selectors.ts';
@@ -30,6 +30,7 @@ function OfferBlock({urlId, selectedOfferId}: OfferBlockProps) {
   const currentOffer = useAppSelector(getCurrentOffer);
   const currentNearbyOffers = useAppSelector(getCurrentNearbyOffers);
   const currentReviews = useAppSelector(getCurrentReviews);
+  const currentReviewsCount = useAppSelector(getCurrentReviewsCount);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const selectedCity = useAppSelector(getSelectedCity);
   const MemoizedOfferDetails = memo(OfferDetails);
@@ -56,7 +57,7 @@ function OfferBlock({urlId, selectedOfferId}: OfferBlockProps) {
   const reviewBlock = currentReviews ? (
     <MemoizedReviewList
       reviews={lastReviews}
-      reviewCount={currentReviews.length}
+      reviewCount={currentReviewsCount}
     />
   ) : <LoadingText/>;
 
