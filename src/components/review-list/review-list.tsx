@@ -8,9 +8,10 @@ const dataOptions: Intl.DateTimeFormatOptions = {
 
 interface ReviewPageProps {
   reviews: Review[];
+  reviewCount: number;
 }
 
-function ReviewList({reviews}: Readonly<ReviewPageProps>) {
+function ReviewList({reviews, reviewCount}: Readonly<ReviewPageProps>) {
   const commentList = reviews.map((review) => (
     <ReviewComment
       key={review.id}
@@ -22,7 +23,7 @@ function ReviewList({reviews}: Readonly<ReviewPageProps>) {
   return (
     <>
       <h2 className="reviews__title">
-            Reviews &middot; <span className="reviews__amount">{reviews.length}</span>
+            Reviews &middot; <span className="reviews__amount">{reviewCount}</span>
       </h2>
       <ul className="reviews__list">
         {commentList}

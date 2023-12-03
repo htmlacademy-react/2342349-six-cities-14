@@ -2,6 +2,7 @@ import {useNavigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus, AuthorizationStatusType, MAX_OFFER_STARS} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
 import {updateFavoriteAction} from '../../store/api-actions/data-api-actions.ts';
+import {decreaseFavoritesCount, increaseFavoritesCount} from '../../store/api-communication/api-communication.slice.ts';
 import {FullOffer} from '../../types/full-offer.ts';
 import styles from './offer-details.module.css';
 
@@ -40,6 +41,12 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
         id: id,
         status: +!isFavorite
       }));
+
+      if (isFavorite) {
+        dispatch(decreaseFavoritesCount());
+      } else {
+        dispatch(increaseFavoritesCount());
+      }
     } else {
       navigate(AppRoute.Login);
     }

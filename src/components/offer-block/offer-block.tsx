@@ -36,10 +36,6 @@ function OfferBlock({urlId, selectedOfferId}: OfferBlockProps) {
   const MemoizedReviewForm = memo(ReviewForm);
   const MemoizedReviewList = memo(ReviewList);
 
-  if (!selectedCity) {
-    return;
-  }
-
   const imageList = currentOffer?.images.slice(0, MAX_IMAGES_PER_OFFER).map((image) => (
     <div key={image} className="offer__image-wrapper">
       <img className="offer__image" src={image} alt="Photo studio"></img>
@@ -56,8 +52,12 @@ function OfferBlock({urlId, selectedOfferId}: OfferBlockProps) {
     <LeafletMap block={'offer'} city={mapCity} points={mapPoints} selectedPoint={selectedMapPoint}/>
   ) : <LoadingText/>;
 
+  const lastReviews = currentReviews ? currentReviews.slice(Math.max(currentReviews.length - MAX_REVIEWS_PER_OFFER, 0)).reverse() : [];
   const reviewBlock = currentReviews ? (
-    <MemoizedReviewList reviews={currentReviews.slice(0, MAX_REVIEWS_PER_OFFER)}/>
+    <MemoizedReviewList
+      reviews={lastReviews}
+      reviewCount={currentReviews.length}
+    />
   ) : <LoadingText/>;
 
   return currentOffer ? (

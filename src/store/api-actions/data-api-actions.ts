@@ -25,7 +25,9 @@ export const fetchOffersAction = createAsyncThunk<
       const {data} = await api.get<BriefOffer[]>(APIRoute.GetOffers);
       return data;
     } catch (error) {
-      toast.warning(handleApiError(error));
+      toast.warning(handleApiError(error), {
+        position: toast.POSITION.TOP_CENTER
+      });
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -43,7 +45,9 @@ export const fetchCurrentOfferAction = createAsyncThunk<
       const {data} = await api.get<FullOffer>(url);
       return data;
     } catch (error) {
-      toast.warning(handleApiError(error));
+      toast.warning(handleApiError(error), {
+        position: toast.POSITION.TOP_CENTER
+      });
       return rejectWithValue(handleApiError(error));
     }
   },
@@ -61,7 +65,9 @@ export const fetchCurrentNearbyOffersAction = createAsyncThunk<
       const {data} = await api.get<BriefOffer[]>(url);
       return data;
     } catch (error) {
-      toast.warning(handleApiError(error));
+      toast.warning(handleApiError(error), {
+        position: toast.POSITION.TOP_CENTER
+      });
       return rejectWithValue(handleApiError(error));
     }
   },
@@ -79,7 +85,9 @@ export const fetchCurrentReviewsAction = createAsyncThunk<
       const {data} = await api.get<Review[]>(url);
       return data;
     } catch (error) {
-      toast.warning(handleApiError(error));
+      toast.warning(handleApiError(error), {
+        position: toast.POSITION.TOP_CENTER
+      });
       return rejectWithValue(handleApiError(error));
     }
   },
@@ -114,9 +122,13 @@ export const postReviewAction = createAsyncThunk<
     try {
       const url = APIRoute.PostComment.replace(':offerId', id.toString());
       await api.post<UserData>(url, reviewData);
-      toast.success('Your review has been posted successfully.');
+      toast.success('Your review has been posted successfully.', {
+        position: toast.POSITION.TOP_CENTER
+      });
     } catch (error) {
-      toast.warning(handleApiError(error));
+      toast.warning(handleApiError(error), {
+        position: toast.POSITION.TOP_CENTER
+      });
       return rejectWithValue(handleApiError(error));
     }
   },
@@ -148,7 +160,9 @@ export const fetchFavoritesAction = createAsyncThunk<
       const {data} = await api.get<BriefOffer[]>(APIRoute.GetFavorite);
       return data;
     } catch (error) {
-      toast.warning(handleApiError(error));
+      toast.warning(handleApiError(error), {
+        position: toast.POSITION.TOP_CENTER
+      });
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -170,9 +184,13 @@ export const updateFavoriteAction = createAsyncThunk<
       await dispatch(fetchFavoritesAction());
       await dispatch(fetchOffersAction());
       await dispatch(fetchCurrentOfferAction(id));
-      toast.success('Update favorite offer successfully.');
+      toast.success('Update favorite offer successfully.', {
+        position: toast.POSITION.TOP_CENTER
+      });
     } catch (error) {
-      toast.warning(handleApiError(error));
+      toast.warning(handleApiError(error), {
+        position: toast.POSITION.TOP_CENTER
+      });
       return rejectWithValue(handleApiError(error));
     }
   },

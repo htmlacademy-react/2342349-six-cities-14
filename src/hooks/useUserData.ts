@@ -1,4 +1,4 @@
-import {getFavorites} from '../store/api-communication/api-communication.selectors.ts';
+import {getFavoritesCount} from '../store/api-communication/api-communication.selectors.ts';
 import {
   getAuthorizationStatus,
   getUserAvatarUrl,
@@ -10,13 +10,13 @@ const useUserData = () => {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const userLogin = useAppSelector(getUserLogin);
   const userAvatarUrl = useAppSelector(getUserAvatarUrl);
-  const favorites = useAppSelector(getFavorites);
+  const favoritesCount = useAppSelector(getFavoritesCount);
 
   return {
     authorizationStatus,
     userLogin,
     userAvatarUrl,
-    favorites,
+    favoritesCount,
   };
 };
 

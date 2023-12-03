@@ -3,6 +3,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus, AuthorizationStatusType, MAX_OFFER_STARS} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
 import {updateFavoriteAction} from '../../store/api-actions/data-api-actions.ts';
+import {decreaseFavoritesCount, increaseFavoritesCount} from '../../store/api-communication/api-communication.slice.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import styles from './card.module.css';
 
@@ -47,6 +48,12 @@ function Card({cardType, offer, onCardInteraction, authorizationStatus}: Readonl
         id: id,
         status: +!isFavorite
       }));
+
+      if (isFavorite) {
+        dispatch(decreaseFavoritesCount());
+      } else {
+        dispatch(increaseFavoritesCount());
+      }
     } else {
       navigate(AppRoute.Login);
     }

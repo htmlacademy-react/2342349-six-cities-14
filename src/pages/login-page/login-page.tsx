@@ -1,23 +1,25 @@
-import {FormEvent, useEffect, useRef} from 'react';
+import {FormEvent, useEffect, useRef, useState} from 'react';
 import {Helmet} from 'react-helmet-async';
 import {Link} from 'react-router-dom';
 import Logo from '../../components/logo/logo.tsx';
 import {AppRoute} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {loginAction} from '../../store/api-actions/user-api-actions.ts';
+import {getOffers} from '../../store/api-communication/api-communication.selectors.ts';
 import {getCities} from '../../store/ui-settings/ui-settings.selectors.ts';
 import {selectCity} from '../../store/ui-settings/ui-settings.slice.ts';
 import {getIsInvalidCredentialsEntered} from '../../store/user-preferences/user-preferences.selectors.ts';
 import {setInvalidCredentialsEntered} from '../../store/user-preferences/user-preferences.slice.ts';
+import {City} from '../../types/city.ts';
 
 function LoginPage() {
+  const [defaultCity, setDefaultCity] = useState<City>();
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
   const isInvalidCredentialsEntered = useAppSelector(getIsInvalidCredentialsEntered);
   const cities = useAppSelector(getCities);
-
-  const defaultCity = cities[Math.floor(Math.random() * cities.length)];
+  const offers = useAppSelector(getOffers);
 
   useEffect(() => {
     if (isInvalidCredentialsEntered) {
@@ -28,6 +30,12 @@ function LoginPage() {
       dispatch(setInvalidCredentialsEntered(false));
     }
   }, [dispatch, isInvalidCredentialsEntered]);
+
+  useEffect(() => {
+    if (offers.length > 0 && !defaultCity) {
+      setDefaultCity(cities[Math.floor(Math.random() * cities.length)]);
+    }
+  }, [offers]);
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -41,8 +49,24 @@ function LoginPage() {
   };
 
   function handlerDefaultCityNameClick() {
-    dispatch(selectCity(defaultCity));
+    if (defaultCity) {
+      dispatch(selectCity(defaultCity));
+    }
   }
+
+  const sectionRandomCity = defaultCity ? (
+    <section className="locations locations--login locations--current">
+      <div className="locations__item">
+        <Link
+          onClick={handlerDefaultCityNameClick}
+          className="locations__item-link"
+          to={AppRoute.Main}
+        >
+          <span>{defaultCity.name}</span>
+        </Link>
+      </div>
+    </section>
+  ) : null;
 
   return (
     <div className="page page--gray page--login">
@@ -53,7 +77,14 @@ function LoginPage() {
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
-            <Logo />
+            <Logo/>
+            <ul className="header__nav-list">
+              <li className="header__nav-item">
+                <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Login}>
+                  Sign in
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
       </header>
@@ -94,17 +125,7 @@ function LoginPage() {
               </button>
             </form>
           </section>
-          <section className="locations locations--login locations--current">
-            <div className="locations__item">
-              <Link
-                onClick={handlerDefaultCityNameClick}
-                className="locations__item-link"
-                to={AppRoute.Main}
-              >
-                <span>{defaultCity.name}</span>
-              </Link>
-            </div>
-          </section>
+          {sectionRandomCity}
         </div>
       </main>
     </div>
