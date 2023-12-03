@@ -10,17 +10,18 @@ import {fetchOfferDetails} from '../../store/api-actions/data-api-actions.ts';
 import {
   getCurrentNearbyOffers,
   getCurrentOffer,
-  getIsCurrentOfferExist
+  getCurrentOfferStatus
 } from '../../store/api-communication/api-communication.selectors.ts';
 import {getAuthorizationStatus} from '../../store/user-preferences/user-preferences.selectors.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
+import {OfferStatus} from '../../types/offer-status.ts';
 import NotFoundPage from '../not-found-page/not-found-page.tsx';
 
 function OfferPage() {
   const [selectedOfferId, setSelectedOfferId] = useState<BriefOffer['id']>('');
   const {id: urlId} = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
-  const isOfferExist = useAppSelector(getIsCurrentOfferExist);
+  const currentOfferStatus = useAppSelector(getCurrentOfferStatus);
   const currentOffer = useAppSelector(getCurrentOffer);
   const currentNearbyOffers = useAppSelector(getCurrentNearbyOffers);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
@@ -31,11 +32,11 @@ function OfferPage() {
     }
   }, [dispatch, urlId]);
 
-  if (isOfferExist === false || !urlId) {
+  if (currentOfferStatus === OfferStatus.NOT_EXISTS || !urlId) {
     return <NotFoundPage text={`Offer with id '${urlId}' not found.`}/>;
   }
 
-  if (isOfferExist === null) {
+  if (currentOfferStatus === OfferStatus.LOADING) {
     return null;
   }
 

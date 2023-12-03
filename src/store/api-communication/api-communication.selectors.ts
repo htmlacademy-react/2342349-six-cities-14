@@ -10,4 +10,5 @@ export const getCurrentReviews = (state: State) => state[NameSpace.ApiCommunicat
 export const getCurrentReviewsCount = (state: State) => state[NameSpace.ApiCommunication].currentReviewsCount;
 export const getIsLoading = (state: State) => state[NameSpace.ApiCommunication].isLoading;
 export const getIsReviewSubmitted = (state: State) => state[NameSpace.ApiCommunication].isReviewSubmitted;
-export const getIsCurrentOfferExist = (state: State) => state[NameSpace.ApiCommunication].isCurrentOfferExist;
+export const getCurrentOfferStatus = (state: State) => state[NameSpace.ApiCommunication].currentOfferStatus;
+export const getIsCurrentOfferFavorite = (state: State) => state[NameSpace.ApiCommunication].isCurrentOfferFavorite;

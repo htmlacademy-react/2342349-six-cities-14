@@ -35,7 +35,7 @@ function LoginPage() {
     if (offers.length > 0 && !defaultCity) {
       setDefaultCity(cities[Math.floor(Math.random() * cities.length)]);
     }
-  }, [offers]);
+  }, [offers.length, cities, defaultCity]);
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();

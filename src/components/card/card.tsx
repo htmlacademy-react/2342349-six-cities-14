@@ -43,21 +43,20 @@ function Card({cardType, offer, onCardInteraction, authorizationStatus}: Readonl
   const favoriteText = isFavorite ? 'In bookmarks' : 'To bookmarks';
 
   function handleBookmarkClick() {
-    if (authorizationStatus === AuthorizationStatus.Auth) {
-      if (isFavorite) {
-        dispatch(decreaseFavoritesCount());
-      } else {
-        dispatch(increaseFavoritesCount());
-      }
-
-      dispatch(updateFavoriteAction({
-        id: id,
-        status: +!isFavorite
-      }));
-
-    } else {
+    if (authorizationStatus !== AuthorizationStatus.Auth) {
       navigate(AppRoute.Login);
     }
+
+    if (isFavorite) {
+      dispatch(decreaseFavoritesCount());
+    } else {
+      dispatch(increaseFavoritesCount());
+    }
+
+    dispatch(updateFavoriteAction({
+      id: id,
+      status: +!isFavorite
+    }));
   }
 
   return (

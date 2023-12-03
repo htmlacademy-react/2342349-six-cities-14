@@ -2,6 +2,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {NameSpace} from '../../const.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import {FullOffer} from '../../types/full-offer.ts';
+import {OfferStatus, OfferStatusType} from '../../types/offer-status.ts';
 import {Review} from '../../types/review.ts';
 import {
   fetchCurrentNearbyOffersAction,
@@ -23,7 +24,8 @@ interface ApiCommunicationState {
     favoritesCount: number;
     isLoading: boolean;
     isReviewSubmitted: boolean;
-    isCurrentOfferExist: boolean | null;
+    currentOfferStatus: OfferStatusType;
+    isCurrentOfferFavorite: boolean;
 }
 
 const initialState: ApiCommunicationState = {
@@ -36,7 +38,8 @@ const initialState: ApiCommunicationState = {
   favoritesCount: 0,
   isLoading: false,
   isReviewSubmitted: false,
-  isCurrentOfferExist: null,
+  currentOfferStatus: OfferStatus.LOADING,
+  isCurrentOfferFavorite: false
 };
 
 export const apiCommunicationSlice = createSlice({
@@ -66,6 +69,9 @@ export const apiCommunicationSlice = createSlice({
     },
     increaseCurrentReviewsCount: (state) => {
       state.currentReviewsCount++;
+    },
+    setCurrentOfferFavorite: (state, action: PayloadAction<boolean>) => {
+      state.isCurrentOfferFavorite = action.payload;
     }
   },
   extraReducers(builder) {
@@ -83,16 +89,17 @@ export const apiCommunicationSlice = createSlice({
 
       .addCase(fetchCurrentOfferAction.pending, (state) => {
         state.isLoading = true;
-        state.isCurrentOfferExist = null;
+        state.currentOfferStatus = OfferStatus.LOADING;
       })
       .addCase(fetchCurrentOfferAction.rejected, (state) => {
         state.isLoading = false;
-        state.isCurrentOfferExist = false;
+        state.currentOfferStatus = OfferStatus.NOT_EXISTS;
       })
       .addCase(fetchCurrentOfferAction.fulfilled, (state, action) => {
         state.currentOffer = action.payload;
         state.isLoading = false;
-        state.isCurrentOfferExist = true;
+        state.currentOfferStatus = OfferStatus.EXISTS;
+        state.isCurrentOfferFavorite = state.currentOffer.isFavorite;
       })
 
       .addCase(fetchCurrentNearbyOffersAction.pending, (state) => {
@@ -162,5 +169,6 @@ export const {
   setReviewSubmitted,
   increaseFavoritesCount,
   decreaseFavoritesCount,
-  increaseCurrentReviewsCount
+  increaseCurrentReviewsCount,
+  setCurrentOfferFavorite
 } = apiCommunicationSlice.actions;
