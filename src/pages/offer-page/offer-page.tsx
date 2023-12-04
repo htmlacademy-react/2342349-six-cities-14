@@ -10,35 +10,33 @@ import {fetchOfferDetails} from '../../store/api-actions/data-api-actions.ts';
 import {
   getCurrentNearbyOffers,
   getCurrentOffer,
-  getCurrentReviews,
-  getOffers
+  getCurrentOfferStatus
 } from '../../store/api-communication/api-communication.selectors.ts';
 import {getAuthorizationStatus} from '../../store/user-preferences/user-preferences.selectors.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
+import {OfferStatus} from '../../types/offer-status.ts';
 import NotFoundPage from '../not-found-page/not-found-page.tsx';
 
 function OfferPage() {
   const [selectedOfferId, setSelectedOfferId] = useState<BriefOffer['id']>('');
   const {id: urlId} = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
-  const offers = useAppSelector(getOffers);
-  const isOfferExist = offers.some((offerItem) => offerItem.id === urlId);
+  const currentOfferStatus = useAppSelector(getCurrentOfferStatus);
   const currentOffer = useAppSelector(getCurrentOffer);
   const currentNearbyOffers = useAppSelector(getCurrentNearbyOffers);
-  const currentReviews = useAppSelector(getCurrentReviews);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   useEffect(() => {
-    if (urlId && isOfferExist) {
+    if (urlId) {
       dispatch(fetchOfferDetails(urlId));
     }
-  }, [dispatch, urlId, isOfferExist]);
+  }, [dispatch, urlId]);
 
-  if (offers.length > 0 && !isOfferExist || !urlId) {
+  if (currentOfferStatus === OfferStatus.NOT_EXISTS || !urlId) {
     return <NotFoundPage text={`Offer with id '${urlId}' not found.`}/>;
   }
 
-  if (!currentOffer && !currentNearbyOffers && !currentReviews) {
+  if (currentOfferStatus === OfferStatus.LOADING) {
     return null;
   }
 

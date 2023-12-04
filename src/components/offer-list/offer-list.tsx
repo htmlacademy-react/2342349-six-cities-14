@@ -16,12 +16,13 @@ interface OfferListProps {
   maxOfferLimit: number;
 }
 
+const MemoizedCard = memo(Card);
+const MemoizedSortList = memo(SortList);
+
 function OfferList({offers, selectedCity, maxOfferLimit = 5}: Readonly<OfferListProps>) {
   const [selectedOfferId, setSelectedOfferId] = useState<BriefOffer['id']>('');
   const currentSortType = useAppSelector(getCurrentSortType);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-  const MemoizedCard = memo(Card);
-  const MemoizedSortList = memo(SortList);
 
   const filteredOffers = useMemo(() =>
     offers.filter((offer) => offer.city.name === selectedCity.name),

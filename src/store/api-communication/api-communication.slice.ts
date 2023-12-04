@@ -2,13 +2,16 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {NameSpace} from '../../const.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import {FullOffer} from '../../types/full-offer.ts';
+import {OfferStatus, OfferStatusType} from '../../types/offer-status.ts';
 import {Review} from '../../types/review.ts';
 import {
   fetchCurrentNearbyOffersAction,
   fetchCurrentOfferAction,
-  fetchCurrentReviewsAction, fetchFavoritesAction,
+  fetchCurrentReviewsAction,
+  fetchFavoritesAction,
   fetchOffersAction,
-  postReviewAction, updateFavoriteAction
+  postReviewAction,
+  updateFavoriteAction
 } from '../api-actions/data-api-actions.ts';
 
 interface ApiCommunicationState {
@@ -16,9 +19,13 @@ interface ApiCommunicationState {
     currentOffer: FullOffer | null;
     currentNearbyOffers: BriefOffer[] | null;
     currentReviews: Review[] | null;
+    currentReviewsCount: number;
     favorites: BriefOffer[];
+    favoritesCount: number;
     isLoading: boolean;
     isReviewSubmitted: boolean;
+    currentOfferStatus: OfferStatusType;
+    isCurrentOfferFavorite: boolean;
 }
 
 const initialState: ApiCommunicationState = {
@@ -26,9 +33,13 @@ const initialState: ApiCommunicationState = {
   currentOffer: null,
   currentNearbyOffers: null,
   currentReviews: null,
+  currentReviewsCount: 0,
   favorites: [],
+  favoritesCount: 0,
   isLoading: false,
   isReviewSubmitted: false,
+  currentOfferStatus: OfferStatus.LOADING,
+  isCurrentOfferFavorite: false
 };
 
 export const apiCommunicationSlice = createSlice({
@@ -46,6 +57,21 @@ export const apiCommunicationSlice = createSlice({
     },
     setReviewSubmitted: (state, action: PayloadAction<boolean>) => {
       state.isReviewSubmitted = action.payload;
+    },
+    setFavoritesCount: (state, action: PayloadAction<number>) => {
+      state.favoritesCount = action.payload;
+    },
+    decreaseFavoritesCount: (state) => {
+      state.favoritesCount--;
+    },
+    increaseFavoritesCount: (state) => {
+      state.favoritesCount++;
+    },
+    increaseCurrentReviewsCount: (state) => {
+      state.currentReviewsCount++;
+    },
+    setCurrentOfferFavorite: (state, action: PayloadAction<boolean>) => {
+      state.isCurrentOfferFavorite = action.payload;
     }
   },
   extraReducers(builder) {
@@ -63,13 +89,17 @@ export const apiCommunicationSlice = createSlice({
 
       .addCase(fetchCurrentOfferAction.pending, (state) => {
         state.isLoading = true;
+        state.currentOfferStatus = OfferStatus.LOADING;
       })
       .addCase(fetchCurrentOfferAction.rejected, (state) => {
         state.isLoading = false;
+        state.currentOfferStatus = OfferStatus.NOT_EXISTS;
       })
       .addCase(fetchCurrentOfferAction.fulfilled, (state, action) => {
         state.currentOffer = action.payload;
         state.isLoading = false;
+        state.currentOfferStatus = OfferStatus.EXISTS;
+        state.isCurrentOfferFavorite = state.currentOffer.isFavorite;
       })
 
       .addCase(fetchCurrentNearbyOffersAction.pending, (state) => {
@@ -91,6 +121,7 @@ export const apiCommunicationSlice = createSlice({
       })
       .addCase(fetchCurrentReviewsAction.fulfilled, (state, action) => {
         state.currentReviews = action.payload;
+        state.currentReviewsCount = state.currentReviews.length;
         state.isLoading = false;
       })
 
@@ -100,6 +131,7 @@ export const apiCommunicationSlice = createSlice({
       .addCase(postReviewAction.rejected, (state) => {
         state.isReviewSubmitted = false;
         state.isLoading = false;
+        state.currentReviewsCount--;
       })
       .addCase(postReviewAction.fulfilled, (state) => {
         state.isReviewSubmitted = true;
@@ -114,6 +146,7 @@ export const apiCommunicationSlice = createSlice({
       })
       .addCase(fetchFavoritesAction.fulfilled, (state, action) => {
         state.favorites = action.payload;
+        state.favoritesCount = state.favorites.length;
         state.isLoading = false;
       })
 
@@ -133,5 +166,9 @@ export const {
   clearCurrentOffer,
   clearCurrentReviews,
   clearCurrentNearbyOffers,
-  setReviewSubmitted
+  setReviewSubmitted,
+  increaseFavoritesCount,
+  decreaseFavoritesCount,
+  increaseCurrentReviewsCount,
+  setCurrentOfferFavorite
 } = apiCommunicationSlice.actions;

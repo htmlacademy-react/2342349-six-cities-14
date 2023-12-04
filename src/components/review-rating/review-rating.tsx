@@ -5,9 +5,10 @@ interface ReviewRatingProps {
   title: string;
   onRatingChange: (event: ChangeEvent<HTMLInputElement>) => void;
   checked: boolean;
+  isDisabled: boolean;
 }
 
-function ReviewRating({value, title, onRatingChange, checked}: Readonly<ReviewRatingProps>) {
+function ReviewRating({value, title, onRatingChange, checked, isDisabled}: Readonly<ReviewRatingProps>) {
   return (
     <>
       <input onChange={onRatingChange}
@@ -17,6 +18,7 @@ function ReviewRating({value, title, onRatingChange, checked}: Readonly<ReviewRa
         id={`${value}-stars`}
         type="radio"
         checked={checked}
+        disabled={isDisabled}
       >
       </input>
       <label htmlFor={`${value}-stars`}

@@ -20,7 +20,9 @@ export const checkAuthAction = createAsyncThunk<
     const userAvatarUrl = response.data?.avatarUrl;
     dispatch(setUserLogin(userLogin));
     dispatch(setUserAvatarUrl(userAvatarUrl));
-    toast.success('You have successfully logged in.');
+    toast.success('You have successfully logged in.', {
+      position: toast.POSITION.TOP_CENTER
+    });
   },
 );
 
@@ -39,9 +41,13 @@ export const loginAction = createAsyncThunk<
       saveToken(token);
       dispatch(setUserLogin(userLogin));
       dispatch(setUserAvatarUrl(userAvatarUrl));
-      toast.success('You have successfully logged in.');
+      toast.success('You have successfully logged in.', {
+        position: toast.POSITION.TOP_CENTER
+      });
     } catch (error) {
-      toast.warning(handleApiError(error));
+      toast.warning(handleApiError(error), {
+        position: toast.POSITION.TOP_CENTER
+      });
       return rejectWithValue(handleApiError(error));
     }
   },
@@ -57,9 +63,13 @@ export const logoutAction = createAsyncThunk<
     try {
       await api.delete(APIRoute.DeleteLogout);
       dropToken();
-      toast.success('You have been successfully logged out.');
+      toast.success('You have been successfully logged out.', {
+        position: toast.POSITION.TOP_CENTER
+      });
     } catch (error) {
-      toast.warning(handleApiError(error));
+      toast.warning(handleApiError(error), {
+        position: toast.POSITION.TOP_CENTER
+      });
       return rejectWithValue(handleApiError(error));
     }
   },

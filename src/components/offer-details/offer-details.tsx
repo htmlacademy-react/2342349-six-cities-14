@@ -1,17 +1,24 @@
+import classNames from 'classnames';
 import {useNavigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus, AuthorizationStatusType, MAX_OFFER_STARS} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
-import {updateFavoriteAction} from '../../store/api-actions/data-api-actions.ts';
+import {updateFavoriteCurrentOfferAction} from '../../store/api-actions/data-api-actions.ts';
+import {
+  decreaseFavoritesCount,
+  increaseFavoritesCount,
+  setCurrentOfferFavorite
+} from '../../store/api-communication/api-communication.slice.ts';
 import {FullOffer} from '../../types/full-offer.ts';
 import styles from './offer-details.module.css';
 
 interface OfferDetailsProps {
   offer: FullOffer;
   authorizationStatus: AuthorizationStatusType;
+  currentOfferFavorite: boolean;
 }
 
-function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>) {
-  const {id, isPremium, title, isFavorite, rating, type,
+function OfferDetails({offer, authorizationStatus, currentOfferFavorite} : Readonly<OfferDetailsProps>) {
+  const {id, isPremium, title, rating, type,
     bedrooms, maxAdults, price, host, description} = offer;
   const {avatarUrl, name, isPro} = host;
   const dispatch = useAppDispatch();
@@ -24,10 +31,10 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
     </li>
   ));
 
-  const bookmarkText = isFavorite ? 'In bookmarks' : 'To bookmarks';
+  const bookmarkText = currentOfferFavorite ? 'In bookmarks' : 'To bookmarks';
   const adultText = maxAdults > 1 ? 'adults' : 'adult';
   const bedroomText = bedrooms > 1 ? 'Bedrooms' : 'Bedroom';
-  const textPro = isPro ? 'Pro' : '';
+  const proStatus = isPro ? <span className="offer__user-status">Pro</span> : '';
   const premiumText = isPremium ? (
     <div className="offer__mark">
       <span>Premium</span>
@@ -35,14 +42,21 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
   ) : '';
 
   function handleBookmarkClick() {
-    if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(updateFavoriteAction({
-        id: id,
-        status: +!isFavorite
-      }));
-    } else {
-      navigate(AppRoute.Login);
+    if (authorizationStatus !== AuthorizationStatus.Auth) {
+      return navigate(AppRoute.Login);
     }
+    if (currentOfferFavorite) {
+      dispatch(setCurrentOfferFavorite(false));
+      dispatch(decreaseFavoritesCount());
+    } else {
+      dispatch(setCurrentOfferFavorite(true));
+      dispatch(increaseFavoritesCount());
+    }
+
+    dispatch(updateFavoriteCurrentOfferAction({
+      id: id,
+      status: +!currentOfferFavorite
+    }));
   }
 
   return (
@@ -52,7 +66,7 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
         <h1 className="offer__name">{title}</h1>
         <button
           onClick={handleBookmarkClick}
-          className="offer__bookmark-button button"
+          className={classNames('offer__bookmark-button', 'button', {'offer__bookmark-button--active' : currentOfferFavorite})}
           type="button"
         >
           <svg className="offer__bookmark-icon" width="31" height="33">
@@ -95,7 +109,7 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
       <div className="offer__host">
         <h2 className="offer__host-title">Meet the host</h2>
         <div className="offer__host-user user">
-          <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
+          <div className={classNames('offer__avatar-wrapper', 'user__avatar-wrapper', {'offer__avatar-wrapper--pro' : isPro })}>
             <img className="offer__avatar user__avatar"
               src={avatarUrl}
               width="74"
@@ -105,7 +119,7 @@ function OfferDetails({offer, authorizationStatus} : Readonly<OfferDetailsProps>
             </img>
           </div>
           <span className="offer__user-name">{name}</span>
-          <span className="offer__user-status">{textPro}</span>
+          {proStatus}
         </div>
         <div className="offer__description">
           <p className="offer__text">

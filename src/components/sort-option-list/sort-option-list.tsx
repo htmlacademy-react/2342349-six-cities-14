@@ -13,10 +13,10 @@ interface SortOptionListProps {
 function SortOptionList({ isSortMenuOpen, toggleSortMenu, currentSortType }: Readonly<SortOptionListProps>) {
   const dispatch = useAppDispatch();
 
-  function handleSortChange(value: keyof typeof SortOptions) {
+  const handleSortChange = (value: keyof typeof SortOptions) => () => {
     dispatch(setSortType(value));
     toggleSortMenu();
-  }
+  };
 
   function handleKeyDown(event: React.KeyboardEvent, action: () => void) {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -30,8 +30,8 @@ function SortOptionList({ isSortMenuOpen, toggleSortMenu, currentSortType }: Rea
       key={key}
       className={classNames('places__option', {'places__option--active': currentSortType === key})}
       tabIndex={index}
-      onClick={() => handleSortChange(key as keyof typeof SortOptions)}
-      onKeyDown={(event) => handleKeyDown(event, () => handleSortChange(key as keyof typeof SortOptions))}
+      onClick={handleSortChange(key as keyof typeof SortOptions)}
+      onKeyDown={(event) => handleKeyDown(event, handleSortChange(key as keyof typeof SortOptions))}
     >
       {title}
     </li>

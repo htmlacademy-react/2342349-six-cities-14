@@ -3,7 +3,10 @@ import {AuthorizationStatus, AuthorizationStatusType, REVIEW_RATING} from '../..
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {submitReviewAndUpdate} from '../../store/api-actions/data-api-actions.ts';
 import {getIsReviewSubmitted} from '../../store/api-communication/api-communication.selectors.ts';
-import {setReviewSubmitted} from '../../store/api-communication/api-communication.slice.ts';
+import {
+  increaseCurrentReviewsCount,
+  setReviewSubmitted
+} from '../../store/api-communication/api-communication.slice.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import ReviewRating from '../review-rating/review-rating.tsx';
 
@@ -65,7 +68,7 @@ function ReviewForm({
     if (!comment.text || !comment.rating) {
       return;
     }
-
+    dispatch(increaseCurrentReviewsCount());
     dispatch(submitReviewAndUpdate({
       id: offerId,
       reviewData: {
@@ -87,6 +90,7 @@ function ReviewForm({
       title={rating.title}
       onRatingChange={handleRatingSelect}
       checked={comment.rating === rating.value}
+      isDisabled={isReviewSubmitted}
     />
   ));
 

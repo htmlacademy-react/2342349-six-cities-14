@@ -21,7 +21,7 @@ function NotFoundPage({text = 'Something went wrong'}: Readonly<NotFoundPageProp
       <main className="page__main">
         <div className={styles.container}>
           <h1 className={styles.heading}>
-            Oops!
+            Oops! - 404
             <br/>
             <small className={styles.text}>{text}</small>
           </h1>

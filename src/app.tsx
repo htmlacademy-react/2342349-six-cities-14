@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 import {HelmetProvider} from 'react-helmet-async';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import LoadingText from './components/loading-text/loading-text.tsx';
 import PrivateRoute from './components/private-route/private-route.tsx';
 import {AppRoute, AuthorizationStatus, CITY_BY_DEFAULT} from './const.ts';
 import {useAppDispatch, useAppSelector} from './hooks';
@@ -12,7 +13,6 @@ import OfferPage from './pages/offer-page/offer-page.tsx';
 import {fetchFavoritesAction, fetchOffersAction} from './store/api-actions/data-api-actions.ts';
 import {checkAuthAction} from './store/api-actions/user-api-actions.ts';
 import {getOffers} from './store/api-communication/api-communication.selectors.ts';
-import {getSelectedCity} from './store/ui-settings/ui-settings.selectors.ts';
 import {selectCity, setCities} from './store/ui-settings/ui-settings.slice.ts';
 import {getAuthorizationStatus} from './store/user-preferences/user-preferences.selectors.ts';
 import {City} from './types/city.ts';
@@ -20,14 +20,18 @@ import {City} from './types/city.ts';
 function App() {
   const offers = useAppSelector(getOffers);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-  const selectedCity = useAppSelector(getSelectedCity);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(checkAuthAction());
     dispatch(fetchOffersAction());
-    dispatch(fetchFavoritesAction());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(fetchFavoritesAction());
+    }
+  }, [dispatch, authorizationStatus]);
 
   useEffect(() => {
     if (offers.length > 0) {
@@ -39,13 +43,15 @@ function App() {
       }, [] as City[]);
       dispatch(setCities(cities));
 
-      if (!selectedCity) {
-        const cityByDefault = offers
-          .find((offer) => offer.city.name === CITY_BY_DEFAULT)?.city ?? offers[0].city;
-        dispatch(selectCity(cityByDefault));
-      }
+      const cityByDefault = offers
+        .find((offer) => offer.city.name.toLowerCase() === CITY_BY_DEFAULT.toLowerCase())?.city ?? offers[0].city;
+      dispatch(selectCity(cityByDefault));
     }
   }, [dispatch, offers]);
+
+  if (authorizationStatus === AuthorizationStatus.Unknown) {
+    return <LoadingText/>;
+  }
 
   return (
     <HelmetProvider>

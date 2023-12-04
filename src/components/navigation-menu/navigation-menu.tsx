@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
 import useUserData from '../../hooks/useUserData.ts';
@@ -8,10 +8,12 @@ import {logoutAction} from '../../store/api-actions/user-api-actions.ts';
 
 function NavigationMenu() {
   const dispatch = useAppDispatch();
-  const {authorizationStatus, userAvatarUrl, userLogin, favorites} = useUserData();
+  const {authorizationStatus, userAvatarUrl, userLogin, favoritesCount} = useUserData();
+  const navigate = useNavigate();
 
-  const logout = () => {
-    dispatch(logoutAction());
+  const logout = async () => {
+    await dispatch(logoutAction());
+    navigate(AppRoute.Login);
   };
 
   const handleSignOutClick = () => {
@@ -40,7 +42,7 @@ function NavigationMenu() {
                 </img>
               </div>
               <span className="header__user-name user__name">{userLogin}</span>
-              <span className="header__favorite-count">{favorites.length}</span>
+              <span className="header__favorite-count">{favoritesCount}</span>
             </Link>
           </li>
           <li
@@ -48,7 +50,7 @@ function NavigationMenu() {
             onClick={handleSignOutClick}
             onKeyDown={handleKeyDown}
           >
-            <Link className="header__nav-link" to="#">
+            <Link className="header__nav-link header__nav-link--profile" to='#'>
               <span className="header__signout">Sign out</span>
             </Link>
           </li>
@@ -56,7 +58,7 @@ function NavigationMenu() {
       ) : (
         <ul className="header__nav-list">
           <li className="header__nav-item">
-            <Link className="header__nav-link" to={AppRoute.Login}>
+            <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Login}>
               <span className="header__signout">Sign in</span>
             </Link>
           </li>

@@ -3,6 +3,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus, AuthorizationStatusType, MAX_OFFER_STARS} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
 import {updateFavoriteAction} from '../../store/api-actions/data-api-actions.ts';
+import {decreaseFavoritesCount, increaseFavoritesCount} from '../../store/api-communication/api-communication.slice.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import styles from './card.module.css';
 
@@ -42,14 +43,20 @@ function Card({cardType, offer, onCardInteraction, authorizationStatus}: Readonl
   const favoriteText = isFavorite ? 'In bookmarks' : 'To bookmarks';
 
   function handleBookmarkClick() {
-    if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(updateFavoriteAction({
-        id: id,
-        status: +!isFavorite
-      }));
-    } else {
-      navigate(AppRoute.Login);
+    if (authorizationStatus !== AuthorizationStatus.Auth) {
+      return navigate(AppRoute.Login);
     }
+
+    if (isFavorite) {
+      dispatch(decreaseFavoritesCount());
+    } else {
+      dispatch(increaseFavoritesCount());
+    }
+
+    dispatch(updateFavoriteAction({
+      id: id,
+      status: +!isFavorite
+    }));
   }
 
   return (

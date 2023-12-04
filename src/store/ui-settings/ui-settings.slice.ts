@@ -4,13 +4,13 @@ import {CITY_FOR_EMPTY_LIST, NameSpace} from '../../const.ts';
 import {City} from '../../types/city.ts';
 
 interface SessionState {
-    selectedCity: City | null;
+    selectedCity: City;
     cities: City[];
     currentSortType: SortOptionsType;
 }
 
 const initialState: SessionState = {
-  selectedCity: null,
+  selectedCity: CITY_FOR_EMPTY_LIST[0],
   cities: CITY_FOR_EMPTY_LIST,
   currentSortType: 'POPULAR',
 };
