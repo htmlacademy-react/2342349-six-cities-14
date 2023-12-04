@@ -44,7 +44,8 @@ function Card({cardType, offer, onCardInteraction, authorizationStatus}: Readonl
 
   function handleBookmarkClick() {
     if (authorizationStatus !== AuthorizationStatus.Auth) {
-      return navigate(AppRoute.Login);
+      navigate(AppRoute.Login);
+      return;
     }
 
     if (isFavorite) {
