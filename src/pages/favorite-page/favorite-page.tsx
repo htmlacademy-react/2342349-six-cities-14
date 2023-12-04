@@ -14,7 +14,7 @@ function FavoritePage() {
   const navigate = useNavigate();
 
   if (authorizationStatus !== AuthorizationStatus.Auth) {
-    navigate(AppRoute.Login);
+    return navigate(AppRoute.Login);
   }
 
   const favoriteList = favorites.length > 0 ? (

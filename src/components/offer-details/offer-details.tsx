@@ -43,7 +43,7 @@ function OfferDetails({offer, authorizationStatus, currentOfferFavorite} : Reado
 
   function handleBookmarkClick() {
     if (authorizationStatus !== AuthorizationStatus.Auth) {
-      navigate(AppRoute.Login);
+      return navigate(AppRoute.Login);
     }
     if (currentOfferFavorite) {
       dispatch(setCurrentOfferFavorite(false));
