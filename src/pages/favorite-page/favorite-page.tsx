@@ -1,3 +1,4 @@
+import {useEffect} from 'react';
 import {Helmet} from 'react-helmet-async';
 import {useNavigate} from 'react-router-dom';
 import FavoriteList from '../../components/favorite-list/favorite-list.tsx';
@@ -13,9 +14,11 @@ function FavoritePage() {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const navigate = useNavigate();
 
-  if (authorizationStatus !== AuthorizationStatus.Auth) {
-    return navigate(AppRoute.Login);
-  }
+  useEffect(() => {
+    if (authorizationStatus !== AuthorizationStatus.Auth) {
+      navigate(AppRoute.Login);
+    }
+  }, [authorizationStatus, navigate]);
 
   const favoriteList = favorites.length > 0 ? (
     <main className="page__main page__main--favorites">
