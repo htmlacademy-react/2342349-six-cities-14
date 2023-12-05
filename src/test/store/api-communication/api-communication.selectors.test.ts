@@ -19,13 +19,10 @@ describe('UserPreferences selector', () => {
       currentOffer: makeFakeFullOffer(),
       currentNearbyOffers: Array.from({ length: 6 }, () => makeFakeBriefOffer()),
       currentReviews: Array.from({ length: 15 }, () => makeFakeReview()),
-      currentReviewsCount: 15,
       favorites: Array.from({ length: 5 }, () => makeFakeBriefOffer()),
-      favoritesCount: 5,
       isLoading: false,
       isReviewSubmitted: false,
       currentOfferStatus: OfferStatus.LOADING,
-      isCurrentOfferFavorite: false
     }
   };
 

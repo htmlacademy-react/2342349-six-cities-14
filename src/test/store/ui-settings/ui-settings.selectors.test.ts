@@ -7,6 +7,7 @@ describe('SessionState selector', () => {
   const state = {
     [NameSpace.SessionState]: {
       selectedCity: makeFakeCity(),
+      isCitySelected: false,
       cities: Array.from({ length: 5 }, () => makeFakeCity()),
       currentSortType: 'POPULAR' as SortOptionsType,
     }
