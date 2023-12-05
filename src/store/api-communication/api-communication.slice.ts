@@ -170,5 +170,6 @@ export const {
   increaseFavoritesCount,
   decreaseFavoritesCount,
   increaseCurrentReviewsCount,
-  setCurrentOfferFavorite
+  setCurrentOfferFavorite,
+  setFavoritesCount
 } = apiCommunicationSlice.actions;

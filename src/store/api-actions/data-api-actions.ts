@@ -155,7 +155,7 @@ export const fetchFavoritesAction = createAsyncThunk<
   ThunkApiConfig
 >(
   'data/fetchFavoritesAction',
-  async (_arg, {extra: api, dispatch, rejectWithValue}) => {
+  async (_arg, {extra: api, rejectWithValue}) => {
     try {
       const {data} = await api.get<BriefOffer[]>(APIRoute.GetFavorite);
       return data;
@@ -163,7 +163,6 @@ export const fetchFavoritesAction = createAsyncThunk<
       toast.warning(handleApiError(error), {
         position: toast.POSITION.TOP_CENTER
       });
-      await dispatch(fetchFavoritesAction());
       return rejectWithValue(handleApiError(error));
     }
   }
