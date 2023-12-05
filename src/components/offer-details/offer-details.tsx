@@ -3,11 +3,6 @@ import {useNavigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus, AuthorizationStatusType, MAX_OFFER_STARS} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
 import {updateFavoriteCurrentOfferAction} from '../../store/api-actions/data-api-actions.ts';
-import {
-  decreaseFavoritesCount,
-  increaseFavoritesCount,
-  setCurrentOfferFavorite
-} from '../../store/api-communication/api-communication.slice.ts';
 import {FullOffer} from '../../types/full-offer.ts';
 import styles from './offer-details.module.css';
 
@@ -46,16 +41,10 @@ function OfferDetails({offer, authorizationStatus, currentOfferFavorite} : Reado
       navigate(AppRoute.Login);
       return;
     }
-    if (currentOfferFavorite) {
-      dispatch(setCurrentOfferFavorite(false));
-      dispatch(decreaseFavoritesCount());
-    } else {
-      dispatch(setCurrentOfferFavorite(true));
-      dispatch(increaseFavoritesCount());
-    }
 
     dispatch(updateFavoriteCurrentOfferAction({
-      id: id,
+      favoriteId: id,
+      currentOfferId: id,
       status: +!currentOfferFavorite
     }));
   }

@@ -8,9 +8,6 @@ import {
   clearCurrentNearbyOffers,
   clearCurrentOffer,
   clearCurrentReviews,
-  decreaseFavoritesCount,
-  increaseCurrentReviewsCount,
-  increaseFavoritesCount, setCurrentOfferFavorite, setFavoritesCount,
   setReviewSubmitted
 } from '../../../store/api-communication/api-communication.slice.ts';
 import {OfferStatus} from '../../../types/offer-status.ts';
@@ -51,37 +48,6 @@ describe('UserPreferences Slice', () => {
     const state = apiCommunicationSlice.reducer(initialState, action);
     expect(state.isReviewSubmitted).toEqual(true);
   });
-
-  it('should handle setFavoritesCount', () => {
-    const action = setFavoritesCount(12);
-    const state = apiCommunicationSlice.reducer(initialState, action);
-    expect(state.favoritesCount).toEqual(12);
-  });
-
-  it('should handle increaseFavoritesCount', () => {
-    const action = increaseFavoritesCount();
-    const state = apiCommunicationSlice.reducer(initialState, action);
-    expect(state.favoritesCount).toEqual(initialState.favoritesCount + 1);
-  });
-
-  it('should handle decreaseFavoritesCount', () => {
-    const action = decreaseFavoritesCount();
-    const state = apiCommunicationSlice.reducer(initialState, action);
-    expect(state.favoritesCount).toEqual(initialState.favoritesCount - 1);
-  });
-
-  it('should handle increaseCurrentReviewsCount', () => {
-    const action = increaseCurrentReviewsCount();
-    const state = apiCommunicationSlice.reducer(initialState, action);
-    expect(state.currentReviewsCount).toEqual(initialState.currentReviewsCount + 1);
-  });
-
-  it('should handle setCurrentOfferFavorite', () => {
-    const action = setCurrentOfferFavorite(true);
-    const state = apiCommunicationSlice.reducer(initialState, action);
-    expect(state.isCurrentOfferFavorite).toEqual(true);
-  });
-
 
   it('should handle fetchOffersAction.pending', () => {
     const state = apiCommunicationSlice.reducer(initialState, fetchOffersAction.pending);
@@ -125,7 +91,6 @@ describe('UserPreferences Slice', () => {
     expect(state.currentOffer).toEqual(currentOffer);
     expect(state.isLoading).toEqual(false);
     expect(state.currentOfferStatus).toEqual(OfferStatus.EXISTS);
-    expect(state.isCurrentOfferFavorite).toEqual(currentOffer.isFavorite);
   });
 
 
@@ -167,7 +132,6 @@ describe('UserPreferences Slice', () => {
       fetchCurrentReviewsAction.fulfilled(reviews, '', '')
     );
     expect(state.currentReviews).toEqual(reviews);
-    expect(state.currentReviewsCount).toEqual(reviews.length);
     expect(state.isLoading).toEqual(false);
   });
 
@@ -207,7 +171,6 @@ describe('UserPreferences Slice', () => {
       fetchFavoritesAction.fulfilled(favorites, '', undefined)
     );
     expect(state.favorites).toEqual(favorites);
-    expect(state.favoritesCount).toEqual(favorites.length);
     expect(state.isLoading).toEqual(false);
   });
 

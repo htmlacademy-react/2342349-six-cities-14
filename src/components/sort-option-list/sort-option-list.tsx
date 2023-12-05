@@ -25,7 +25,7 @@ function SortOptionList({ isSortMenuOpen, handleToggleSortMenu, currentSortType 
     }
   }
 
-  const sortOptionElement = Object.entries(SortOptions).map(([key , {title}], index) => (
+  const sortOptionElements = Object.entries(SortOptions).map(([key , {title}], index) => (
     <li
       key={key}
       className={classNames('places__option', {'places__option--active': currentSortType === key})}
@@ -39,7 +39,7 @@ function SortOptionList({ isSortMenuOpen, handleToggleSortMenu, currentSortType 
 
   return (
     <ul className={classNames('places__options', 'places__options--custom', {'places__options--opened': isSortMenuOpen})}>
-      {sortOptionElement}
+      {sortOptionElements}
     </ul>
   );
 }

@@ -7,10 +7,15 @@ import {createAPI} from '../../../services/api.ts';
 import {
   fetchCurrentNearbyOffersAction,
   fetchCurrentOfferAction,
-  fetchCurrentReviewsAction, fetchFavoritesAction,
+  fetchCurrentReviewsAction,
+  fetchFavoritesAction,
   fetchOfferDetails,
   fetchOffersAction,
-  postReviewAction, submitReviewAndUpdate, updateFavoriteAction, updateFavoriteCurrentOfferAction
+  postReviewAction,
+  submitReviewAndUpdate,
+  updateFavoriteAction,
+  updateFavoriteCurrentNearbyOfferAction,
+  updateFavoriteCurrentOfferAction
 } from '../../../store/api-actions/data-api-actions.ts';
 import {
   clearCurrentNearbyOffers,
@@ -41,13 +46,10 @@ describe('User API Async actions', () => {
         currentOffer: makeFakeFullOffer(),
         currentNearbyOffers: Array.from({ length: 6 }, () => makeFakeBriefOffer()),
         currentReviews: Array.from({ length: 15 }, () => makeFakeReview()),
-        currentReviewsCount: 15,
         favorites: Array.from({ length: 5 }, () => makeFakeBriefOffer()),
-        favoritesCount: 5,
         isLoading: false,
         isReviewSubmitted: false,
         currentOfferStatus: OfferStatus.LOADING,
-        isCurrentOfferFavorite: false
       }
     });
   });
@@ -326,7 +328,7 @@ describe('User API Async actions', () => {
       mockAxiosAdapter.onGet(APIRoute.GetFavorite).reply(200, []);
       mockAxiosAdapter.onGet(APIRoute.GetOffers).reply(200, []);
 
-      await store.dispatch(updateFavoriteAction({ id: fakeOfferId, status: fakeStatus }));
+      await store.dispatch(updateFavoriteAction({ favoriteId: fakeOfferId, status: fakeStatus }));
       const actions = extractActionsTypes(store.getActions());
 
       expect(actions).toEqual(
@@ -346,7 +348,7 @@ describe('User API Async actions', () => {
       const fakeStatus = 1;
       mockAxiosAdapter.onPost(APIRoute.PostFavorite.replace(':offerId', fakeOfferId).replace(':statusId', fakeStatus.toString())).reply(500);
 
-      await store.dispatch(updateFavoriteAction({ id: fakeOfferId, status: fakeStatus }));
+      await store.dispatch(updateFavoriteAction({ favoriteId: fakeOfferId, status: fakeStatus }));
       const actions = extractActionsTypes(store.getActions());
 
       expect(actions).toEqual([
@@ -366,7 +368,7 @@ describe('User API Async actions', () => {
       mockAxiosAdapter.onGet(APIRoute.GetOffers).reply(200, []);
       mockAxiosAdapter.onGet(APIRoute.GetOffer.replace(':offerId', fakeOfferId)).reply(200, {});
 
-      await store.dispatch(updateFavoriteCurrentOfferAction({ id: fakeOfferId, status: fakeStatus }));
+      await store.dispatch(updateFavoriteCurrentOfferAction({ favoriteId: fakeOfferId, status: fakeStatus, currentOfferId: fakeOfferId }));
       const actions = extractActionsTypes(store.getActions());
 
       expect(actions).toEqual(
@@ -388,12 +390,54 @@ describe('User API Async actions', () => {
       const fakeStatus = 1;
       mockAxiosAdapter.onPost(APIRoute.PostFavorite.replace(':offerId', fakeOfferId).replace(':statusId', fakeStatus.toString())).reply(500);
 
-      await store.dispatch(updateFavoriteCurrentOfferAction({ id: fakeOfferId, status: fakeStatus }));
+      await store.dispatch(updateFavoriteCurrentOfferAction({ favoriteId: fakeOfferId, status: fakeStatus, currentOfferId: fakeOfferId }));
       const actions = extractActionsTypes(store.getActions());
 
       expect(actions).toEqual([
         updateFavoriteCurrentOfferAction.pending.type,
         updateFavoriteCurrentOfferAction.rejected.type,
+      ]);
+    });
+  });
+
+
+  describe('updateFavoriteCurrentNearbyOfferAction', () => {
+    it('should dispatch actions related to updating favorite status and fetching nearby offers', async () => {
+      const fakeOfferId = '123';
+      const fakeStatus = 1;
+      mockAxiosAdapter.onPost(APIRoute.PostFavorite.replace(':offerId', fakeOfferId).replace(':statusId', fakeStatus.toString())).reply(200);
+      mockAxiosAdapter.onGet(APIRoute.GetFavorite).reply(200, []);
+      mockAxiosAdapter.onGet(APIRoute.GetOffers).reply(200, []);
+      mockAxiosAdapter.onGet(APIRoute.GetOfferNearby.replace(':offerId', fakeOfferId)).reply(200, []);
+
+      await store.dispatch(updateFavoriteCurrentNearbyOfferAction({ favoriteId: fakeOfferId, status: fakeStatus, currentOfferId: fakeOfferId }));
+      const actions = extractActionsTypes(store.getActions());
+
+      expect(actions).toEqual(
+        expect.arrayContaining([
+          updateFavoriteCurrentNearbyOfferAction.pending.type,
+          fetchFavoritesAction.pending.type,
+          fetchOffersAction.pending.type,
+          fetchCurrentNearbyOffersAction.pending.type,
+          updateFavoriteCurrentNearbyOfferAction.fulfilled.type,
+          fetchFavoritesAction.fulfilled.type,
+          fetchOffersAction.fulfilled.type,
+          fetchCurrentNearbyOffersAction.fulfilled.type,
+        ])
+      );
+    });
+
+    it('should dispatch "updateFavoriteCurrentOfferAction.pending" and "updateFavoriteCurrentOfferAction.rejected" if API call fails', async () => {
+      const fakeOfferId = '123';
+      const fakeStatus = 1;
+      mockAxiosAdapter.onPost(APIRoute.PostFavorite.replace(':offerId', fakeOfferId).replace(':statusId', fakeStatus.toString())).reply(500);
+
+      await store.dispatch(updateFavoriteCurrentNearbyOfferAction({ favoriteId: fakeOfferId, status: fakeStatus, currentOfferId: fakeOfferId }));
+      const actions = extractActionsTypes(store.getActions());
+
+      expect(actions).toEqual([
+        updateFavoriteCurrentNearbyOfferAction.pending.type,
+        updateFavoriteCurrentNearbyOfferAction.rejected.type,
       ]);
     });
   });

@@ -7,9 +7,10 @@ interface NearbyOfferListProps {
   selectedOffer: BriefOffer;
   onCardInteraction?: (cardId: BriefOffer['id']) => void;
   authorizationStatus: AuthorizationStatusType;
+  currentOfferId?: BriefOffer['id'];
 }
 
-function NearbyOfferList({offers, selectedOffer, onCardInteraction, authorizationStatus}: Readonly<NearbyOfferListProps>) {
+function NearbyOfferList({offers, selectedOffer, onCardInteraction, currentOfferId, authorizationStatus}: Readonly<NearbyOfferListProps>) {
   const offerCards = offers
     .slice(0, 3)
     .map((offer) => (
@@ -19,6 +20,7 @@ function NearbyOfferList({offers, selectedOffer, onCardInteraction, authorizatio
         cardType={'cities'}
         offer={offer}
         onCardInteraction={onCardInteraction}
+        currentOfferId={currentOfferId}
       />
     ));
   const handleCardInteraction = onCardInteraction ? () => onCardInteraction(selectedOffer.id) : undefined;

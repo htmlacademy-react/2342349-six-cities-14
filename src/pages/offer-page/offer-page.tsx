@@ -46,6 +46,7 @@ function OfferPage() {
       selectedOffer={currentOffer}
       onCardInteraction={setSelectedOfferId}
       authorizationStatus={authorizationStatus}
+      currentOfferId={currentOffer.id}
     />
   ) : <LoadingText/>;
 

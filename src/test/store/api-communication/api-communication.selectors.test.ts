@@ -4,10 +4,7 @@ import {
   getCurrentOffer,
   getCurrentOfferStatus,
   getCurrentReviews,
-  getCurrentReviewsCount,
   getFavorites,
-  getFavoritesCount,
-  getIsCurrentOfferFavorite,
   getIsLoading,
   getIsReviewSubmitted,
   getOffers
@@ -44,12 +41,6 @@ describe('UserPreferences selector', () => {
     expect(result).toEqual(favorites);
   });
 
-  it('should return favorites count from state', () => {
-    const {favoritesCount} = state[NameSpace.ApiCommunication];
-    const result = getFavoritesCount(state);
-    expect(result).toEqual(favoritesCount);
-  });
-
   it('should return current offer from state', () => {
     const {currentOffer} = state[NameSpace.ApiCommunication];
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -69,12 +60,6 @@ describe('UserPreferences selector', () => {
     expect(result).toEqual(currentReviews);
   });
 
-  it('should return current reviews count from state', () => {
-    const {currentReviewsCount} = state[NameSpace.ApiCommunication];
-    const result = getCurrentReviewsCount(state);
-    expect(result).toEqual(currentReviewsCount);
-  });
-
   it('should return loading status from state', () => {
     const {isLoading} = state[NameSpace.ApiCommunication];
     const result = getIsLoading(state);
@@ -91,11 +76,5 @@ describe('UserPreferences selector', () => {
     const {currentOfferStatus} = state[NameSpace.ApiCommunication];
     const result = getCurrentOfferStatus(state);
     expect(result).toEqual(currentOfferStatus);
-  });
-
-  it('should return current offer favorite status from state', () => {
-    const {isCurrentOfferFavorite} = state[NameSpace.ApiCommunication];
-    const result = getIsCurrentOfferFavorite(state);
-    expect(result).toEqual(isCurrentOfferFavorite);
   });
 });
