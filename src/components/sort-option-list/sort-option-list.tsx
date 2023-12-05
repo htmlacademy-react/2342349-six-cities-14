@@ -6,16 +6,16 @@ import {SortOptions, SortOptionsType} from '../sort-list/sort-offers.ts';
 
 interface SortOptionListProps {
   isSortMenuOpen: boolean;
-  toggleSortMenu: () => void;
+  handleToggleSortMenu: () => void;
   currentSortType: SortOptionsType;
 }
 
-function SortOptionList({ isSortMenuOpen, toggleSortMenu, currentSortType }: Readonly<SortOptionListProps>) {
+function SortOptionList({ isSortMenuOpen, handleToggleSortMenu, currentSortType }: Readonly<SortOptionListProps>) {
   const dispatch = useAppDispatch();
 
   const handleSortChange = (value: keyof typeof SortOptions) => () => {
     dispatch(setSortType(value));
-    toggleSortMenu();
+    handleToggleSortMenu();
   };
 
   function handleKeyDown(event: React.KeyboardEvent, action: () => void) {

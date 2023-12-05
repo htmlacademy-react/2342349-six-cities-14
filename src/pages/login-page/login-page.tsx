@@ -78,13 +78,6 @@ function LoginPage() {
         <div className="container">
           <div className="header__wrapper">
             <Logo/>
-            <ul className="header__nav-list">
-              <li className="header__nav-item">
-                <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Login}>
-                  Sign in
-                </Link>
-              </li>
-            </ul>
           </div>
         </div>
       </header>

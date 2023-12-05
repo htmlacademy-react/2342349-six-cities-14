@@ -2,7 +2,7 @@ import React from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
-import useUserData from '../../hooks/useUserData.ts';
+import useUserData from '../../hooks/use-user-data.ts';
 
 import {logoutAction} from '../../store/api-actions/user-api-actions.ts';
 
