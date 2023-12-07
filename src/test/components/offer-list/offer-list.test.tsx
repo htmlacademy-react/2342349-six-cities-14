@@ -9,7 +9,9 @@ describe('Component: OfferList', () => {
   it('should render correct number of offers', () => {
     const selectedCity = makeFakeCity();
     const fakeOffers = Array.from({ length: 6 }, () => makeFakeBriefOffer());
-    fakeOffers.forEach((offer) => offer.city = selectedCity);
+    fakeOffers.forEach((offer) => {
+      offer.city = selectedCity;
+    });
     const maxOfferLimit = 3;
     const { withStoreComponent } = withStore(
       <OfferList

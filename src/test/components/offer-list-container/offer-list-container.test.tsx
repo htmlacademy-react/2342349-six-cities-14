@@ -11,7 +11,9 @@ describe('Component: OfferListContainer', () => {
   it('should render correct number of offers when they are available', () => {
     const selectedCity = makeFakeCity();
     const fakeOffers = Array.from({ length: 6 }, () => makeFakeBriefOffer());
-    fakeOffers.forEach((offer) => offer.city = selectedCity);
+    fakeOffers.forEach((offer) => {
+      offer.city = selectedCity;
+    });
     const overrideState = {
       [NameSpace.SessionState]: {
         selectedCity: selectedCity,
