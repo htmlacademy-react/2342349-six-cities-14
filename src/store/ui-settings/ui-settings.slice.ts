@@ -5,12 +5,14 @@ import {City} from '../../types/city.ts';
 
 interface SessionState {
     selectedCity: City;
+    isCitySelected: boolean;
     cities: City[];
     currentSortType: SortOptionsType;
 }
 
 const initialState: SessionState = {
   selectedCity: CITY_FOR_EMPTY_LIST[0],
+  isCitySelected: false,
   cities: CITY_FOR_EMPTY_LIST,
   currentSortType: 'POPULAR',
 };
@@ -21,6 +23,7 @@ export const uiSettingsSlice = createSlice({
   reducers: {
     selectCity: (state, action: PayloadAction<City>) => {
       state.selectedCity = action.payload;
+      state.isCitySelected = true;
     },
     setCities: (state, action: PayloadAction<City[]>) => {
       state.cities = action.payload;

@@ -4,7 +4,7 @@ import OfferListContainer from '../../components/offer-list-container/offer-list
 
 function MainPage() {
   return (
-    <div className="page page--gray page--main">
+    <div className="page page--gray page--main" data-testid="main-page">
       <Helmet>
         <title>6 Sites - Main</title>
       </Helmet>

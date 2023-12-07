@@ -1,6 +1,7 @@
 import {NameSpace} from '../../const.ts';
 import {State} from '../state.ts';
 
-export const getSelectedCity = (state: State) => state[NameSpace.SessionState].selectedCity;
-export const getCities = (state: State) => state[NameSpace.SessionState].cities;
-export const getCurrentSortType = (state: State) => state[NameSpace.SessionState].currentSortType;
+export const getSelectedCity = (state: Pick<State, typeof NameSpace.SessionState>) => state[NameSpace.SessionState].selectedCity;
+export const getIsCitySelected = (state: Pick<State, typeof NameSpace.SessionState>) => state[NameSpace.SessionState].isCitySelected;
+export const getCities = (state: Pick<State, typeof NameSpace.SessionState>) => state[NameSpace.SessionState].cities;
+export const getCurrentSortType = (state: Pick<State, typeof NameSpace.SessionState>) => state[NameSpace.SessionState].currentSortType;

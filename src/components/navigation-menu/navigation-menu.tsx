@@ -1,15 +1,18 @@
 import React from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const.ts';
-import {useAppDispatch} from '../../hooks';
-import useUserData from '../../hooks/useUserData.ts';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import useUserData from '../../hooks/use-user-data.ts';
 
 import {logoutAction} from '../../store/api-actions/user-api-actions.ts';
+import {getFavorites} from '../../store/api-communication/api-communication.selectors.ts';
 
 function NavigationMenu() {
   const dispatch = useAppDispatch();
-  const {authorizationStatus, userAvatarUrl, userLogin, favoritesCount} = useUserData();
+  const {authorizationStatus, userAvatarUrl, userLogin} = useUserData();
   const navigate = useNavigate();
+  const favorites = useAppSelector(getFavorites);
+
 
   const logout = async () => {
     await dispatch(logoutAction());
@@ -42,7 +45,7 @@ function NavigationMenu() {
                 </img>
               </div>
               <span className="header__user-name user__name">{userLogin}</span>
-              <span className="header__favorite-count">{favoritesCount}</span>
+              <span className="header__favorite-count">{favorites.length}</span>
             </Link>
           </li>
           <li

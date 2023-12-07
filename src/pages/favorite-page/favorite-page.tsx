@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import {useEffect} from 'react';
 import {Helmet} from 'react-helmet-async';
 import {useNavigate} from 'react-router-dom';
@@ -20,36 +21,32 @@ function FavoritePage() {
     }
   }, [authorizationStatus, navigate]);
 
-  const favoriteList = favorites.length > 0 ? (
-    <main className="page__main page__main--favorites">
-      <FavoriteList offers={favorites}/>
-    </main>
-  ) : (
-    <div className="page page--favorites-empty">
-      <main className="page__main page__main--favorites page__main--favorites-empty">
-        <div className="page__favorites-container container">
-          <section className="favorites favorites--empty">
-            <h1 className="visually-hidden">Favorites (empty)</h1>
-            <div className="favorites__status-wrapper">
-              <b className="favorites__status">Nothing yet saved.</b>
-              <p className="favorites__status-description">Save properties to narrow down search or plan your
-                        future trips.
-              </p>
-            </div>
-          </section>
+  const isFavoritesEmpty = favorites.length === 0;
+
+  const favoriteList = isFavoritesEmpty ? (
+    <div className="page__favorites-container container">
+      <section className="favorites favorites--empty">
+        <h1 className="visually-hidden">Favorites (empty)</h1>
+        <div className="favorites__status-wrapper">
+          <b className="favorites__status">Nothing yet saved.</b>
+          <p className="favorites__status-description">Save properties to narrow down search or plan your future trips.</p>
         </div>
-      </main>
+      </section>
     </div>
+  ) : (
+    <FavoriteList offers={favorites}/>
   );
 
   return (
-    <div className="page">
+    <div className={classNames('page', {'page--favorites-empty': isFavoritesEmpty})} data-testid="favorite-page">
       <Helmet>
         <title>6 Sites - Favorite</title>
       </Helmet>
-      <Header/>
-      {favoriteList}
-      <Footer/>
+      <Header />
+      <main className={classNames('page__main', 'page__main--favorites', {'page__main--favorites-empty': isFavoritesEmpty})}>
+        {favoriteList}
+      </main>
+      <Footer />
     </div>
   );
 }

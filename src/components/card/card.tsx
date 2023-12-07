@@ -2,8 +2,10 @@ import classNames from 'classnames';
 import {Link, useNavigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus, AuthorizationStatusType, MAX_OFFER_STARS} from '../../const.ts';
 import {useAppDispatch} from '../../hooks';
-import {updateFavoriteAction} from '../../store/api-actions/data-api-actions.ts';
-import {decreaseFavoritesCount, increaseFavoritesCount} from '../../store/api-communication/api-communication.slice.ts';
+import {
+  updateFavoriteAction,
+  updateFavoriteCurrentNearbyOfferAction
+} from '../../store/api-actions/data-api-actions.ts';
 import {BriefOffer} from '../../types/brief-offer.ts';
 import styles from './card.module.css';
 
@@ -28,9 +30,10 @@ interface CardProps {
   offer: CardOffer;
   onCardInteraction?: (cardId: BriefOffer['id']) => void;
   authorizationStatus: AuthorizationStatusType;
+  currentOfferId?: BriefOffer['id'];
 }
 
-function Card({cardType, offer, onCardInteraction, authorizationStatus}: Readonly<CardProps>) {
+function Card({cardType, offer, onCardInteraction, currentOfferId, authorizationStatus}: Readonly<CardProps>) {
   const {id, title, isFavorite, isPremium,
     rating, type, price, previewImage} = offer;
   const {name, imgWidth, imgHeight} = cardConfigurations[cardType];
@@ -48,16 +51,14 @@ function Card({cardType, offer, onCardInteraction, authorizationStatus}: Readonl
       return;
     }
 
-    if (isFavorite) {
-      dispatch(decreaseFavoritesCount());
-    } else {
-      dispatch(increaseFavoritesCount());
-    }
-
-    dispatch(updateFavoriteAction({
-      id: id,
-      status: +!isFavorite
-    }));
+    const actionPayload = {
+      status: +!offer.isFavorite,
+      favoriteId: offer.id
+    };
+    const action = currentOfferId
+      ? updateFavoriteCurrentNearbyOfferAction({ ...actionPayload, currentOfferId })
+      : updateFavoriteAction(actionPayload);
+    dispatch(action);
   }
 
   return (

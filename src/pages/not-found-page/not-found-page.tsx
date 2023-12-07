@@ -12,7 +12,7 @@ interface NotFoundPageProps {
 function NotFoundPage({text = 'Something went wrong'}: Readonly<NotFoundPageProps>) {
 
   return (
-    <div className="page">
+    <div className="page page--not-found" data-testid="not-found-page">
       <Helmet>
         <title>6 Sites - 404</title>
       </Helmet>

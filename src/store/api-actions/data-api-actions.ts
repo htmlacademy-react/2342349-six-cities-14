@@ -155,7 +155,7 @@ export const fetchFavoritesAction = createAsyncThunk<
   ThunkApiConfig
 >(
   'data/fetchFavoritesAction',
-  async (_arg, {extra: api, dispatch, rejectWithValue}) => {
+  async (_arg, {extra: api, rejectWithValue}) => {
     try {
       const {data} = await api.get<BriefOffer[]>(APIRoute.GetFavorite);
       return data;
@@ -163,7 +163,6 @@ export const fetchFavoritesAction = createAsyncThunk<
       toast.warning(handleApiError(error), {
         position: toast.POSITION.TOP_CENTER
       });
-      await dispatch(fetchFavoritesAction());
       return rejectWithValue(handleApiError(error));
     }
   }
@@ -173,14 +172,14 @@ export const updateFavoriteAction = createAsyncThunk<
   void,
   {
     status: number;
-    id: BriefOffer['id'];
+    favoriteId: BriefOffer['id'];
   },
   ThunkApiConfig
 >(
   'data/updateFavoriteAction',
-  async ({id, status}, {extra: api, dispatch, rejectWithValue}) => {
+  async ({favoriteId, status}, {extra: api, dispatch, rejectWithValue}) => {
     try {
-      const url = APIRoute.PostFavorite.replace(':offerId', id.toString()).replace(':statusId', status.toString());
+      const url = APIRoute.PostFavorite.replace(':offerId', favoriteId.toString()).replace(':statusId', status.toString());
       await api.post(url);
       await dispatch(fetchFavoritesAction());
       await dispatch(fetchOffersAction());
@@ -200,18 +199,19 @@ export const updateFavoriteCurrentOfferAction = createAsyncThunk<
   void,
   {
     status: number;
-    id: BriefOffer['id'];
+    favoriteId: BriefOffer['id'];
+    currentOfferId: BriefOffer['id'];
   },
   ThunkApiConfig
 >(
   'data/updateFavoriteCurrentOfferAction',
-  async ({id, status}, {extra: api, dispatch, rejectWithValue}) => {
+  async ({favoriteId, currentOfferId, status}, {extra: api, dispatch, rejectWithValue}) => {
     try {
-      const url = APIRoute.PostFavorite.replace(':offerId', id.toString()).replace(':statusId', status.toString());
+      const url = APIRoute.PostFavorite.replace(':offerId', favoriteId.toString()).replace(':statusId', status.toString());
       await api.post(url);
       await dispatch(fetchFavoritesAction());
       await dispatch(fetchOffersAction());
-      await dispatch(fetchCurrentOfferAction(id));
+      await dispatch(fetchCurrentOfferAction(currentOfferId));
       toast.success('Update current favorite offer successfully.', {
         position: toast.POSITION.TOP_CENTER
       });
@@ -223,3 +223,34 @@ export const updateFavoriteCurrentOfferAction = createAsyncThunk<
     }
   },
 );
+
+export const updateFavoriteCurrentNearbyOfferAction = createAsyncThunk<
+  void,
+  {
+    status: number;
+    favoriteId: BriefOffer['id'];
+    currentOfferId: BriefOffer['id'];
+  },
+  ThunkApiConfig
+>(
+  'data/updateFavoriteCurrentOfferAction',
+  async ({favoriteId, currentOfferId, status}, {extra: api, dispatch, rejectWithValue}) => {
+    try {
+      const url = APIRoute.PostFavorite.replace(':offerId', favoriteId.toString()).replace(':statusId', status.toString());
+      await api.post(url);
+      await dispatch(fetchFavoritesAction());
+      await dispatch(fetchOffersAction());
+      await dispatch(fetchCurrentNearbyOffersAction(currentOfferId));
+      toast.success('Update nearby favorite offer successfully.', {
+        position: toast.POSITION.TOP_CENTER
+      });
+    } catch (error) {
+      toast.warning(handleApiError(error), {
+        position: toast.POSITION.TOP_CENTER
+      });
+      return rejectWithValue(handleApiError(error));
+    }
+  },
+);
+
+

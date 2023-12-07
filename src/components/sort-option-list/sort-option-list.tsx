@@ -6,16 +6,16 @@ import {SortOptions, SortOptionsType} from '../sort-list/sort-offers.ts';
 
 interface SortOptionListProps {
   isSortMenuOpen: boolean;
-  toggleSortMenu: () => void;
+  handleToggleSortMenu: () => void;
   currentSortType: SortOptionsType;
 }
 
-function SortOptionList({ isSortMenuOpen, toggleSortMenu, currentSortType }: Readonly<SortOptionListProps>) {
+function SortOptionList({ isSortMenuOpen, handleToggleSortMenu, currentSortType }: Readonly<SortOptionListProps>) {
   const dispatch = useAppDispatch();
 
   const handleSortChange = (value: keyof typeof SortOptions) => () => {
     dispatch(setSortType(value));
-    toggleSortMenu();
+    handleToggleSortMenu();
   };
 
   function handleKeyDown(event: React.KeyboardEvent, action: () => void) {
@@ -25,7 +25,7 @@ function SortOptionList({ isSortMenuOpen, toggleSortMenu, currentSortType }: Rea
     }
   }
 
-  const sortOptionElement = Object.entries(SortOptions).map(([key , {title}], index) => (
+  const sortOptionElements = Object.entries(SortOptions).map(([key , {title}], index) => (
     <li
       key={key}
       className={classNames('places__option', {'places__option--active': currentSortType === key})}
@@ -39,7 +39,7 @@ function SortOptionList({ isSortMenuOpen, toggleSortMenu, currentSortType }: Rea
 
   return (
     <ul className={classNames('places__options', 'places__options--custom', {'places__options--opened': isSortMenuOpen})}>
-      {sortOptionElement}
+      {sortOptionElements}
     </ul>
   );
 }

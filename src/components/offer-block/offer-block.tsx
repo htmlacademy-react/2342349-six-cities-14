@@ -1,18 +1,10 @@
 import {memo} from 'react';
-import {
-  MAX_COMMENT_LENGTH,
-  MAX_IMAGES_PER_OFFER,
-  MAX_NEAR_OFFERS,
-  MAX_REVIEWS_PER_OFFER,
-  MIN_COMMENT_LENGTH
-} from '../../const.ts';
+import {CommentLength, MAX_IMAGES_PER_OFFER, MAX_NEAR_OFFERS, MAX_REVIEWS_PER_OFFER} from '../../const.ts';
 import {useAppSelector} from '../../hooks';
 import {
   getCurrentNearbyOffers,
   getCurrentOffer,
   getCurrentReviews,
-  getCurrentReviewsCount,
-  getIsCurrentOfferFavorite
 } from '../../store/api-communication/api-communication.selectors.ts';
 import {getSelectedCity} from '../../store/ui-settings/ui-settings.selectors.ts';
 import {getAuthorizationStatus} from '../../store/user-preferences/user-preferences.selectors.ts';
@@ -34,10 +26,8 @@ const MemoizedReviewList = memo(ReviewList);
 
 function OfferBlock({urlId, selectedOfferId}: OfferBlockProps) {
   const currentOffer = useAppSelector(getCurrentOffer);
-  const currentOfferFavorite = useAppSelector(getIsCurrentOfferFavorite);
   const currentNearbyOffers = useAppSelector(getCurrentNearbyOffers);
   const currentReviews = useAppSelector(getCurrentReviews);
-  const currentReviewsCount = useAppSelector(getCurrentReviewsCount);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const selectedCity = useAppSelector(getSelectedCity);
 
@@ -50,7 +40,7 @@ function OfferBlock({urlId, selectedOfferId}: OfferBlockProps) {
   let mapCity, mapPoints, selectedMapPoint;
   if (currentOffer && currentNearbyOffers) {
     [mapCity, mapPoints, selectedMapPoint] =
-      getMapDataFromOffers([currentOffer, ...currentNearbyOffers.slice(0, MAX_NEAR_OFFERS)], selectedCity, selectedOfferId);
+      getMapDataFromOffers([currentOffer, ...currentNearbyOffers.slice(0, MAX_NEAR_OFFERS)], selectedCity, selectedOfferId || currentOffer.id);
   }
 
   const mapBlock = (mapCity && mapPoints) ? (
@@ -64,7 +54,7 @@ function OfferBlock({urlId, selectedOfferId}: OfferBlockProps) {
   const reviewBlock = currentReviews ? (
     <MemoizedReviewList
       reviews={lastReviews}
-      reviewCount={currentReviewsCount}
+      reviewCount={currentReviews.length}
     />
   ) : <LoadingText/>;
 
@@ -80,7 +70,7 @@ function OfferBlock({urlId, selectedOfferId}: OfferBlockProps) {
           <MemoizedOfferDetails
             offer={currentOffer}
             authorizationStatus={authorizationStatus}
-            currentOfferFavorite={currentOfferFavorite}
+            currentOfferFavorite={currentOffer.isFavorite}
           />
 
           <section className="offer__reviews reviews">
@@ -88,8 +78,8 @@ function OfferBlock({urlId, selectedOfferId}: OfferBlockProps) {
             <MemoizedReviewForm
               offerId={urlId}
               authorizationStatus={authorizationStatus}
-              minCommentLength={MIN_COMMENT_LENGTH}
-              maxCommentLength={MAX_COMMENT_LENGTH}
+              minCommentLength={CommentLength.MIN}
+              maxCommentLength={CommentLength.MAX}
             />
           </section>
         </div>

@@ -36,8 +36,10 @@ export const NameSpace = {
 export const BACKEND_URL = 'https://14.design.pages.academy/six-cities';
 export const BACKEND_REQUEST_TIMEOUT = 5000;
 export const AUTH_TOKEN_KEY_NAME = 'six-cities-token';
-export const MIN_COMMENT_LENGTH = 50;
-export const MAX_COMMENT_LENGTH = 300;
+export const CommentLength = {
+  MIN: 50,
+  MAX: 300
+};
 export const MAX_RENT_OFFERS = 100;
 export const MAX_OFFER_STARS = 5;
 export const MAX_IMAGES_PER_OFFER = 6;
