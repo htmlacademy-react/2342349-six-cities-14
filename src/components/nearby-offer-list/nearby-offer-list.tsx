@@ -26,7 +26,7 @@ function NearbyOfferList({offers, selectedOffer, onCardInteraction, currentOffer
   const handleCardInteraction = onCardInteraction ? () => onCardInteraction(selectedOffer.id) : undefined;
 
   return (
-    <div className="container">
+    <div className="container" data-testid="nearby-offer-list">
       <section
         className="near-places places"
         onMouseLeave={handleCardInteraction}

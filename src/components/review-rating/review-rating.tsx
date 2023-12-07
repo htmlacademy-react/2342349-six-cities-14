@@ -12,6 +12,7 @@ function ReviewRating({value, title, onRatingChange, checked, isDisabled}: Reado
   return (
     <>
       <input onChange={onRatingChange}
+        data-testid="rating-input"
         className="form__rating-input visually-hidden"
         name="rating"
         value={value}

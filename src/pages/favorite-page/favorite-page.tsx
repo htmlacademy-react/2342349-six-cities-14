@@ -38,7 +38,7 @@ function FavoritePage() {
   );
 
   return (
-    <div className={classNames('page', {'page--favorites-empty': isFavoritesEmpty})}>
+    <div className={classNames('page', {'page--favorites-empty': isFavoritesEmpty})} data-testid="favorite-page">
       <Helmet>
         <title>6 Sites - Favorite</title>
       </Helmet>

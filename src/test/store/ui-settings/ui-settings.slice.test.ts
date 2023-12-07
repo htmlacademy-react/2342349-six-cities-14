@@ -1,3 +1,4 @@
+import {beforeEach, describe, expect, it} from 'vitest';
 import {SortOptionsType} from '../../../components/sort-list/sort-offers.ts';
 import {selectCity, setCities, setSortType, uiSettingsSlice} from '../../../store/ui-settings/ui-settings.slice.ts';
 import {makeFakeCity} from '../../utils/mocks.ts';

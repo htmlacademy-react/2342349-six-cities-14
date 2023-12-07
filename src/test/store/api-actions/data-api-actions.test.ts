@@ -2,6 +2,7 @@ import {configureMockStore} from '@jedmao/redux-mock-store';
 import {Action} from '@reduxjs/toolkit';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
+import {describe, expect, it, beforeEach} from 'vitest';
 import {APIRoute, NameSpace} from '../../../const.ts';
 import {createAPI} from '../../../services/api.ts';
 import {

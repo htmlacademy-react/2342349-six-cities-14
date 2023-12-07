@@ -15,7 +15,7 @@ function OfferListContainer() {
 
   return (
     isOffersEmpty ? (
-      <main className="page__main page__main--index page__main--index-empty">
+      <main className="page__main page__main--index page__main--index-empty" data-testid="offer-list-container">
         <h1 className="visually-hidden">Cities</h1>
         <CityList
           cities={cities}
@@ -37,7 +37,7 @@ function OfferListContainer() {
         </div>
       </main>
     ) : (
-      <main className="page__main page__main--index">
+      <main className="page__main page__main--index" data-testid="offer-list-container">
         <h1 className="visually-hidden">Cities</h1>
         <CityList
           cities={cities}

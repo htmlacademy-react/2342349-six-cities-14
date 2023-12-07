@@ -1,6 +1,6 @@
-import {useEffect} from 'react';
+import {ComponentType, useEffect} from 'react';
 import {HelmetProvider} from 'react-helmet-async';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {BrowserRouter, BrowserRouterProps, MemoryRouterProps, Route, Routes} from 'react-router-dom';
 import LoadingText from './components/loading-text/loading-text.tsx';
 import PrivateRoute from './components/private-route/private-route.tsx';
 import {AppRoute, AuthorizationStatus, CITY_BY_DEFAULT} from './const.ts';
@@ -18,7 +18,14 @@ import {selectCity, setCities} from './store/ui-settings/ui-settings.slice.ts';
 import {getAuthorizationStatus} from './store/user-preferences/user-preferences.selectors.ts';
 import {City} from './types/city.ts';
 
-function App() {
+type CustomRouterProps = BrowserRouterProps | MemoryRouterProps;
+
+interface AppProps {
+  RouterComponent?: ComponentType<CustomRouterProps>;
+  routerProps?: CustomRouterProps;
+}
+
+function App({ RouterComponent = BrowserRouter, routerProps = {} }: Readonly<AppProps>) {
   const offers = useAppSelector(getOffers);
   const isCitySelected = useAppSelector(getIsCitySelected);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
@@ -57,7 +64,7 @@ function App() {
 
   return (
     <HelmetProvider>
-      <BrowserRouter>
+      <RouterComponent {...routerProps}>
         <Routes>
           <Route path={AppRoute.Main}
             element={
@@ -97,7 +104,7 @@ function App() {
             }
           />
         </Routes>
-      </BrowserRouter>
+      </RouterComponent>
     </HelmetProvider>
   );
 }

@@ -51,7 +51,7 @@ function OfferPage() {
   ) : <LoadingText/>;
 
   return (
-    <div className="page">
+    <div className="page" data-testid="offer-page">
       <Helmet>
         <title>6 Sites - Offers</title>
       </Helmet>

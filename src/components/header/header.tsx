@@ -3,7 +3,7 @@ import NavigationMenu from '../navigation-menu/navigation-menu.tsx';
 
 function Header() {
   return (
-    <header className="header">
+    <header className="header" data-testid="header">
       <div className="container">
         <div className="header__wrapper">
           <Logo/>

@@ -1,3 +1,4 @@
+import {describe, expect, it} from 'vitest';
 import {SortOptionsType} from '../../../components/sort-list/sort-offers.ts';
 import {NameSpace} from '../../../const.ts';
 import {getCities, getCurrentSortType, getSelectedCity} from '../../../store/ui-settings/ui-settings.selectors.ts';

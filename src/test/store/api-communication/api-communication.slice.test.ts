@@ -1,7 +1,12 @@
+import {beforeEach, describe, expect, it} from 'vitest';
 import {
   fetchCurrentNearbyOffersAction,
-  fetchCurrentOfferAction, fetchCurrentReviewsAction, fetchFavoritesAction,
-  fetchOffersAction, postReviewAction, updateFavoriteAction
+  fetchCurrentOfferAction,
+  fetchCurrentReviewsAction,
+  fetchFavoritesAction,
+  fetchOffersAction,
+  postReviewAction,
+  updateFavoriteAction
 } from '../../../store/api-actions/data-api-actions.ts';
 import {
   apiCommunicationSlice,

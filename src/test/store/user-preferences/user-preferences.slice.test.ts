@@ -1,7 +1,10 @@
+import {beforeEach, describe, expect, it} from 'vitest';
 import {AuthorizationStatus} from '../../../const.ts';
 import {checkAuthAction, loginAction, logoutAction} from '../../../store/api-actions/user-api-actions.ts';
 import {
-  setInvalidCredentialsEntered, setUserAvatarUrl, setUserLogin,
+  setInvalidCredentialsEntered,
+  setUserAvatarUrl,
+  setUserLogin,
   userPreferencesSlice
 } from '../../../store/user-preferences/user-preferences.slice.ts';
 

@@ -41,9 +41,8 @@ export const makeFakeFullOffer = (): FullOffer => ({
   description: faker.lorem.paragraph(),
   bedrooms: faker.datatype.number({ min: 1, max: 10 }),
   maxAdults: faker.datatype.number({ min: 1, max: 10 }),
-  goods: Array.from({ length: 10 }, () => faker.commerce.productName()),
-  images: Array.from({ length: 10 }, () => faker.image.imageUrl()),
-  host: {
+  goods: Array.from({ length: 10 }, () => `${faker.commerce.productName()}?${Date.now()}-${Math.random()}`),
+  images: Array.from({ length: 10 }, () => `${faker.image.imageUrl()}?${Date.now()}-${Math.random()}`), host: {
     name: faker.name.findName(),
     isPro: faker.datatype.boolean(),
     avatarUrl: faker.image.avatar(),
