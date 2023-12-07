@@ -1,11 +1,12 @@
 import {Action, ThunkDispatch} from '@reduxjs/toolkit';
 import * as faker from 'faker';
-import {createAPI} from '../../services/api.ts';
-import {State} from '../../store/state.ts';
-import {BriefOffer} from '../../types/brief-offer.ts';
-import {City} from '../../types/city.ts';
-import {FullOffer} from '../../types/full-offer.ts';
-import {Review} from '../../types/review.ts';
+import {createAPI} from '../services/api.ts';
+import {State} from '../store/state.ts';
+import {BriefOffer} from '../types/brief-offer.ts';
+import {City} from '../types/city.ts';
+import {FullOffer} from '../types/full-offer.ts';
+import {Review} from '../types/review.ts';
+
 
 export type AppThunkDispatch = ThunkDispatch<State, ReturnType<typeof createAPI>, Action>;
 export const extractActionsTypes = (actions: Action<string>[]) => actions.map(({ type }) => type);
