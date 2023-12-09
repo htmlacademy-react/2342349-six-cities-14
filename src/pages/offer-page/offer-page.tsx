@@ -18,7 +18,7 @@ import {OfferStatus} from '../../types/offer-status.ts';
 import NotFoundPage from '../not-found-page/not-found-page.tsx';
 
 function OfferPage() {
-  const [selectedOfferId, setSelectedOfferId] = useState<BriefOffer['id']>('');
+  const [selectedOfferId] = useState<BriefOffer['id']>('');
   const {id: urlId} = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const currentOfferStatus = useAppSelector(getCurrentOfferStatus);
@@ -44,7 +44,6 @@ function OfferPage() {
     <NearbyOfferList
       offers={currentNearbyOffers}
       selectedOffer={currentOffer}
-      onCardInteraction={setSelectedOfferId}
       authorizationStatus={authorizationStatus}
       currentOfferId={currentOffer.id}
     />
